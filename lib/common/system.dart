@@ -164,13 +164,14 @@ class Windows {
             Pointer<Utf16> lpDirectory,
             int nShowCmd)>('ShellExecuteW');
 
+    // 使用 SW_HIDE(0) 隐藏被提权进程的主窗口，避免出现 cmd/PowerShell 黑框
     final result = shellExecute(
       nullptr,
       operationPtr,
       commandPtr,
       argumentsPtr,
       nullptr,
-      1,
+      0,
     );
 
     calloc.free(commandPtr);

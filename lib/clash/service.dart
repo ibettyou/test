@@ -89,7 +89,7 @@ class ClashService extends ClashHandlerInterface {
 
     if (system.isWindows) {
       // 强制使用 Helper 服务模式：先确保 Helper 服务已注册并启动
-      final serviceOk = await system.registerService();
+      final serviceOk = await windows?.registerService() ?? false;
       if (serviceOk) {
         final isSuccess = await request.startCoreByHelper(arg);
         if (isSuccess) {
