@@ -218,6 +218,92 @@ class Windows {
     return WindowsHelperServiceStatus.presence;
   }
 
+  /// 清理 Windows 上残留的 TUN 接口
+  /// 使用 PowerShell 命令查找并删除以 "Meta" 开头的网络适配器
+  Future<void> cleanupTunInterfaces() async {
+    if (!isWindows) {
+      return;
+    }
+
+    try {
+      // 使用 PowerShell 获取所有网络适配器，查找以 "Meta" 开头的适配器
+      // 使用 -WindowStyle Hidden 隐藏 PowerShell 窗口
+      final getAdapterCmd =
+          r'Get-NetAdapter | Where-Object { $_.Name -like "Meta*" } | Select-Object -ExpandProperty Name';
+
+      final result = await Process.run(
+        'powershell',
+        [
+          '-WindowStyle',
+          'Hidden',
+          '-NoProfile',
+          '-Command',
+          getAdapterCmd,
+        ],
+      );
+
+      if (result.exitCode != 0) {
+        return;
+      }
+
+      final output = result.stdout.toString().trim();
+      if (output.isEmpty) {
+        return;
+      }
+
+      final adapterNames = output
+          .split('\n')
+          .map((name) => name.trim())
+          .where((name) => name.isNotEmpty)
+          .toList();
+
+      if (adapterNames.isEmpty) {
+        return;
+      }
+
+      // 删除找到的适配器（需要管理员权限）
+      for (final adapterName in adapterNames) {
+        // 转义适配器名称中的特殊字符（PowerShell 中需要转义 "）
+        // 使用单引号包裹适配器名称，避免转义问题
+        final removeCmd =
+            "Remove-NetAdapter -Name '$adapterName' -Confirm:`\$false -ErrorAction SilentlyContinue";
+
+        // 尝试直接删除（如果已有管理员权限）
+        // 使用 -WindowStyle Hidden 隐藏 PowerShell 窗口
+        final directResult = await Process.run(
+          'powershell',
+          [
+            '-WindowStyle',
+            'Hidden',
+            '-NoProfile',
+            '-Command',
+            removeCmd,
+          ],
+        );
+
+        // 如果直接删除失败（可能需要管理员权限），尝试使用 runas
+        if (directResult.exitCode != 0) {
+          // 使用 runas 以管理员权限执行删除命令
+          // 注意：runas 会弹出 UAC 提示，但使用 SW_HIDE 隐藏窗口
+          // 使用 Start-Process 以隐藏窗口方式执行 PowerShell 命令
+          final hiddenCmd =
+              'Start-Process powershell -ArgumentList "-Command", "$removeCmd" -WindowStyle Hidden -Wait';
+          runas(
+            'powershell.exe',
+            '-Command "$hiddenCmd"'.replaceAll('\$hiddenCmd', hiddenCmd),
+          );
+          // 等待一下，让删除操作完成
+          await Future.delayed(const Duration(milliseconds: 500));
+        }
+
+        commonPrint.log('Cleaned up TUN interface: $adapterName');
+      }
+    } catch (e) {
+      // 静默处理错误，避免影响启动流程
+      commonPrint.log('Failed to cleanup TUN interfaces: $e');
+    }
+  }
+
   Future<bool> registerService() async {
     final status = await checkService();
 

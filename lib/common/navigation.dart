@@ -92,7 +92,7 @@ class Navigation {
         ),
         description: 'logsDesc',
         modes: openLogs
-            ? [NavigationItemMode.desktop, NavigationItemMode.more]
+            ? [NavigationItemMode.more]
             : [],
       ),
       NavigationItem(
