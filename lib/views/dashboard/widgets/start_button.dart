@@ -2,147 +2,154 @@ import 'package:li_clash/common/common.dart';
 import 'package:li_clash/enum/enum.dart';
 import 'package:li_clash/providers/providers.dart';
 import 'package:li_clash/state.dart';
+import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StartButton extends ConsumerStatefulWidget {
+class StartButton extends ConsumerWidget {
   const StartButton({super.key});
 
-  @override
-  ConsumerState<StartButton> createState() => _StartButtonState();
-}
-
-class _StartButtonState extends ConsumerState<StartButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  bool isStart = false;
-
-  @override
-  void initState() {
-    super.initState();
-    isStart = globalState.appState.runTime != null;
-    _controller = AnimationController(
-      vsync: this,
-      value: isStart ? 1 : 0,
-      duration: const Duration(milliseconds: 200),
-    );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutBack,
-    );
-    ref.listenManual(
-      runTimeProvider.select((state) => state != null),
-      (prev, next) {
-        if (next != isStart) {
-          isStart = next;
-          updateController();
-        }
-      },
-      fireImmediately: true,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void handleSwitchStart() {
-    isStart = !isStart;
-    updateController();
+  void _handleStart(WidgetRef ref) {
+    final isStart = ref.read(runTimeProvider) != null;
+    final newState = !isStart;
+    
     debouncer.call(
       FunctionTag.updateStatus,
       () {
-        globalState.appController.updateStatus(isStart);
+        globalState.appController.updateStatus(newState);
       },
       duration: commonDuration,
     );
   }
 
-  void updateController() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (isStart) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(startButtonSelectorStateProvider);
-    if (!state.isInit || !state.hasProfile) {
-      return Container();
-    }
-    return Theme(
-      data: Theme.of(context).copyWith(
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          sizeConstraints: BoxConstraints(
-            minWidth: 56,
-            maxWidth: 200,
+    final runTime = ref.watch(runTimeProvider);
+    final isStart = runTime != null;
+    
+    return SizedBox(
+      height: getWidgetHeight(1),
+      child: CommonCard(
+        info: Info(
+          label: appLocalizations.powerSwitch,
+          iconData: Icons.power_settings_new,
+        ),
+        onPressed: state.isInit && state.hasProfile ? () => _handleStart(ref) : null,
+        child: Container(
+          padding: baseInfoEdgeInsets.copyWith(
+            top: 0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: globalState.measure.bodyMediumHeight + 2,
+                child: FadeThroughBox(
+                  child: _buildContent(context, ref, state, isStart, runTime),
+                ),
+              )
+            ],
           ),
         ),
       ),
-      child: AnimatedBuilder(
-        animation: _controller.view,
-        builder: (_, child) {
-          final textWidth = globalState.measure
-                  .computeTextSize(
-                    Text(
-                      utils.getTimeDifference(
-                        DateTime.now(),
-                      ),
-                      style: context.textTheme.titleMedium?.toSoftBold,
-                    ),
-                  )
-                  .width +
-              16;
-          return FloatingActionButton(
-            clipBehavior: Clip.antiAlias,
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-            heroTag: null,
-            onPressed: () {
-              handleSwitchStart();
-            },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 56,
-                  width: 56,
-                  alignment: Alignment.center,
-                  child: AnimatedIcon(
-                    icon: AnimatedIcons.play_pause,
-                    progress: _animation,
-                  ),
-                ),
-                SizedBox(
-                  width: textWidth * _animation.value,
-                  child: child!,
-                )
-              ],
-            ),
-          );
-        },
-        child: Consumer(
-          builder: (_, ref, __) {
-            final runTime = ref.watch(runTimeProvider);
-            final text = utils.getTimeText(runTime);
-            return Text(
-              text,
-              maxLines: 1,
-              overflow: TextOverflow.visible,
-              style:
-                  Theme.of(context).textTheme.titleMedium?.toSoftBold.copyWith(
-                        color: context.colorScheme.onPrimaryContainer,
-                      ),
-            );
-          },
-        ),
-      ),
     );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    WidgetRef ref,
+    StartButtonSelectorState state,
+    bool isStart,
+    int? runTime,
+  ) {
+    if (!state.isInit) {
+      return Container(
+        padding: EdgeInsets.all(2),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+          ),
+        ),
+      );
+    }
+
+    if (!state.hasProfile) {
+      return Text(
+        appLocalizations.checkOrAddProfile,
+        style: context.textTheme.bodyMedium?.toLight.adjustSize(1),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    if (!isStart) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.play_arrow,
+            size: 16,
+            color: context.colorScheme.primary,
+          ),
+          SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              appLocalizations.serviceReady,
+              style: context.textTheme.bodyMedium?.toLight.adjustSize(1),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      );
+    }
+
+    // 启动状态：显示暂停图标 + 运行时间
+    final timeText = _formatRunTime(runTime);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.pause,
+          size: 16,
+          color: context.colorScheme.primary,
+        ),
+        SizedBox(width: 4),
+        Expanded(
+          child: Text(
+            timeText,
+            style: context.textTheme.bodyMedium?.toLight.adjustSize(1),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatRunTime(int? timeStamp) {
+    if (timeStamp == null) return '00:00:00';
+    
+    final diff = timeStamp / 1000;
+    int inHours = (diff / 3600).floor();
+    int inMinutes = (diff / 60 % 60).floor();
+    int inSeconds = (diff % 60).floor();
+    
+    // 限制最大显示为 999:59:59
+    if (inHours > 999) {
+      inHours = 999;
+      inMinutes = 59;
+      inSeconds = 59;
+    }
+    
+    // 小于100小时显示2位，大于等于100小时显示3位
+    final hourStr = inHours < 100 
+        ? inHours.toString().padLeft(2, '0')
+        : inHours.toString().padLeft(3, '0');
+    
+    return '$hourStr:${inMinutes.toString().padLeft(2, '0')}:${inSeconds.toString().padLeft(2, '0')}';
   }
 }

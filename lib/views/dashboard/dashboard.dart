@@ -8,7 +8,7 @@ import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'widgets/start_button.dart';
+import 'widgets/widgets.dart' as dashboard_widgets;
 
 typedef _IsEditWidgetBuilder = Widget Function(bool isEdit);
 
@@ -154,12 +154,11 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     return CommonScaffold(
       title: appLocalizations.dashboard,
       actions: _buildActions(),
-      floatingActionButton: const StartButton(),
       body: Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
             padding: const EdgeInsets.all(16).copyWith(
-              bottom: 88,
+              bottom: 16,
             ),
             child: _buildIsEdit((isEdit) {
               return isEdit
@@ -180,6 +179,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                                 .map(
                                   (item) => item.widget,
                                 ),
+                            // StartButton 始终在最后，编辑模式下不可删除
+                            GridItem(
+                              crossAxisCellCount: 4,
+                              child: dashboard_widgets.StartButton(),
+                            ).wrap(
+                              builder: (child) => _NonDeletableWidget(child: child),
+                            ),
                           ],
                           onUpdate: () {
                             _handleSave();
@@ -195,7 +201,14 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                       crossAxisCount: columns,
                       crossAxisSpacing: spacing,
                       mainAxisSpacing: spacing,
-                      children: children,
+                      children: [
+                        ...children,
+                        // StartButton 始终在最后
+                        GridItem(
+                          crossAxisCellCount: 4,
+                          child: dashboard_widgets.StartButton(),
+                        ),
+                      ],
                     );
             })),
       ),
@@ -304,6 +317,20 @@ class _AddedContainerState extends State<_AddedContainer> {
           ),
         )
       ],
+    );
+  }
+}
+
+// 不可删除的小部件包装器（用于 StartButton）
+class _NonDeletableWidget extends StatelessWidget {
+  final Widget child;
+
+  const _NonDeletableWidget({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ActivateBox(
+      child: child,
     );
   }
 }
