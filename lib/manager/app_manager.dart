@@ -288,20 +288,40 @@ class AppSidebarContainer extends ConsumerWidget {
       ),
       tooltip: isLocked ? '解锁窗口大小' : '锁定窗口大小',
       onPressed: () async {
-        final newLockedState = !isLocked;
-        ref.read(windowLockedProvider.notifier).state = newLockedState;
-        
-        if (newLockedState) {
-          // 锁定窗口：获取当前窗口大小，设置为最小和最大大小
-          final currentSize = await windowManager.getSize();
-          await windowManager.setMinimumSize(currentSize);
-          await windowManager.setMaximumSize(currentSize);
-          await windowManager.setResizable(false);
-        } else {
-          // 解锁窗口：恢复默认的最小大小，移除最大大小限制，允许调整大小
-          await windowManager.setMinimumSize(const Size(380, 400));
-          await windowManager.setMaximumSize(const Size(double.infinity, double.infinity));
-          await windowManager.setResizable(true);
+        try {
+          final newLockedState = !isLocked;
+          
+          if (newLockedState) {
+            // 锁定窗口：获取当前窗口大小，设置为最小和最大大小
+            final currentSize = await windowManager.getSize();
+            await windowManager.setMinimumSize(currentSize);
+            await windowManager.setMaximumSize(currentSize);
+            await windowManager.setResizable(false);
+            
+            // 保存窗口大小和锁定状态
+            ref.read(windowSettingProvider.notifier).updateState(
+              (state) => state.copyWith(
+                width: currentSize.width,
+                height: currentSize.height,
+              ),
+            );
+            ref.read(windowLockedProvider.notifier).state = newLockedState;
+            globalState.appController.savePreferencesDebounce();
+          } else {
+            // 解锁窗口：恢复默认的最小大小，移除最大大小限制，允许调整大小
+            // 使用一个非常大的固定值来移除最大大小限制（Windows 不支持 double.infinity）
+            await windowManager.setMinimumSize(const Size(380, 400));
+            await windowManager.setMaximumSize(const Size(10000, 10000));
+            await windowManager.setResizable(true);
+            
+            // 保存解锁状态
+            ref.read(windowLockedProvider.notifier).state = newLockedState;
+            globalState.appController.savePreferencesDebounce();
+          }
+        } catch (e) {
+          // 如果操作失败，恢复状态并记录错误
+          commonPrint.log('窗口锁定操作失败: $e');
+          ref.read(windowLockedProvider.notifier).state = isLocked;
         }
       },
     );

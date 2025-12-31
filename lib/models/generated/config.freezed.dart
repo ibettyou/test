@@ -866,6 +866,7 @@ mixin _$WindowProps {
   double get height => throw _privateConstructorUsedError;
   double? get top => throw _privateConstructorUsedError;
   double? get left => throw _privateConstructorUsedError;
+  bool get isLocked => throw _privateConstructorUsedError;
 
   /// Serializes this WindowProps to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -883,7 +884,8 @@ abstract class $WindowPropsCopyWith<$Res> {
           WindowProps value, $Res Function(WindowProps) then) =
       _$WindowPropsCopyWithImpl<$Res, WindowProps>;
   @useResult
-  $Res call({double width, double height, double? top, double? left});
+  $Res call(
+      {double width, double height, double? top, double? left, bool isLocked});
 }
 
 /// @nodoc
@@ -905,6 +907,7 @@ class _$WindowPropsCopyWithImpl<$Res, $Val extends WindowProps>
     Object? height = null,
     Object? top = freezed,
     Object? left = freezed,
+    Object? isLocked = null,
   }) {
     return _then(_value.copyWith(
       width: null == width
@@ -923,6 +926,10 @@ class _$WindowPropsCopyWithImpl<$Res, $Val extends WindowProps>
           ? _value.left
           : left // ignore: cast_nullable_to_non_nullable
               as double?,
+      isLocked: null == isLocked
+          ? _value.isLocked
+          : isLocked // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -935,7 +942,8 @@ abstract class _$$WindowPropsImplCopyWith<$Res>
       __$$WindowPropsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double width, double height, double? top, double? left});
+  $Res call(
+      {double width, double height, double? top, double? left, bool isLocked});
 }
 
 /// @nodoc
@@ -955,6 +963,7 @@ class __$$WindowPropsImplCopyWithImpl<$Res>
     Object? height = null,
     Object? top = freezed,
     Object? left = freezed,
+    Object? isLocked = null,
   }) {
     return _then(_$WindowPropsImpl(
       width: null == width
@@ -973,6 +982,10 @@ class __$$WindowPropsImplCopyWithImpl<$Res>
           ? _value.left
           : left // ignore: cast_nullable_to_non_nullable
               as double?,
+      isLocked: null == isLocked
+          ? _value.isLocked
+          : isLocked // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -981,7 +994,11 @@ class __$$WindowPropsImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$WindowPropsImpl implements _WindowProps {
   const _$WindowPropsImpl(
-      {this.width = 750, this.height = 600, this.top, this.left});
+      {this.width = 750,
+      this.height = 600,
+      this.top,
+      this.left,
+      this.isLocked = false});
 
   factory _$WindowPropsImpl.fromJson(Map<String, dynamic> json) =>
       _$$WindowPropsImplFromJson(json);
@@ -996,10 +1013,13 @@ class _$WindowPropsImpl implements _WindowProps {
   final double? top;
   @override
   final double? left;
+  @override
+  @JsonKey()
+  final bool isLocked;
 
   @override
   String toString() {
-    return 'WindowProps(width: $width, height: $height, top: $top, left: $left)';
+    return 'WindowProps(width: $width, height: $height, top: $top, left: $left, isLocked: $isLocked)';
   }
 
   @override
@@ -1010,12 +1030,15 @@ class _$WindowPropsImpl implements _WindowProps {
             (identical(other.width, width) || other.width == width) &&
             (identical(other.height, height) || other.height == height) &&
             (identical(other.top, top) || other.top == top) &&
-            (identical(other.left, left) || other.left == left));
+            (identical(other.left, left) || other.left == left) &&
+            (identical(other.isLocked, isLocked) ||
+                other.isLocked == isLocked));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, width, height, top, left);
+  int get hashCode =>
+      Object.hash(runtimeType, width, height, top, left, isLocked);
 
   /// Create a copy of WindowProps
   /// with the given fields replaced by the non-null parameter values.
@@ -1038,7 +1061,8 @@ abstract class _WindowProps implements WindowProps {
       {final double width,
       final double height,
       final double? top,
-      final double? left}) = _$WindowPropsImpl;
+      final double? left,
+      final bool isLocked}) = _$WindowPropsImpl;
 
   factory _WindowProps.fromJson(Map<String, dynamic> json) =
       _$WindowPropsImpl.fromJson;
@@ -1051,6 +1075,8 @@ abstract class _WindowProps implements WindowProps {
   double? get top;
   @override
   double? get left;
+  @override
+  bool get isLocked;
 
   /// Create a copy of WindowProps
   /// with the given fields replaced by the non-null parameter values.

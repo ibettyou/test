@@ -64,6 +64,18 @@ class Window {
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.setPreventClose(true);
     });
+    
+    // 如果窗口被锁定，应用锁定状态
+    if (props.isLocked) {
+      try {
+        final lockedSize = Size(props.width, props.height);
+        await windowManager.setMinimumSize(lockedSize);
+        await windowManager.setMaximumSize(lockedSize);
+        await windowManager.setResizable(false);
+      } catch (e) {
+        commonPrint.log('应用窗口锁定状态失败: $e');
+      }
+    }
   }
 
   void updateMacOSBrightness(Brightness brightness) {

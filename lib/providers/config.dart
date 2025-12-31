@@ -320,6 +320,15 @@ class PatchClashConfig extends _$PatchClashConfig
 class WindowLocked extends _$WindowLocked with AutoDisposeNotifierMixin {
   @override
   bool build() {
-    return false;
+    return globalState.config.windowProps.isLocked;
+  }
+
+  @override
+  onUpdate(value) {
+    globalState.config = globalState.config.copyWith(
+      windowProps: globalState.config.windowProps.copyWith(
+        isLocked: value,
+      ),
+    );
   }
 }

@@ -209,7 +209,7 @@ final patchClashConfigProvider =
 );
 
 typedef _$PatchClashConfig = AutoDisposeNotifier<ClashConfig>;
-String _$windowLockedHash() => r'664395a08506258976678ab4a89912d1cede80d2';
+String _$windowLockedHash() => r'3dc075afbc2a00dae7dec528accbed76afc206e4';
 
 /// See also [WindowLocked].
 @ProviderFor(WindowLocked)
