@@ -889,7 +889,8 @@ class _$SnifferImpl implements _Sniffer {
       final List<String> skipSrcAddress = const [],
       @JsonKey(name: 'skip-dst-address')
       final List<String> skipDstAddress = const [],
-      @JsonKey(name: 'skip-domain') final List<String> skipDomain = const [],
+      @JsonKey(name: 'skip-domain')
+      final List<String> skipDomain = const ['mijia cloud'],
       @JsonKey(name: 'port-whitelist') final List<String> port = const [],
       @JsonKey(name: 'force-dns-mapping') this.forceDnsMapping = true,
       @JsonKey(name: 'parse-pure-ip') this.parsePureIp = true,
@@ -1456,7 +1457,7 @@ class __$$TunImplCopyWithImpl<$Res> extends _$TunCopyWithImpl<$Res, _$TunImpl>
 class _$TunImpl implements _Tun {
   const _$TunImpl(
       {this.enable = false,
-      this.device = appName,
+      this.device = tunDeviceName,
       @JsonKey(name: 'auto-route') this.autoRoute = false,
       this.stack = TunStack.system,
       @JsonKey(name: 'dns-hijack')

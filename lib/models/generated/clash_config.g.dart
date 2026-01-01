@@ -86,7 +86,7 @@ _$SnifferImpl _$$SnifferImplFromJson(Map<String, dynamic> json) =>
       skipDomain: (json['skip-domain'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
+          const ['mijia cloud'],
       port: (json['port-whitelist'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -131,7 +131,7 @@ Map<String, dynamic> _$$SnifferConfigImplToJson(_$SnifferConfigImpl instance) =>
 
 _$TunImpl _$$TunImplFromJson(Map<String, dynamic> json) => _$TunImpl(
       enable: json['enable'] as bool? ?? false,
-      device: json['device'] as String? ?? appName,
+      device: json['device'] as String? ?? tunDeviceName,
       autoRoute: json['auto-route'] as bool? ?? false,
       stack: $enumDecodeNullable(_$TunStackEnumMap, json['stack']) ??
           TunStack.system,
