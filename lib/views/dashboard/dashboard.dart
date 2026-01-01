@@ -175,6 +175,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                 return SystemBackBlock(
                   child: CommonPopScope(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SuperGrid(
                           key: key,
@@ -197,12 +198,19 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                           },
                         ),
                         SizedBox(height: spacing),
-                        // StartButton 单独渲染，不在 SuperGrid 中
-                        GridItem(
-                          crossAxisCellCount: 4,
-                          child: ActivateBox(
-                            child: dashboard_widgets.StartButton(),
-                          ),
+                        // StartButton 单独渲染在 Grid 中，保持正确的宽度
+                        Grid(
+                          crossAxisCount: columns,
+                          crossAxisSpacing: spacing,
+                          mainAxisSpacing: spacing,
+                          children: [
+                            GridItem(
+                              crossAxisCellCount: 4,
+                              child: ActivateBox(
+                                child: dashboard_widgets.StartButton(),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

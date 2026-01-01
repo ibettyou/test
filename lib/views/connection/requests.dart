@@ -48,6 +48,7 @@ class _RequestsViewState extends ConsumerState<RequestsView> {
       requestsProvider.select((state) => state.list),
       (prev, next) {
         _requests = next;
+        updateRequestsThrottler();
       },
     );
   }

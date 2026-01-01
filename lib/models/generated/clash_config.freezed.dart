@@ -1716,15 +1716,11 @@ class __$$FallbackFilterImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FallbackFilterImpl implements _FallbackFilter {
   const _$FallbackFilterImpl(
-      {this.geoip = true,
+      {this.geoip = false,
       @JsonKey(name: 'geoip-code') this.geoipCode = 'CN',
       final List<String> geosite = const ['gfw'],
       final List<String> ipcidr = const ['240.0.0.0/4'],
-      final List<String> domain = const [
-        '+.google.com',
-        '+.facebook.com',
-        '+.youtube.com'
-      ]})
+      final List<String> domain = const ['+.google.com']})
       : _geosite = geosite,
         _ipcidr = ipcidr,
         _domain = domain;
@@ -2160,24 +2156,22 @@ class _$DnsImpl implements _Dns {
       @JsonKey(name: 'respect-rules') this.respectRules = false,
       this.ipv6 = false,
       @JsonKey(name: 'default-nameserver')
-      final List<String> defaultNameserver = const ['223.5.5.5'],
+      final List<String> defaultNameserver = const ['114.114.114.114'],
       @JsonKey(name: 'enhanced-mode') this.enhancedMode = DnsMode.fakeIp,
-      @JsonKey(name: 'fake-ip-range') this.fakeIpRange = '198.18.0.1/16',
+      @JsonKey(name: 'fake-ip-range') this.fakeIpRange = '198.18.0.1/15',
       @JsonKey(name: 'fake-ip-filter') final List<String> fakeIpFilter = const [
-        '*.lan',
-        'localhost.ptlogin2.qq.com'
+        '*',
+        'geosite:private',
+        'geosite:geolocation-cn'
       ],
       @JsonKey(name: 'nameserver-policy')
       final Map<String, String> nameserverPolicy = const {
-        'www.baidu.com': '114.114.114.114',
         '+.internal.crop.com': '10.0.0.1',
-        'geosite:cn': 'https://doh.pub/dns-query'
+        'geosite:private': 'system',
+        'geosite:cn': 'system'
       },
-      final List<String> nameserver = const [
-        'https://doh.pub/dns-query',
-        'https://dns.alidns.com/dns-query'
-      ],
-      final List<String> fallback = const ['tls://8.8.4.4', 'tls://1.1.1.1'],
+      final List<String> nameserver = const ['1.1.1.1', '8.8.8.8'],
+      final List<String> fallback = const [],
       @JsonKey(name: 'proxy-server-nameserver')
       final List<String> proxyServerNameserver = const [
         'https://doh.pub/dns-query'

@@ -207,6 +207,37 @@ class TunStackItem extends ConsumerWidget {
   }
 }
 
+class IcmpForwardingItem extends ConsumerWidget {
+  const IcmpForwardingItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    // 注意：这里取反，因为 disableIcmpForwarding=true 表示禁用
+    // 而 UI 上显示的是"启用 ICMP 转发"
+    final icmpForwarding = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => !state.tun.disableIcmpForwarding,
+      ),
+    );
+
+    return ListItem.switchItem(
+      title: Text(appLocalizations.icmpForwarding),
+      subtitle: Text(appLocalizations.icmpForwardingDesc),
+      delegate: SwitchDelegate(
+        value: icmpForwarding,
+        onChanged: (value) {
+          // 取反后传递给内核
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith.tun(
+                  disableIcmpForwarding: !value,
+                ),
+              );
+        },
+      ),
+    );
+  }
+}
+
 class BypassDomainItem extends StatelessWidget {
   const BypassDomainItem({super.key});
 
@@ -367,6 +398,7 @@ final networkItems = [
     items: [
       if (system.isDesktop) const TUNItem(),
       if (system.isMacOS) const AutoSetSystemDnsItem(),
+      const IcmpForwardingItem(),
       const TunStackItem(),
       if (!system.isDesktop) ...[
         const RouteModeItem(),

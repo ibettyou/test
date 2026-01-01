@@ -436,6 +436,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "specialProxy": MessageLookupByLibrary.simpleMessage("特殊代理"),
     "specialRules": MessageLookupByLibrary.simpleMessage("特殊规则"),
     "stackMode": MessageLookupByLibrary.simpleMessage("栈模式"),
+    "icmpForwarding": MessageLookupByLibrary.simpleMessage("ICMP转发"),
+    "icmpForwardingDesc": MessageLookupByLibrary.simpleMessage("开启后将支持ICMP Ping"),
     "standard": MessageLookupByLibrary.simpleMessage("标准"),
     "start": MessageLookupByLibrary.simpleMessage("启动"),
     "startVpn": MessageLookupByLibrary.simpleMessage("正在启动VPN..."),

@@ -2345,6 +2345,16 @@ class AppLocalizations {
     return Intl.message('Stack mode', name: 'stackMode', desc: '', args: []);
   }
 
+  /// `ICMP Forwarding`
+  String get icmpForwarding {
+    return Intl.message('ICMP Forwarding', name: 'icmpForwarding', desc: '', args: []);
+  }
+
+  /// `Enable ICMP Ping support`
+  String get icmpForwardingDesc {
+    return Intl.message('Enable ICMP Ping support', name: 'icmpForwardingDesc', desc: '', args: []);
+  }
+
   /// `Network`
   String get network {
     return Intl.message('Network', name: 'network', desc: '', args: []);

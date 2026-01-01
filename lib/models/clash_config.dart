@@ -16,7 +16,7 @@ const defaultDns = Dns();
 const defaultGeoXUrl = GeoXUrl();
 
 const defaultMixedPort = 7890;
-const defaultKeepAliveInterval = 30;
+const defaultKeepAliveInterval = 60;
 
 const defaultBypassPrivateRouteAddress = [
   '1.0.0.0/8',
@@ -143,8 +143,8 @@ class RuleProvider with _$RuleProvider {
 @freezed
 class Sniffer with _$Sniffer {
   const factory Sniffer({
-    @Default(false) bool enable,
-    @Default(true) @JsonKey(name: 'override-destination') bool overrideDest,
+    @Default(true) bool enable,
+    @Default(false) @JsonKey(name: 'override-destination') bool overrideDest,
     @Default([]) List<String> sniffing,
     @Default([]) @JsonKey(name: 'force-domain') List<String> forceDomain,
     @Default([]) @JsonKey(name: 'skip-src-address') List<String> skipSrcAddress,
@@ -181,9 +181,10 @@ class Tun with _$Tun {
     @Default(false) bool enable,
     @Default(appName) String device,
     @JsonKey(name: 'auto-route') @Default(false) bool autoRoute,
-    @Default(TunStack.mixed) TunStack stack,
+    @Default(TunStack.system) TunStack stack,
     @JsonKey(name: 'dns-hijack') @Default(['any:53']) List<String> dnsHijack,
     @JsonKey(name: 'route-address') @Default([]) List<String> routeAddress,
+    @JsonKey(name: 'disable-icmp-forwarding') @Default(true) bool disableIcmpForwarding,
   }) = _Tun;
 
   factory Tun.fromJson(Map<String, Object?> json) => _$TunFromJson(json);
@@ -221,21 +222,16 @@ extension TunExt on Tun {
 @freezed
 class FallbackFilter with _$FallbackFilter {
   const factory FallbackFilter({
-    @Default(true) bool geoip,
+    @Default(false) bool geoip,
     @Default('CN') @JsonKey(name: 'geoip-code') String geoipCode,
-    @Default(['gfw']) List<String> geosite,
-    @Default(['240.0.0.0/4']) List<String> ipcidr,
-    @Default([
-      '+.google.com',
-      '+.facebook.com',
-      '+.youtube.com',
-    ])
-    List<String> domain,
+    @Default([]) List<String> geosite,
+    @Default([]) List<String> ipcidr,
+    @Default([]) List<String> domain,
   }) = _FallbackFilter;
-
   factory FallbackFilter.fromJson(Map<String, Object?> json) =>
       _$FallbackFilterFromJson(json);
 }
+
 
 @freezed
 class Dns with _$Dns {
@@ -247,38 +243,35 @@ class Dns with _$Dns {
     @Default(true) @JsonKey(name: 'use-system-hosts') bool useSystemHosts,
     @Default(false) @JsonKey(name: 'respect-rules') bool respectRules,
     @Default(false) bool ipv6,
-    @Default(['223.5.5.5'])
+    @Default(['114.114.114.114'])
     @JsonKey(name: 'default-nameserver')
     List<String> defaultNameserver,
     @Default(DnsMode.fakeIp)
     @JsonKey(name: 'enhanced-mode')
     DnsMode enhancedMode,
-    @Default('198.18.0.1/16')
+    @Default('198.18.0.1/15')
     @JsonKey(name: 'fake-ip-range')
     String fakeIpRange,
     @Default([
-      '*.lan',
-      'localhost.ptlogin2.qq.com',
+      '*',
+      'geosite:private',
+      'geosite:geolocation-cn',
     ])
     @JsonKey(name: 'fake-ip-filter')
     List<String> fakeIpFilter,
     @Default({
-      'www.baidu.com': '114.114.114.114',
       '+.internal.crop.com': '10.0.0.1',
-      'geosite:cn': 'https://doh.pub/dns-query'
+      'geosite:private': 'system',
+      'geosite:cn': 'system'
     })
     @JsonKey(name: 'nameserver-policy')
     Map<String, String> nameserverPolicy,
     @Default([
-      'https://doh.pub/dns-query',
-      'https://dns.alidns.com/dns-query',
+      '1.1.1.1',
+      '8.8.8.8',
     ])
     List<String> nameserver,
-    @Default([
-      'tls://8.8.4.4',
-      'tls://1.1.1.1',
-    ])
-    List<String> fallback,
+    @Default([]) List<String> fallback,
     @Default([
       'https://doh.pub/dns-query',
     ])
