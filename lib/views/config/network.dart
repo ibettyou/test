@@ -225,15 +225,14 @@ class IcmpForwardingItem extends ConsumerWidget {
       subtitle: Text(appLocalizations.icmpForwardingDesc),
       delegate: SwitchDelegate(
         value: icmpForwarding,
-        onChanged: (value) async {
+        onChanged: (value) {
           // 取反后传递给内核
+          // updateParamsProvider 会自动监听变化并触发 updateClashConfigDebounce()
           ref.read(patchClashConfigProvider.notifier).updateState(
                 (state) => state.copyWith.tun(
                   disableIcmpForwarding: !value,
                 ),
               );
-          // 重新加载配置使设置立即生效
-          await globalState.appController.updateClashConfig();
         },
       ),
     );

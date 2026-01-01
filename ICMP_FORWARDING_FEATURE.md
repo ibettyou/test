@@ -36,15 +36,14 @@ class IcmpForwardingItem extends ConsumerWidget {
       subtitle: Text(appLocalizations.icmpForwardingDesc),
       delegate: SwitchDelegate(
         value: icmpForwarding,
-        onChanged: (value) async {
+        onChanged: (value) {
           // 取反后传递给内核
+          // updateParamsProvider 会自动监听变化并触发 updateClashConfigDebounce()
           ref.read(patchClashConfigProvider.notifier).updateState(
                 (state) => state.copyWith.tun(
                   disableIcmpForwarding: !value,
                 ),
               );
-          // 重新加载配置使设置立即生效
-          await globalState.appController.updateClashConfig();
         },
       ),
     );
@@ -108,7 +107,13 @@ patchClashConfigProvider.updateState()
     ↓
 state.copyWith.tun(disableIcmpForwarding: !value)
     ↓
-configState provider 监听变化
+updateParamsProvider 检测到变化 (自动监听)
+    ↓
+ClashManager 监听器触发
+    ↓
+updateClashConfigDebounce() (防抖)
+    ↓
+updateClashConfig()
     ↓
 clashCore.updateConfig(UpdateParams)
     ↓
@@ -127,6 +132,60 @@ Tun 对象序列化为 JSON
     ↓
 内核应用配置
 ```
+
+### 3.1 自动重载机制
+
+系统使用 Riverpod 的自动监听机制来处理配置重载：
+
+**lib/providers/state.dart**:
+```dart
+@riverpod
+UpdateParams updateParams(Ref ref) {
+  final routeMode = ref.watch(
+    networkSettingProvider.select(
+      (state) => state.routeMode,
+    ),
+  );
+  return ref.watch(
+    patchClashConfigProvider.select(
+      (state) => UpdateParams(
+        tun: state.tun.getRealTun(routeMode),  // 包含 disableIcmpForwarding
+        allowLan: state.allowLan,
+        findProcessMode: state.findProcessMode,
+        mode: state.mode,
+        logLevel: state.logLevel,
+        ipv6: state.ipv6,
+        tcpConcurrent: state.tcpConcurrent,
+        externalController: state.externalController,
+        unifiedDelay: state.unifiedDelay,
+        mixedPort: state.mixedPort,
+      ),
+    ),
+  );
+}
+```
+
+**lib/manager/clash_manager.dart**:
+```dart
+ref.listenManual(updateParamsProvider, (prev, next) {
+  if (prev != next) {
+    globalState.appController.updateClashConfigDebounce();
+  }
+});
+```
+
+**工作原理**：
+1. `updateParamsProvider` 监听 `patchClashConfigProvider` 的变化
+2. 当 `tun.disableIcmpForwarding` 变化时，`UpdateParams` 对象也会变化（因为 `Tun` 是 freezed 类，自动实现了正确的 `==` 比较）
+3. `ClashManager` 的监听器检测到 `updateParamsProvider` 变化
+4. 触发 `updateClashConfigDebounce()`，使用防抖机制避免频繁调用
+5. 最终调用 `updateClashConfig()` 重载配置
+
+**优势**：
+- 无需手动调用 `updateClashConfig()`
+- 与其他配置项（如 TUN、栈模式等）行为一致
+- 使用防抖机制，避免频繁重载
+- 避免手动调用和自动触发的竞态条件
 
 ### 4. 数据模型
 
@@ -216,8 +275,11 @@ class UpdateParams with _$UpdateParams {
 
 ## 修复记录
 
-### 2025-01-01: 修复 ICMP 转发开关不立即生效的问题
-- **问题**：用户切换 ICMP 转发开关后，设置不会立即生效，需要重启或重新加载配置
-- **原因**：`onChanged` 回调只更新了配置状态，但没有触发配置重新加载
-- **解决方案**：在 `onChanged` 回调中添加 `await globalState.appController.updateClashConfig()` 调用
-- **影响**：现在切换开关后，配置会立即应用到内核，无需手动重启
+### 2025-01-01: 修复 ICMP 转发开关配置重载机制
+- **问题**：用户切换 ICMP 转发开关后，配置没有正确 reload
+- **原因**：手动调用 `updateClashConfig()` 与自动监听机制产生冲突
+- **解决方案**：移除手动调用，依赖系统自动监听机制
+  - `updateParamsProvider` 监听 `patchClashConfigProvider` 变化
+  - `ClashManager` 监听 `updateParamsProvider` 变化并触发 `updateClashConfigDebounce()`
+  - 使用防抖机制避免频繁调用
+- **影响**：现在切换开关后，配置会通过自动机制正确重载，与其他配置项行为一致

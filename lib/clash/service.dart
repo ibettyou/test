@@ -99,7 +99,7 @@ class ClashService extends ClashHandlerInterface {
       } else {
         // 注册服务失败（例如用户拒绝 UAC），提示但仍尝试直接启动核心（无服务模式，可能影响 TUN）
         globalState.showNotifier(
-          'Helper 服务启动失败，已尝试直接启动核心，某些需要管理员权限的功能可能不可用',
+          '服务启动失败，尝试直接启动核心',
         );
       }
     }

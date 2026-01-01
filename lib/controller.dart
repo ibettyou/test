@@ -86,21 +86,11 @@ class AppController {
 
   Future<void> updateStatus(bool isStart) async {
     if (isStart) {
-      await globalState.handleStart([
-        updateRunTime,
-        updateTraffic,
-      ]);
-      final currentLastModified =
-          await _ref.read(currentProfileProvider)?.profileLastModified;
-      if (currentLastModified == null || lastProfileModified == null) {
-        addCheckIpNumDebounce();
-        return;
-      }
-      if (currentLastModified <= (lastProfileModified ?? 0)) {
-        addCheckIpNumDebounce();
-        return;
-      }
-      applyProfileDebounce();
+      // 快速启动路径：立即启动核心服务
+      await _fastStart();
+      
+      // 后台异步加载其他数据
+      _backgroundLoad();
     } else {
       await globalState.handleStop();
       clashCore.resetTraffic();
@@ -109,6 +99,87 @@ class AppController {
       _ref.read(runTimeProvider.notifier).value = null;
       addCheckIpNumDebounce();
     }
+  }
+
+  /// 快速启动：只执行启动必需的操作
+  Future<void> _fastStart() async {
+    await globalState.handleStart([
+      updateRunTime,
+      updateTraffic,
+    ]);
+    
+    // 检查是否需要重新应用配置
+    final needReapply = await _checkIfNeedReapply();
+    if (needReapply) {
+      // 只设置配置，不更新组和提供者（这些在后台执行）
+      await _quickSetupConfig();
+    }
+    
+    addCheckIpNumDebounce();
+  }
+
+  /// 后台加载：异步执行非关键操作
+  void _backgroundLoad() {
+    Future.microtask(() async {
+      try {
+        // 并行执行网络请求
+        await Future.wait([
+          updateGroups(),
+          updateProviders(),
+        ]);
+        
+        // 延迟执行垃圾回收，避免影响启动性能
+        await Future.delayed(const Duration(seconds: 2));
+        await clashCore.requestGc();
+      } catch (e) {
+        // 静默处理错误，不影响启动
+        commonPrint.log('Background load error: $e');
+      }
+    });
+  }
+
+  /// 检查是否需要重新应用配置
+  Future<bool> _checkIfNeedReapply() async {
+    final currentLastModified =
+        await _ref.read(currentProfileProvider)?.profileLastModified;
+    
+    // 如果配置没有变化，跳过重新应用
+    if (currentLastModified != null && 
+        lastProfileModified != null &&
+        currentLastModified <= lastProfileModified) {
+      return false;
+    }
+    
+    return true;
+  }
+
+  /// 快速配置设置：只设置配置，不执行耗时操作
+  Future<void> _quickSetupConfig() async {
+    await safeRun(
+      () async {
+        await _ref.read(currentProfileProvider)?.checkAndUpdate();
+        final patchConfig = _ref.read(patchClashConfigProvider);
+        final res = await _requestAdmin(patchConfig.tun.enable);
+        if (res.isError) {
+          return;
+        }
+        final realTunEnable = _ref.read(realTunEnableProvider);
+        final realPatchConfig = patchConfig.copyWith.tun(enable: realTunEnable);
+        final params = await globalState.getSetupParams(
+          pathConfig: realPatchConfig,
+        );
+        final message = await clashCore.setupConfig(params);
+        lastProfileModified = await _ref.read(
+          currentProfileProvider.select(
+            (state) => state?.profileLastModified,
+          ),
+        );
+        if (message.isNotEmpty) {
+          throw message;
+        }
+      },
+      needLoading: false, // 不显示加载界面，保持快速启动
+    );
   }
 
   void updateRunTime() {
@@ -561,6 +632,10 @@ class AppController {
       }
     };
     updateTray(true);
+    
+    // 迁移设备名称（如果需要）
+    await _migrateDeviceName();
+    
     await _initCore();
     await _initStatus();
     autoLaunch?.updateStatus(
@@ -568,14 +643,63 @@ class AppController {
     );
     autoUpdateProfiles();
     autoCheckUpdate();
-    if (!_ref.read(appSettingProvider).silentLaunch) {
+    
+    // 窗口显示逻辑优化：
+    // 1. 如果窗口已经可见（用户手动打开应用），保持显示状态
+    // 2. 如果窗口不可见且不是静默启动，显示窗口
+    // 3. 如果是静默启动，隐藏窗口
+    final isWindowVisible = await window?.isVisible ?? false;
+    if (isWindowVisible) {
+      // 窗口已经可见，保持显示状态（用户手动打开了应用）
       window?.show();
     } else {
-      window?.hide();
+      // 窗口不可见，根据 silentLaunch 设置决定是否显示
+      if (!_ref.read(appSettingProvider).silentLaunch) {
+        window?.show();
+      } else {
+        window?.hide();
+      }
     }
+    
     await _handlePreference();
     await _handlerDisclaimer();
     _ref.read(initProvider.notifier).value = true;
+  }
+
+  /// 迁移设备名称：确保 TUN 设备名称为最新值（只执行一次）
+  Future<void> _migrateDeviceName() async {
+    try {
+      // 检查是否已经迁移过
+      final appSetting = _ref.read(appSettingProvider);
+      if (appSetting.deviceNameMigrated) {
+        return; // 已经迁移过，跳过
+      }
+      
+      final currentDeviceName = _ref.read(patchClashConfigProvider).tun.device;
+      
+      // 如果设备名称不是预期值，进行迁移
+      if (currentDeviceName != tunDeviceName) {
+        commonPrint.log('Migrating TUN device name from "$currentDeviceName" to "$tunDeviceName"');
+        
+        _ref.read(patchClashConfigProvider.notifier).updateState(
+          (state) => state.copyWith.tun(
+            device: tunDeviceName,
+          ),
+        );
+        
+        commonPrint.log('TUN device name migration completed');
+      }
+      
+      // 标记为已迁移，无论是否实际执行了迁移
+      _ref.read(appSettingProvider.notifier).updateState(
+        (state) => state.copyWith(deviceNameMigrated: true),
+      );
+      
+      // 保存配置
+      await savePreferences();
+    } catch (e) {
+      commonPrint.log('Failed to migrate device name: $e');
+    }
   }
 
   Future<void> _initStatus() async {
