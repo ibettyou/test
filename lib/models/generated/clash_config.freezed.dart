@@ -881,8 +881,8 @@ class __$$SnifferImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SnifferImpl implements _Sniffer {
   const _$SnifferImpl(
-      {this.enable = false,
-      @JsonKey(name: 'override-destination') this.overrideDest = true,
+      {this.enable = true,
+      @JsonKey(name: 'override-destination') this.overrideDest = false,
       final List<String> sniffing = const [],
       @JsonKey(name: 'force-domain') final List<String> forceDomain = const [],
       @JsonKey(name: 'skip-src-address')
@@ -1301,6 +1301,8 @@ mixin _$Tun {
   List<String> get dnsHijack => throw _privateConstructorUsedError;
   @JsonKey(name: 'route-address')
   List<String> get routeAddress => throw _privateConstructorUsedError;
+  @JsonKey(name: 'disable-icmp-forwarding')
+  bool get disableIcmpForwarding => throw _privateConstructorUsedError;
 
   /// Serializes this Tun to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1322,7 +1324,8 @@ abstract class $TunCopyWith<$Res> {
       @JsonKey(name: 'auto-route') bool autoRoute,
       TunStack stack,
       @JsonKey(name: 'dns-hijack') List<String> dnsHijack,
-      @JsonKey(name: 'route-address') List<String> routeAddress});
+      @JsonKey(name: 'route-address') List<String> routeAddress,
+      @JsonKey(name: 'disable-icmp-forwarding') bool disableIcmpForwarding});
 }
 
 /// @nodoc
@@ -1345,6 +1348,7 @@ class _$TunCopyWithImpl<$Res, $Val extends Tun> implements $TunCopyWith<$Res> {
     Object? stack = null,
     Object? dnsHijack = null,
     Object? routeAddress = null,
+    Object? disableIcmpForwarding = null,
   }) {
     return _then(_value.copyWith(
       enable: null == enable
@@ -1371,6 +1375,10 @@ class _$TunCopyWithImpl<$Res, $Val extends Tun> implements $TunCopyWith<$Res> {
           ? _value.routeAddress
           : routeAddress // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      disableIcmpForwarding: null == disableIcmpForwarding
+          ? _value.disableIcmpForwarding
+          : disableIcmpForwarding // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -1387,7 +1395,8 @@ abstract class _$$TunImplCopyWith<$Res> implements $TunCopyWith<$Res> {
       @JsonKey(name: 'auto-route') bool autoRoute,
       TunStack stack,
       @JsonKey(name: 'dns-hijack') List<String> dnsHijack,
-      @JsonKey(name: 'route-address') List<String> routeAddress});
+      @JsonKey(name: 'route-address') List<String> routeAddress,
+      @JsonKey(name: 'disable-icmp-forwarding') bool disableIcmpForwarding});
 }
 
 /// @nodoc
@@ -1407,6 +1416,7 @@ class __$$TunImplCopyWithImpl<$Res> extends _$TunCopyWithImpl<$Res, _$TunImpl>
     Object? stack = null,
     Object? dnsHijack = null,
     Object? routeAddress = null,
+    Object? disableIcmpForwarding = null,
   }) {
     return _then(_$TunImpl(
       enable: null == enable
@@ -1433,6 +1443,10 @@ class __$$TunImplCopyWithImpl<$Res> extends _$TunCopyWithImpl<$Res, _$TunImpl>
           ? _value._routeAddress
           : routeAddress // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      disableIcmpForwarding: null == disableIcmpForwarding
+          ? _value.disableIcmpForwarding
+          : disableIcmpForwarding // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -1444,11 +1458,13 @@ class _$TunImpl implements _Tun {
       {this.enable = false,
       this.device = appName,
       @JsonKey(name: 'auto-route') this.autoRoute = false,
-      this.stack = TunStack.mixed,
+      this.stack = TunStack.system,
       @JsonKey(name: 'dns-hijack')
       final List<String> dnsHijack = const ['any:53'],
       @JsonKey(name: 'route-address')
-      final List<String> routeAddress = const []})
+      final List<String> routeAddress = const [],
+      @JsonKey(name: 'disable-icmp-forwarding')
+      this.disableIcmpForwarding = true})
       : _dnsHijack = dnsHijack,
         _routeAddress = routeAddress;
 
@@ -1486,8 +1502,12 @@ class _$TunImpl implements _Tun {
   }
 
   @override
+  @JsonKey(name: 'disable-icmp-forwarding')
+  final bool disableIcmpForwarding;
+
+  @override
   String toString() {
-    return 'Tun(enable: $enable, device: $device, autoRoute: $autoRoute, stack: $stack, dnsHijack: $dnsHijack, routeAddress: $routeAddress)';
+    return 'Tun(enable: $enable, device: $device, autoRoute: $autoRoute, stack: $stack, dnsHijack: $dnsHijack, routeAddress: $routeAddress, disableIcmpForwarding: $disableIcmpForwarding)';
   }
 
   @override
@@ -1503,7 +1523,9 @@ class _$TunImpl implements _Tun {
             const DeepCollectionEquality()
                 .equals(other._dnsHijack, _dnsHijack) &&
             const DeepCollectionEquality()
-                .equals(other._routeAddress, _routeAddress));
+                .equals(other._routeAddress, _routeAddress) &&
+            (identical(other.disableIcmpForwarding, disableIcmpForwarding) ||
+                other.disableIcmpForwarding == disableIcmpForwarding));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1515,7 +1537,8 @@ class _$TunImpl implements _Tun {
       autoRoute,
       stack,
       const DeepCollectionEquality().hash(_dnsHijack),
-      const DeepCollectionEquality().hash(_routeAddress));
+      const DeepCollectionEquality().hash(_routeAddress),
+      disableIcmpForwarding);
 
   /// Create a copy of Tun
   /// with the given fields replaced by the non-null parameter values.
@@ -1535,13 +1558,14 @@ class _$TunImpl implements _Tun {
 
 abstract class _Tun implements Tun {
   const factory _Tun(
-          {final bool enable,
-          final String device,
-          @JsonKey(name: 'auto-route') final bool autoRoute,
-          final TunStack stack,
-          @JsonKey(name: 'dns-hijack') final List<String> dnsHijack,
-          @JsonKey(name: 'route-address') final List<String> routeAddress}) =
-      _$TunImpl;
+      {final bool enable,
+      final String device,
+      @JsonKey(name: 'auto-route') final bool autoRoute,
+      final TunStack stack,
+      @JsonKey(name: 'dns-hijack') final List<String> dnsHijack,
+      @JsonKey(name: 'route-address') final List<String> routeAddress,
+      @JsonKey(name: 'disable-icmp-forwarding')
+      final bool disableIcmpForwarding}) = _$TunImpl;
 
   factory _Tun.fromJson(Map<String, dynamic> json) = _$TunImpl.fromJson;
 
@@ -1560,6 +1584,9 @@ abstract class _Tun implements Tun {
   @override
   @JsonKey(name: 'route-address')
   List<String> get routeAddress;
+  @override
+  @JsonKey(name: 'disable-icmp-forwarding')
+  bool get disableIcmpForwarding;
 
   /// Create a copy of Tun
   /// with the given fields replaced by the non-null parameter values.
@@ -1718,9 +1745,9 @@ class _$FallbackFilterImpl implements _FallbackFilter {
   const _$FallbackFilterImpl(
       {this.geoip = false,
       @JsonKey(name: 'geoip-code') this.geoipCode = 'CN',
-      final List<String> geosite = const ['gfw'],
-      final List<String> ipcidr = const ['240.0.0.0/4'],
-      final List<String> domain = const ['+.google.com']})
+      final List<String> geosite = const [],
+      final List<String> ipcidr = const [],
+      final List<String> domain = const []})
       : _geosite = geosite,
         _ipcidr = ipcidr,
         _domain = domain;

@@ -65,8 +65,8 @@ Map<String, dynamic> _$$RuleProviderImplToJson(_$RuleProviderImpl instance) =>
 
 _$SnifferImpl _$$SnifferImplFromJson(Map<String, dynamic> json) =>
     _$SnifferImpl(
-      enable: json['enable'] as bool? ?? false,
-      overrideDest: json['override-destination'] as bool? ?? true,
+      enable: json['enable'] as bool? ?? true,
+      overrideDest: json['override-destination'] as bool? ?? false,
       sniffing: (json['sniffing'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -134,7 +134,7 @@ _$TunImpl _$$TunImplFromJson(Map<String, dynamic> json) => _$TunImpl(
       device: json['device'] as String? ?? appName,
       autoRoute: json['auto-route'] as bool? ?? false,
       stack: $enumDecodeNullable(_$TunStackEnumMap, json['stack']) ??
-          TunStack.mixed,
+          TunStack.system,
       dnsHijack: (json['dns-hijack'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -143,6 +143,7 @@ _$TunImpl _$$TunImplFromJson(Map<String, dynamic> json) => _$TunImpl(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      disableIcmpForwarding: json['disable-icmp-forwarding'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$TunImplToJson(_$TunImpl instance) => <String, dynamic>{
@@ -152,6 +153,7 @@ Map<String, dynamic> _$$TunImplToJson(_$TunImpl instance) => <String, dynamic>{
       'stack': _$TunStackEnumMap[instance.stack]!,
       'dns-hijack': instance.dnsHijack,
       'route-address': instance.routeAddress,
+      'disable-icmp-forwarding': instance.disableIcmpForwarding,
     };
 
 const _$TunStackEnumMap = {
@@ -167,15 +169,15 @@ _$FallbackFilterImpl _$$FallbackFilterImplFromJson(Map<String, dynamic> json) =>
       geosite: (json['geosite'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['gfw'],
+          const [],
       ipcidr: (json['ipcidr'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['240.0.0.0/4'],
+          const [],
       domain: (json['domain'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['+.google.com'],
+          const [],
     );
 
 Map<String, dynamic> _$$FallbackFilterImplToJson(
