@@ -224,8 +224,11 @@ DashboardState dashboardState(Ref ref) {
   final dashboardWidgets =
       ref.watch(appSettingProvider.select((state) => state.dashboardWidgets));
   final viewWidth = ref.watch(viewWidthProvider);
+  final widgets = dashboardWidgets.contains(DashboardWidget.startButton)
+      ? dashboardWidgets
+      : [...dashboardWidgets, DashboardWidget.startButton];
   return DashboardState(
-    dashboardWidgets: dashboardWidgets,
+    dashboardWidgets: widgets,
     viewWidth: viewWidth,
   );
 }

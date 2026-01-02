@@ -174,11 +174,13 @@ class ProxiesTabViewState extends ConsumerState<ProxiesTabView>
       return;
     }
     final realIndex = index == -1 ? 0 : index;
-    _tabController ??= TabController(
-      length: length,
-      initialIndex: realIndex,
-      vsync: this,
-    );
+    setState(() {
+      _tabController ??= TabController(
+        length: length,
+        initialIndex: realIndex,
+        vsync: this,
+      );
+    });
     _tabControllerListener(realIndex);
     _tabController?.addListener(_tabControllerListener);
   }
@@ -193,6 +195,16 @@ class ProxiesTabViewState extends ConsumerState<ProxiesTabView>
         label: appLocalizations.nullTip(appLocalizations.proxies),
       );
     }
+    // Safety check: ensure controller matches groups count
+    if (_tabController != null && _tabController!.length != groups.length) {
+      _destroyTabController();
+      _updateTabController(groups.length, _tabController?.index ?? 0);
+    }
+    // Also handle case where controller is null but we have groups
+    if (_tabController == null && groups.isNotEmpty) {
+       _updateTabController(groups.length, 0);
+    }
+
     final ProxyGroupViewKeyMap keyMap = {};
     final children = groups.map((group) {
       final key = GlobalObjectKey<_ProxyGroupViewState>(group.name);
@@ -239,7 +251,9 @@ class ProxiesTabViewState extends ConsumerState<ProxiesTabView>
                     tabs: [
                       for (final group in groups)
                         Tab(
-                          text: group.name,
+                          child: EmojiText(
+                            group.name,
+                          ),
                         ),
                     ],
                   ),

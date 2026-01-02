@@ -52,7 +52,7 @@ class InfoHeader extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: TooltipText(
-                    text: Text(
+                    text: EmojiText(
                       info.label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

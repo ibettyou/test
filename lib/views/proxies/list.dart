@@ -120,6 +120,7 @@ class _ProxiesListViewState extends State<ProxiesListView> {
       final isExpand = currentUnfoldSet.contains(groupName);
       items.addAll([
         ListHeader(
+          enterAnimated: false,
           onScrollToSelected: _scrollToGroupSelected,
           isExpand: isExpand,
           group: group,
@@ -465,7 +466,7 @@ class _ListHeaderState extends State<ListHeader> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        EmojiText(
                           groupName,
                           style: context.textTheme.titleMedium,
                         ),

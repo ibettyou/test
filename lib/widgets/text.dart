@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 
 class TooltipText extends StatelessWidget {
-  final Text text;
+  final Widget text;
 
   const TooltipText({
     super.key,
@@ -18,16 +18,33 @@ class TooltipText extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, container) {
         final maxWidth = container.maxWidth;
-        final size = globalState.measure.computeTextSize(
-          text,
-        );
-        if (maxWidth < size.width) {
-          return Tooltip(
-            triggerMode: TooltipTriggerMode.longPress,
-            preferBelow: false,
-            message: text.data,
-            child: text,
+        Text? textWidget;
+        String? message;
+        if (text is Text) {
+          textWidget = text as Text;
+          message = textWidget.data;
+        } else if (text is EmojiText) {
+          final emojiText = text as EmojiText;
+          textWidget = Text(
+            emojiText.text,
+            style: emojiText.style,
+            maxLines: emojiText.maxLines,
+            overflow: emojiText.overflow,
           );
+          message = emojiText.text;
+        }
+        if (textWidget != null) {
+          final size = globalState.measure.computeTextSize(
+            textWidget,
+          );
+          if (maxWidth < size.width) {
+            return Tooltip(
+              triggerMode: TooltipTriggerMode.longPress,
+              preferBelow: false,
+              message: message,
+              child: text,
+            );
+          }
         }
         return text;
       },

@@ -176,7 +176,7 @@ final navigationStateProvider = AutoDisposeProvider<NavigationState>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef NavigationStateRef = AutoDisposeProviderRef<NavigationState>;
-String _$dashboardStateHash() => r'4434206df2753d7df9eb5223c07ddead4ed170fa';
+String _$dashboardStateHash() => r'6bd5c98196d99af7f198fe1a636f157df5d25c90';
 
 /// See also [dashboardState].
 @ProviderFor(dashboardState)

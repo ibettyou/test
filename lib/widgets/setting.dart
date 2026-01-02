@@ -64,7 +64,7 @@ class SettingTextCard extends StatelessWidget {
       isSelected: isSelected,
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Text(
+        child: EmojiText(
           text,
           style: context.textTheme.bodyMedium,
         ),

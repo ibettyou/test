@@ -320,8 +320,8 @@ class AppIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
-      width: 40,
-      height: 40,
+      width: 32,
+      height: 32,
       child: Image.asset(
         isDark ? 'assets/images/icon_white.png' : 'assets/images/icon_black.png',
         fit: BoxFit.contain,
