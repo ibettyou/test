@@ -2,6 +2,7 @@ import 'package:li_clash/common/common.dart';
 import 'package:flutter/material.dart';
 
 import 'card.dart';
+import 'text.dart';
 
 class SettingInfoCard extends StatelessWidget {
   final Info info;
