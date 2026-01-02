@@ -66,23 +66,28 @@ class EmojiText extends StatelessWidget {
     this.style,
   });
 
-  List<TextSpan> _buildTextSpans(String emojis) {
+  List<TextSpan> _buildTextSpans(String emojis, TextStyle defaultStyle) {
     final List<TextSpan> spans = [];
     final matches = emojiRegex().allMatches(text);
+    final effectiveStyle = style ?? defaultStyle;
 
     int lastMatchEnd = 0;
     for (final match in matches) {
       if (match.start > lastMatchEnd) {
         spans.add(
           TextSpan(
-              text: text.substring(lastMatchEnd, match.start), style: style),
+            text: text.substring(lastMatchEnd, match.start),
+            style: effectiveStyle,
+          ),
         );
       }
       spans.add(
         TextSpan(
           text: match.group(0),
-          style: style?.copyWith(
-            fontFamily: system.isDesktop ? FontFamily.twEmoji.value : null,
+          style: effectiveStyle.merge(
+            TextStyle(
+              fontFamily: system.isDesktop ? FontFamily.twEmoji.value : null,
+            ),
           ),
         ),
       );
@@ -92,7 +97,7 @@ class EmojiText extends StatelessWidget {
       spans.add(
         TextSpan(
           text: text.substring(lastMatchEnd),
-          style: style,
+          style: effectiveStyle,
         ),
       );
     }
@@ -102,12 +107,13 @@ class EmojiText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultStyle = DefaultTextStyle.of(context).style;
     return RichText(
       textScaler: MediaQuery.of(context).textScaler,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.clip,
       text: TextSpan(
-        children: _buildTextSpans(text),
+        children: _buildTextSpans(text, defaultStyle),
       ),
     );
   }

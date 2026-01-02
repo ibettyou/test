@@ -45,7 +45,11 @@ class ProxiesTabViewState extends ConsumerState<ProxiesTabView>
           final index = next.a.indexWhere(
             (item) => item == next.b,
           );
-          _updateTabController(next.a.length, index);
+          if (mounted) {
+            setState(() {
+              _updateTabController(next.a.length, index);
+            });
+          }
         }
       },
       fireImmediately: true,
@@ -174,13 +178,11 @@ class ProxiesTabViewState extends ConsumerState<ProxiesTabView>
       return;
     }
     final realIndex = index == -1 ? 0 : index;
-    setState(() {
-      _tabController ??= TabController(
-        length: length,
-        initialIndex: realIndex,
-        vsync: this,
-      );
-    });
+    _tabController ??= TabController(
+      length: length,
+      initialIndex: realIndex,
+      vsync: this,
+    );
     _tabControllerListener(realIndex);
     _tabController?.addListener(_tabControllerListener);
   }

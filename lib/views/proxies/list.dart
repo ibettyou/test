@@ -43,6 +43,13 @@ class _ProxiesListViewState extends State<ProxiesListView> {
     final index = _headerOffset.findInterval(initOffset);
     final currentIndex = index;
     double headerOffset = 0.0;
+    if (index < _headerOffset.length - 1) {
+      final nextOffset = _headerOffset[index + 1];
+      final currentOffsetInHeader = nextOffset - initOffset;
+      if (currentOffsetInHeader < listHeaderHeight) {
+        headerOffset = listHeaderHeight - currentOffsetInHeader;
+      }
+    }
     return ProxiesListHeaderSelectorState(
       offset: max(headerOffset, 0),
       currentIndex: currentIndex,
