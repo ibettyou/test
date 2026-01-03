@@ -65,7 +65,7 @@ Map<String, dynamic> _$$RuleProviderImplToJson(_$RuleProviderImpl instance) =>
 
 _$SnifferImpl _$$SnifferImplFromJson(Map<String, dynamic> json) =>
     _$SnifferImpl(
-      enable: json['enable'] as bool? ?? true,
+      enable: json['enable'] as bool? ?? false,
       overrideDest: json['override-destination'] as bool? ?? false,
       sniffing: (json['sniffing'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -192,7 +192,7 @@ Map<String, dynamic> _$$FallbackFilterImplToJson(
 
 _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       enable: json['enable'] as bool? ?? true,
-      listen: json['listen'] as String? ?? '0.0.0.0:1053',
+      listen: json['listen'] as String? ?? '0.0.0.0:10053',
       preferH3: json['prefer-h3'] as bool? ?? false,
       useHosts: json['use-hosts'] as bool? ?? true,
       useSystemHosts: json['use-system-hosts'] as bool? ?? true,
@@ -222,7 +222,7 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       nameserver: (json['nameserver'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['1.1.1.1', '8.8.8.8'],
+          const ['1.1.1.1', '1.0.0.1'],
       fallback: (json['fallback'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -266,13 +266,13 @@ const _$DnsModeEnumMap = {
 _$GeoXUrlImpl _$$GeoXUrlImplFromJson(Map<String, dynamic> json) =>
     _$GeoXUrlImpl(
       mmdb: json['mmdb'] as String? ??
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb',
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb',
       asn: json['asn'] as String? ??
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb',
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-asn.mmdb',
       geoip: json['geoip'] as String? ??
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat',
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip-only-cn-private.dat',
       geosite: json['geosite'] as String? ??
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat',
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat',
     );
 
 Map<String, dynamic> _$$GeoXUrlImplToJson(_$GeoXUrlImpl instance) =>

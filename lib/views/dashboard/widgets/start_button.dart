@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/enum/enum.dart';
 import 'package:li_clash/models/models.dart';
@@ -7,13 +9,76 @@ import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StartButton extends ConsumerWidget {
+class StartButton extends ConsumerStatefulWidget {
   const StartButton({super.key});
 
-  void _handleStart(WidgetRef ref) {
+  @override
+  ConsumerState<StartButton> createState() => _StartButtonState();
+}
+
+class _StartButtonState extends ConsumerState<StartButton> {
+  Timer? _timer;
+  String? _statusText;
+  int _seconds = 0;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _seconds = 0;
+    _statusText = null;
+
+    if (system.isAndroid) return;
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      _seconds++;
+      
+      String? newText;
+      if (_seconds < 1) {
+        newText = null;
+      } else if (_seconds < 2) {
+        newText = appLocalizations.waitMoment;
+      } else if (_seconds < 4) {
+        newText = appLocalizations.checkingService;
+      } else if (_seconds < 7) {
+        newText = appLocalizations.asyncLoading;
+      } else if (_seconds < 10) {
+        newText = appLocalizations.quickConfig;
+      } else {
+        newText = appLocalizations.safeStartup;
+      }
+
+      if (newText != _statusText) {
+        setState(() {
+          _statusText = newText;
+        });
+      }
+    });
+  }
+
+  void _handleStart() {
     final isStart = ref.read(runTimeProvider) != null;
     final newState = !isStart;
-    
+
+    if (newState) {
+      _startTimer();
+    } else {
+      _timer?.cancel();
+      if (_statusText != null) {
+        setState(() {
+          _statusText = null;
+        });
+      }
+    }
+
     debouncer.call(
       FunctionTag.updateStatus,
       () {
@@ -24,19 +89,32 @@ class StartButton extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    ref.listen(runTimeProvider, (previous, next) {
+      if (next != null) {
+        _timer?.cancel();
+        if (_statusText != null) {
+          setState(() {
+            _statusText = null;
+          });
+        }
+      }
+    });
+
     final state = ref.watch(startButtonSelectorStateProvider);
     final runTime = ref.watch(runTimeProvider);
     final isStart = runTime != null;
-    
+
     return SizedBox(
       height: getWidgetHeight(1),
       child: CommonCard(
         info: Info(
-          label: isStart ? appLocalizations.runTime : appLocalizations.powerSwitch,
+          label: isStart
+              ? appLocalizations.runTime
+              : (_statusText ?? appLocalizations.powerSwitch),
           iconData: Icons.power_settings_new,
         ),
-        onPressed: state.isInit && state.hasProfile ? () => _handleStart(ref) : null,
+        onPressed: state.isInit && state.hasProfile ? _handleStart : null,
         child: Container(
           padding: baseInfoEdgeInsets.copyWith(
             top: 0,
@@ -134,24 +212,24 @@ class StartButton extends ConsumerWidget {
 
   String _formatRunTime(int? timeStamp) {
     if (timeStamp == null) return '00:00:00';
-    
+
     final diff = timeStamp / 1000;
     int inHours = (diff / 3600).floor();
     int inMinutes = (diff / 60 % 60).floor();
     int inSeconds = (diff % 60).floor();
-    
+
     // 限制最大显示为 999:59:59
     if (inHours > 999) {
       inHours = 999;
       inMinutes = 59;
       inSeconds = 59;
     }
-    
+
     // 小于100小时显示2位，大于等于100小时显示3位
-    final hourStr = inHours < 100 
+    final hourStr = inHours < 100
         ? inHours.toString().padLeft(2, '0')
         : inHours.toString().padLeft(3, '0');
-    
+
     return '$hourStr:${inMinutes.toString().padLeft(2, '0')}:${inSeconds.toString().padLeft(2, '0')}';
   }
 }

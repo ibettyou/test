@@ -240,15 +240,7 @@ class AppLocalizations {
     return Intl.message('English', name: 'en', desc: '', args: []);
   }
 
-  /// `Japanese`
-  String get ja {
-    return Intl.message('Japanese', name: 'ja', desc: '', args: []);
-  }
 
-  /// `Russian`
-  String get ru {
-    return Intl.message('Russian', name: 'ru', desc: '', args: []);
-  }
 
   /// `Simplified Chinese`
   String get zh_CN {
@@ -3289,6 +3281,56 @@ class AppLocalizations {
   String get request {
     return Intl.message('Request', name: 'request', desc: '', args: []);
   }
+
+  /// `Wait a moment`
+  String get waitMoment {
+    return Intl.message(
+      'Wait a moment',
+      name: 'waitMoment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checking service`
+  String get checkingService {
+    return Intl.message(
+      'Checking service',
+      name: 'checkingService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Async loading`
+  String get asyncLoading {
+    return Intl.message(
+      'Async loading',
+      name: 'asyncLoading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quick config`
+  String get quickConfig {
+    return Intl.message(
+      'Quick config',
+      name: 'quickConfig',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Safe startup`
+  String get safeStartup {
+    return Intl.message(
+      'Safe startup',
+      name: 'safeStartup',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -3297,8 +3339,6 @@ class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
-      Locale.fromSubtags(languageCode: 'ja'),
-      Locale.fromSubtags(languageCode: 'ru'),
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'),
     ];
   }

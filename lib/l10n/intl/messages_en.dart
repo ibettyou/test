@@ -744,6 +744,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("Whitelist mode"),
     "years": MessageLookupByLibrary.simpleMessage("Years"),
+    "waitMoment": MessageLookupByLibrary.simpleMessage("Wait a moment"),
+    "checkingService": MessageLookupByLibrary.simpleMessage("Checking service"),
+    "asyncLoading": MessageLookupByLibrary.simpleMessage("Async loading"),
+    "quickConfig": MessageLookupByLibrary.simpleMessage("Quick config"),
+    "safeStartup": MessageLookupByLibrary.simpleMessage("Safe startup"),
     "zh_CN": MessageLookupByLibrary.simpleMessage("Simplified Chinese"),
   };
 }

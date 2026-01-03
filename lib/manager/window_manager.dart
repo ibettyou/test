@@ -263,6 +263,8 @@ class _WindowHeaderState extends State<WindowHeader> {
                   ),
                   IconButton(
                     onPressed: () {
+                      // Unfocus any focused widget (like search fields) before closing
+                      FocusManager.instance.primaryFocus?.unfocus();
                       globalState.appController.handleBackOrExit();
                     },
                     icon: const Icon(Icons.close),

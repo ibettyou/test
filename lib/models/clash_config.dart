@@ -143,7 +143,7 @@ class RuleProvider with _$RuleProvider {
 @freezed
 class Sniffer with _$Sniffer {
   const factory Sniffer({
-    @Default(true) bool enable,
+    @Default(false) bool enable,
     @Default(false) @JsonKey(name: 'override-destination') bool overrideDest,
     @Default([]) List<String> sniffing,
     @Default([]) @JsonKey(name: 'force-domain') List<String> forceDomain,
@@ -237,7 +237,7 @@ class FallbackFilter with _$FallbackFilter {
 class Dns with _$Dns {
   const factory Dns({
     @Default(true) bool enable,
-    @Default('0.0.0.0:1053') String listen,
+    @Default('0.0.0.0:10053') String listen,
     @Default(false) @JsonKey(name: 'prefer-h3') bool preferH3,
     @Default(true) @JsonKey(name: 'use-hosts') bool useHosts,
     @Default(true) @JsonKey(name: 'use-system-hosts') bool useSystemHosts,
@@ -268,7 +268,7 @@ class Dns with _$Dns {
     Map<String, String> nameserverPolicy,
     @Default([
       '1.1.1.1',
-      '8.8.8.8',
+      '1.0.0.1',
     ])
     List<String> nameserver,
     @Default([]) List<String> fallback,
@@ -297,19 +297,19 @@ class Dns with _$Dns {
 class GeoXUrl with _$GeoXUrl {
   const factory GeoXUrl({
     @Default(
-      'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb',
+      'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb',
     )
     String mmdb,
     @Default(
-      'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb',
+      'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-asn.mmdb',
     )
     String asn,
     @Default(
-      'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat',
+      'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip-only-cn-private.dat',
     )
     String geoip,
     @Default(
-      'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat',
+      'https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat',
     )
     String geosite,
   }) = _GeoXUrl;

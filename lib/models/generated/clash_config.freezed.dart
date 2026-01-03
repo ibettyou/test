@@ -881,7 +881,7 @@ class __$$SnifferImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SnifferImpl implements _Sniffer {
   const _$SnifferImpl(
-      {this.enable = true,
+      {this.enable = false,
       @JsonKey(name: 'override-destination') this.overrideDest = false,
       final List<String> sniffing = const [],
       @JsonKey(name: 'force-domain') final List<String> forceDomain = const [],
@@ -2177,7 +2177,7 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
 class _$DnsImpl implements _Dns {
   const _$DnsImpl(
       {this.enable = true,
-      this.listen = '0.0.0.0:1053',
+      this.listen = '0.0.0.0:10053',
       @JsonKey(name: 'prefer-h3') this.preferH3 = false,
       @JsonKey(name: 'use-hosts') this.useHosts = true,
       @JsonKey(name: 'use-system-hosts') this.useSystemHosts = true,
@@ -2198,7 +2198,7 @@ class _$DnsImpl implements _Dns {
         'geosite:private': 'system',
         'geosite:cn': 'system'
       },
-      final List<String> nameserver = const ['1.1.1.1', '8.8.8.8'],
+      final List<String> nameserver = const ['1.1.1.1', '1.0.0.1'],
       final List<String> fallback = const [],
       @JsonKey(name: 'proxy-server-nameserver')
       final List<String> proxyServerNameserver = const [
@@ -2579,13 +2579,13 @@ class __$$GeoXUrlImplCopyWithImpl<$Res>
 class _$GeoXUrlImpl implements _GeoXUrl {
   const _$GeoXUrlImpl(
       {this.mmdb =
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb',
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb',
       this.asn =
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb',
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-asn.mmdb',
       this.geoip =
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat',
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip-only-cn-private.dat',
       this.geosite =
-          'https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat'});
+          'https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat'});
 
   factory _$GeoXUrlImpl.fromJson(Map<String, dynamic> json) =>
       _$$GeoXUrlImplFromJson(json);

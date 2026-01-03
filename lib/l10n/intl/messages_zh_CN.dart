@@ -510,6 +510,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV配置"),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("白名单模式"),
     "years": MessageLookupByLibrary.simpleMessage("年"),
+    "waitMoment": MessageLookupByLibrary.simpleMessage("稍等片刻"),
+    "checkingService": MessageLookupByLibrary.simpleMessage("检查服务"),
+    "asyncLoading": MessageLookupByLibrary.simpleMessage("异步加载"),
+    "quickConfig": MessageLookupByLibrary.simpleMessage("快速配置"),
+    "safeStartup": MessageLookupByLibrary.simpleMessage("安全启动"),
     "zh_CN": MessageLookupByLibrary.simpleMessage("中文简体"),
   };
 }

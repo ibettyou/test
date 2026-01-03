@@ -2,11 +2,11 @@ package statistic
 
 import (
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/metacubex/mihomo/common/atomic"
 	"github.com/metacubex/mihomo/common/xsync"
-	"github.com/metacubex/mihomo/component/memory"
 )
 
 var DefaultManager *Manager
@@ -109,11 +109,11 @@ func (m *Manager) Snapshot() *Snapshot {
 }
 
 func (m *Manager) updateMemory() {
-	stat, err := memory.GetMemoryInfo(m.pid)
-	if err != nil {
-		return
-	}
-	m.memory = stat.RSS
+	var memStats runtime.MemStats
+	runtime.ReadMemStats(&memStats)
+	// Use Alloc (currently allocated heap memory) for a lower, more accurate representation
+	// of Go kernel memory usage, similar to sing-box
+	m.memory = memStats.Alloc
 }
 
 func (m *Manager) ResetStatistic() {

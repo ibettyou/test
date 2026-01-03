@@ -4,9 +4,9 @@ RUN echo "I'm building for $TARGETPLATFORM"
 
 RUN apk add --no-cache gzip && \
     mkdir /mihomo-config && \
-    wget -O /mihomo-config/geoip.metadb https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb && \
-    wget -O /mihomo-config/geosite.dat https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat && \
-    wget -O /mihomo-config/geoip.dat https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat
+    wget -O /mihomo-config/geoip.metadb https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb && \
+    wget -O /mihomo-config/geosite.dat https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat && \
+    wget -O /mihomo-config/geoip.dat https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip-only-cn-private.dat
 
 COPY docker/file-name.sh /mihomo/file-name.sh
 WORKDIR /mihomo

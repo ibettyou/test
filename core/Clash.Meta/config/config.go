@@ -559,10 +559,10 @@ func DefaultRawConfig() *RawConfig {
 			StoreSelected: true,
 		},
 		GeoXUrl: RawGeoXUrl{
-			Mmdb:    "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb",
-			ASN:     "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb",
-			GeoIp:   "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat",
-			GeoSite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat",
+			Mmdb:    "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb",
+			ASN:     "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-asn.mmdb",
+			GeoIp:   "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip-only-cn-private.dat",
+			GeoSite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat",
 		},
 		Sniffer: RawSniffer{
 			Enable:          false,
