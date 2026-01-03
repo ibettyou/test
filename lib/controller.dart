@@ -103,17 +103,44 @@ class AppController {
 
   /// 快速启动：只执行启动必需的操作
   Future<void> _fastStart() async {
+    final patchConfig = _ref.read(patchClashConfigProvider);
+    final isDesktop = system.isDesktop;
+    
+    // 桌面端优化：如果启用了虚拟网卡，先以关闭网卡状态启动核心，再开启网卡
+    // 这样可以避免网卡初始化阻塞导致启动按钮响应迟缓
+    if (isDesktop && patchConfig.tun.enable) {
+      // 1. 强制应用配置（关闭TUN）
+      await _quickSetupConfig(enableTun: false);
+      
+      // 2. 启动服务（更新UI状态）
+      await globalState.handleStart([
+        updateRunTime,
+        updateTraffic,
+      ]);
+      
+      // 3. 延迟开启TUN
+      Future.microtask(() async {
+        final res = await _requestAdmin(true);
+        if (!res.isError) {
+           await _updateClashConfig();
+        }
+      });
+      
+      addCheckIpNumDebounce();
+      return;
+    }
+
+    await globalState.handleStart([
+      updateRunTime,
+      updateTraffic,
+    ]);
+
     // 检查是否需要重新应用配置
     final needReapply = await _checkIfNeedReapply();
     if (needReapply) {
       // 只设置配置，不更新组和提供者（这些在后台执行）
       await _quickSetupConfig();
     }
-    
-    await globalState.handleStart([
-      updateRunTime,
-      updateTraffic,
-    ]);
     
     addCheckIpNumDebounce();
   }
@@ -153,12 +180,15 @@ class AppController {
   }
 
   /// 快速配置设置：只设置配置，不执行耗时操作
-  Future<void> _quickSetupConfig() async {
+  Future<void> _quickSetupConfig({bool? enableTun}) async {
     await safeRun(
       () async {
         await _ref.read(currentProfileProvider)?.checkAndUpdate();
         final patchConfig = _ref.read(patchClashConfigProvider);
-        final res = await _requestAdmin(patchConfig.tun.enable);
+        
+        final targetTun = enableTun ?? patchConfig.tun.enable;
+        
+        final res = await _requestAdmin(targetTun);
         if (res.isError) {
           return;
         }

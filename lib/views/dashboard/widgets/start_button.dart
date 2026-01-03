@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/enum/enum.dart';
 import 'package:li_clash/models/models.dart';
@@ -17,70 +16,9 @@ class StartButton extends ConsumerStatefulWidget {
 }
 
 class _StartButtonState extends ConsumerState<StartButton> {
-  Timer? _timer;
-  String? _statusText;
-  int _seconds = 0;
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _startTimer() {
-    _timer?.cancel();
-    _seconds = 0;
-    
-    // Immediate feedback
-    _statusText = appLocalizations.waitMoment;
-
-    if (system.isAndroid) return;
-
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-      _seconds++;
-      
-      String? newText;
-      if (_seconds < 2) {
-        newText = appLocalizations.waitMoment;
-      } else if (_seconds < 4) {
-        newText = appLocalizations.checkingService;
-      } else if (_seconds < 6) {
-        newText = appLocalizations.asyncLoading;
-      } else if (_seconds < 8) {
-        newText = appLocalizations.quickConfig;
-      } else {
-        newText = appLocalizations.safeStartup;
-      }
-
-      if (newText != _statusText) {
-        setState(() {
-          _statusText = newText;
-        });
-      }
-    });
-  }
-
   void _handleStart() {
     final isStart = ref.read(runTimeProvider) != null;
     final newState = !isStart;
-    
-    // Immediate UI update
-    if (newState) {
-      setState(() {
-        _startTimer();
-      });
-    } else {
-      _timer?.cancel();
-      if (_statusText != null) {
-        setState(() {
-          _statusText = null;
-        });
-      }
-    }
 
     debouncer.call(
       FunctionTag.updateStatus,
@@ -93,30 +31,17 @@ class _StartButtonState extends ConsumerState<StartButton> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(runTimeProvider, (previous, next) {
-      if (next != null) {
-         // Service started, clear manual timer
-        if (_timer != null || _statusText != null) {
-          _timer?.cancel();
-          _timer = null;
-          setState(() {
-            _statusText = null;
-          });
-        }
-      }
-    });
-
     final state = ref.watch(startButtonSelectorStateProvider);
     final runTime = ref.watch(runTimeProvider);
     final isStart = runTime != null;
-    
+
     return SizedBox(
       height: getWidgetHeight(1),
       child: CommonCard(
         info: Info(
           label: isStart
               ? appLocalizations.runTime
-              : (_statusText ?? appLocalizations.powerSwitch),
+              : appLocalizations.powerSwitch,
           iconData: Icons.power_settings_new,
         ),
         onPressed: state.isInit && state.hasProfile ? _handleStart : null,
@@ -170,34 +95,6 @@ class _StartButtonState extends ConsumerState<StartButton> {
     }
 
     if (!isStart) {
-      // If we are showing status text (loading), we can optionally show a loading indicator or just the text in the label.
-      // But the requirement is about "UI immediate feedback". The label changing is feedback.
-      // We can also change the content below.
-      
-      if (_statusText != null) {
-         // While waiting for start, show a small loader or just keep existing "Service Ready" but maybe dimmed?
-         // Actually, let's substitute the "Service Ready" with a loading indicator to match the "Activity".
-         return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 16, 
-              height: 16,
-              child: CircularProgressIndicator(strokeWidth: 2)
-            ),
-            SizedBox(width: 4),
-            Expanded(
-              child: Text(
-                _statusText!,
-                style: context.textTheme.bodyMedium?.toLight.adjustSize(1),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        );
-      }
-
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
