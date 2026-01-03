@@ -113,7 +113,7 @@ func (m *Manager) updateMemory() {
 	if err != nil {
 		return
 	}
-	m.memory = stat.RSS / 15
+	m.memory = stat.RSS
 }
 
 func (m *Manager) ResetStatistic() {

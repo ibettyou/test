@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:li_clash/clash/clash.dart';
-import 'package:li_clash/common/common.dart';
-import 'package:li_clash/models/common.dart';
-import 'package:li_clash/state.dart';
-import 'package:li_clash/widgets/widgets.dart';
+import 'package:fl_clash/clash/clash.dart';
+import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/models/common.dart';
+import 'package:fl_clash/state.dart';
+import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 final _memoryInfoStateNotifier = ValueNotifier<TrafficValue>(
@@ -36,10 +36,11 @@ class _MemoryInfoState extends State<MemoryInfo> {
 
   Future<void> _updateMemory() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final rss = ProcessInfo.currentRss;
       _memoryInfoStateNotifier.value = TrafficValue(
-        value: await clashCore.getMemory(),
+        value: clashLib != null ? rss : await clashCore.getMemory() + rss,
       );
-      timer = Timer(Duration(seconds: 1), () async {
+      timer = Timer(Duration(seconds: 2), () async {
         _updateMemory();
       });
     });
@@ -99,72 +100,3 @@ class _MemoryInfoState extends State<MemoryInfo> {
     );
   }
 }
-
-// class AnimatedCounter extends StatefulWidget {
-//   final double value;
-//   final TextStyle? style;
-//
-//   const AnimatedCounter({
-//     super.key,
-//     required this.value,
-//     this.style,
-//   });
-//
-//   @override
-//   State<AnimatedCounter> createState() => _AnimatedCounterState();
-// }
-//
-// class _AnimatedCounterState extends State<AnimatedCounter> {
-//   late double _previousValue;
-//   late double _currentValue;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _previousValue = widget.value;
-//     _currentValue = widget.value;
-//   }
-//
-//   @override
-//   void didUpdateWidget(AnimatedCounter oldWidget) {
-//     super.didUpdateWidget(oldWidget);
-//     if (oldWidget.value != widget.value) {
-//       // if (_previousValue == _currentValue) {
-//       //   _previousValue = widget.value;
-//       //   _currentValue = widget.value;
-//       //   return;
-//       // }
-//       _currentValue = widget.value;
-//     }
-//   }
-//
-//   @override
-//   void dispose() {
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Text(
-//       _currentValue.fixed(decimals: 1),
-//       style: widget.style,
-//     );
-//     return TweenAnimationBuilder(
-//       tween: Tween(
-//         begin: _previousValue,
-//         end: _currentValue,
-//       ),
-//       onEnd: () {
-//         _previousValue = _currentValue;
-//       },
-//       duration: Duration(seconds: 6),
-//       curve: Curves.easeOut,
-//       builder: (_, value, ___) {
-//         return Text(
-//           value.fixed(decimals: 1),
-//           style: widget.style,
-//         );
-//       },
-//     );
-//   }
-// }

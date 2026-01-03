@@ -269,11 +269,13 @@ class _WindowHeaderState extends State<WindowHeader> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Unfocus any focused widget (like search fields) before closing
-                      FocusManager.instance.primaryFocus?.unfocus();
+                      FocusScope.of(context).unfocus();
                       // 保持按钮可见状态直到窗口关闭
                       isHoveringNotifier.value = true;
+                      // 等待焦点变更完成
+                      await Future.delayed(Duration.zero);
                       globalState.appController.handleBackOrExit();
                     },
                     icon: const Icon(Icons.close),

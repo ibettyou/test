@@ -103,17 +103,17 @@ class AppController {
 
   /// 快速启动：只执行启动必需的操作
   Future<void> _fastStart() async {
-    await globalState.handleStart([
-      updateRunTime,
-      updateTraffic,
-    ]);
-    
     // 检查是否需要重新应用配置
     final needReapply = await _checkIfNeedReapply();
     if (needReapply) {
       // 只设置配置，不更新组和提供者（这些在后台执行）
       await _quickSetupConfig();
     }
+    
+    await globalState.handleStart([
+      updateRunTime,
+      updateTraffic,
+    ]);
     
     addCheckIpNumDebounce();
   }
@@ -138,7 +138,6 @@ class AppController {
     });
   }
 
-  /// 检查是否需要重新应用配置
   Future<bool> _checkIfNeedReapply() async {
     final currentLastModified =
         await _ref.read(currentProfileProvider)?.profileLastModified;
@@ -146,7 +145,7 @@ class AppController {
     // 如果配置没有变化，跳过重新应用
     if (currentLastModified != null && 
         lastProfileModified != null &&
-        currentLastModified <= (lastProfileModified ?? 0)) {
+        currentLastModified <= lastProfileModified!) {
       return false;
     }
     
