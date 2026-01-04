@@ -48,6 +48,7 @@ const List<DashboardWidget> defaultDashboardWidgets = [
   DashboardWidget.networkDetection,
   DashboardWidget.trafficUsage,
   DashboardWidget.intranetIp,
+  DashboardWidget.memoryInfo,
   DashboardWidget.startButton,
 ];
 

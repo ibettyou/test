@@ -26,6 +26,10 @@ class HomePage extends StatelessWidget {
             final pageView = _HomePageView(pageBuilder: (_, index) {
               final navigationItem = state.navigationItems[index];
               final navigationView = navigationItem.builder(context);
+              
+              // 监听 groups 变化，用于强制刷新代理页面
+              final groupsLen = ref.watch(currentGroupsStateProvider).value.length;
+              
               final view = isMobile
                   ? KeepScope(
                       keep: navigationItem.keep,
@@ -34,6 +38,10 @@ class HomePage extends StatelessWidget {
                   : KeepScope(
                       keep: navigationItem.keep,
                       child: Navigator(
+                        // 当 groups 数量变化时（特别是从0变多），强制重建 Navigator
+                        key: navigationItem.label == PageLabel.proxies
+                            ? ValueKey('${navigationItem.label}_$groupsLen')
+                            : null,
                         onGenerateRoute: (_) {
                           return CommonRoute(
                             builder: (_) => navigationView,
