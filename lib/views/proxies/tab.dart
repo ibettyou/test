@@ -54,6 +54,19 @@ class ProxiesTabViewState extends ConsumerState<ProxiesTabView>
       },
       fireImmediately: true,
     );
+    // 直接监听 groupsProvider，确保当 groups 从空变为非空时能正确更新
+    // 这解决了 ProviderScope 覆盖可能导致的更新传播问题
+    ref.listenManual(
+      groupsProvider,
+      (prev, next) {
+        if (prev?.isEmpty == true && next.isNotEmpty) {
+          // groups 从空变为非空，强制触发重建
+          if (mounted) {
+            setState(() {});
+          }
+        }
+      },
+    );
   }
 
   @override
@@ -197,12 +210,15 @@ class ProxiesTabViewState extends ConsumerState<ProxiesTabView>
         label: appLocalizations.nullTip(appLocalizations.proxies),
       );
     }
-    // Ensure TabController exists and matches groups count
-    if (_tabController == null || _tabController!.length != groups.length) {
+    // Safety check: ensure controller matches groups count
+    if (_tabController != null && _tabController!.length != groups.length) {
       _destroyTabController();
-      _updateTabController(groups.length, 0);
+      _updateTabController(groups.length, _tabController?.index ?? 0);
     }
-    // No need for additional safety checks; controller is now valid
+    // Also handle case where controller is null but we have groups
+    if (_tabController == null && groups.isNotEmpty) {
+       _updateTabController(groups.length, 0);
+    }
 
     final ProxyGroupViewKeyMap keyMap = {};
     final children = groups.map((group) {

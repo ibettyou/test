@@ -69,11 +69,12 @@ NavigationItemsState navigationItemsState(Ref ref) {
   final hasProxies = ref.watch(currentGroupsStateProvider.select(
     (state) => state.value.isNotEmpty,
   ));
-  final isInit = ref.watch(initProvider);
+  // 只要有配置文件或有代理组，就显示代理页面
+  // 这样可以防止 groups 加载中时代理页面消失
   return NavigationItemsState(
     value: navigation.getItems(
       openLogs: openLogs,
-      hasProxies: !isInit ? hasProfiles : hasProxies,
+      hasProxies: hasProfiles || hasProxies,
     ),
   );
 }
