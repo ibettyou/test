@@ -73,9 +73,9 @@ NavigationItemsState navigationItemsState(Ref ref) {
   return NavigationItemsState(
     value: navigation.getItems(
       openLogs: openLogs,
-      // 未初始化：使用 hasProfiles
-      // 已初始化：只要有配置文件就显示代理页（即使 groups 还在加载）
-      hasProxies: !isInit ? hasProfiles : (hasProxies || hasProfiles),
+      // 只要有配置文件或有代理组，就显示代理页面
+      // 避免新安装时因 updateGroups 延迟导致代理页面短暂消失
+      hasProxies: hasProfiles || hasProxies,
     ),
   );
 }
