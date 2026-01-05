@@ -41,7 +41,7 @@ class SmartSuspendItem extends ConsumerStatefulWidget {
 }
 
 class _SmartSuspendItemState extends ConsumerState<SmartSuspendItem> {
-  void _showInputDialog(String currentValue) {
+  void _showInputDialog(String currentValue, bool shouldEnable) {
     final controller = TextEditingController(text: currentValue);
     
     showDialog(
@@ -83,16 +83,27 @@ class _SmartSuspendItemState extends ConsumerState<SmartSuspendItem> {
                 return;
               }
               
-              // 保存并更新
+              // 如果是空值且要启用,不允许
+              if (shouldEnable && newValue.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(appLocalizations.smartSuspendInvalidInput),
+                  ),
+                );
+                return;
+              }
+              
+              // 保存IP并更新启用状态
               ref.read(appSettingProvider.notifier).updateState(
                 (state) => state.copyWith(
                   smartSuspendIps: newValue,
+                  smartSuspendEnabled: shouldEnable ? (newValue.isNotEmpty) : false,
                 ),
               );
               
               // 通知Android端
-              final enabled = ref.read(appSettingProvider).smartSuspendEnabled;
-              vpn?.updateSmartSuspend(enabled, newValue);
+              final finalEnabled = shouldEnable && newValue.isNotEmpty;
+              vpn?.updateSmartSuspend(finalEnabled, newValue);
               
               Navigator.pop(context);
             },
@@ -162,8 +173,8 @@ class _SmartSuspendItemState extends ConsumerState<SmartSuspendItem> {
         value: enabled,
         onChanged: (value) async {
           if (value) {
-            // 开启时弹出输入框
-            _showInputDialog(ips);
+            // 开启时弹出输入框,让用户输入IP
+            _showInputDialog(ips, true);
           } else {
             // 关闭时直接更新
             ref.read(appSettingProvider.notifier).updateState(
@@ -175,10 +186,10 @@ class _SmartSuspendItemState extends ConsumerState<SmartSuspendItem> {
       ),
     );
     
-    // 如果已启用,允许点击整个item来编辑
+    // 如果已启用,允许点击整个item来编辑IP
     if (enabled) {
       return GestureDetector(
-        onTap: () => _showInputDialog(ips),
+        onTap: () => _showInputDialog(ips, false),  // 编辑时不改变启用状态
         child: listItem,
       );
     }
