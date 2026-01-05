@@ -17,6 +17,8 @@ import com.appshub.liclash.extensions.getIpv6RouteAddress
 import com.appshub.liclash.extensions.toCIDR
 import com.appshub.liclash.models.AccessControlMode
 import com.appshub.liclash.models.VpnOptions
+import com.appshub.liclash.modules.SmartSuspendModule
+import com.appshub.liclash.modules.SuspendManager
 import com.appshub.liclash.modules.SuspendModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
