@@ -124,21 +124,31 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
       currentIp = await _getLocalIpAddress();
     }
     
-    if (currentIp == null || currentIp.isEmpty) {
-      commonPrint.log('Smart Auto Stop: No IP address detected');
+    commonPrint.log('Smart Auto Stop: currentIp=$currentIp, lastCheckedIp=$_lastCheckedIp, isVpnRunning=$isVpnRunning, isSmartStopped=$isSmartStopped');
+    
+    if (currentIp == null || currentIp.isEmpty) return;
+    
+    // Only skip if IP is the same AND VPN state hasn't changed
+    // This allows re-checking when VPN state changes even if IP is the same
+    final ipChanged = currentIp != _lastCheckedIp;
+    if (!ipChanged && !isSmartStopped && !isVpnRunning) {
+      // IP same, not smart-stopped, VPN not running - nothing to do
+      return;
+    }
+    if (!ipChanged && isVpnRunning && !isSmartStopped) {
+      // IP same, VPN running, not smart-stopped - already checked
       return;
     }
     
-    commonPrint.log('Smart Auto Stop: Current IP=$currentIp, Last IP=$_lastCheckedIp, VPN running=$isVpnRunning, Smart stopped=$isSmartStopped');
+    _lastCheckedIp = currentIp;
     
     // Use NetworkMatcher for IP matching
     final shouldStop = NetworkMatcher.matchAny(currentIp, networks);
-    commonPrint.log('Smart Auto Stop: Should stop=$shouldStop (matched against ${networks.join(", ")})');
+    commonPrint.log('Smart Auto Stop: shouldStop=$shouldStop for IP $currentIp');
     
-    // Check if we need to take action
     if (shouldStop && isVpnRunning && !isSmartStopped) {
       // Stop VPN
-      _lastCheckedIp = currentIp;
+      commonPrint.log('Smart Auto Stop: Stopping VPN...');
       ref.read(isSmartStoppedProvider.notifier).state = true;
       // Update native state for notification
       if (system.isAndroid) {
@@ -148,7 +158,7 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
       commonPrint.log('Smart Auto Stop: VPN stopped due to matching network $currentIp');
     } else if (!shouldStop && !isVpnRunning && isSmartStopped) {
       // Restart VPN
-      _lastCheckedIp = currentIp;
+      commonPrint.log('Smart Auto Stop: Restarting VPN...');
       ref.read(isSmartStoppedProvider.notifier).state = false;
       // Update native state for notification
       if (system.isAndroid) {
@@ -156,12 +166,6 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
       }
       await _restartVpn();
       commonPrint.log('Smart Auto Stop: VPN restarted due to network change $currentIp');
-    } else {
-      // No action needed, but update last checked IP if it changed
-      if (currentIp != _lastCheckedIp) {
-        _lastCheckedIp = currentIp;
-        commonPrint.log('Smart Auto Stop: IP changed but no action needed');
-      }
     }
   }
 
@@ -187,7 +191,7 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
   }
 
   Future<void> _stopVpn() async {
-    commonPrint.log('Smart Auto Stop: _stopVpn called, isInit=${globalState.isInit}, isAndroid=${system.isAndroid}');
+    commonPrint.log('Smart Auto Stop: _stopVpn called, isInit=${globalState.isInit}, isAndroid=${system.isAndroid}, isService=${globalState.isService}');
     if (!globalState.isInit) {
       commonPrint.log('Smart Auto Stop: globalState not initialized, cannot stop VPN');
       return;
@@ -195,26 +199,30 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
     
     // On Android, use smartStop to keep foreground service running
     if (system.isAndroid) {
-      commonPrint.log('Smart Auto Stop: Using Android smartStop, service=$service');
-      final result = await service?.smartStop();
-      commonPrint.log('Smart Auto Stop: smartStop result=$result');
-      // Also update the Dart-side state
-      globalState.startTime = null;
-      clashCore.resetTraffic();
-      ref.read(trafficsProvider.notifier).clear();
-      ref.read(totalTrafficProvider.notifier).value = Traffic();
-      ref.read(runTimeProvider.notifier).value = null;
-      commonPrint.log('Smart Auto Stop: smartStop completed, Dart state updated');
+      final serviceInstance = service;
+      commonPrint.log('Smart Auto Stop: Using Android smartStop, service=$serviceInstance');
+      if (serviceInstance != null) {
+        await serviceInstance.smartStop();
+        // Also update the Dart-side state
+        globalState.startTime = null;
+        clashCore.resetTraffic();
+        ref.read(trafficsProvider.notifier).clear();
+        ref.read(totalTrafficProvider.notifier).value = Traffic();
+        ref.read(runTimeProvider.notifier).value = null;
+        commonPrint.log('Smart Auto Stop: smartStop completed');
+      } else {
+        commonPrint.log('Smart Auto Stop: service is null, falling back to updateStatus');
+        await globalState.appController.updateStatus(false);
+      }
     } else {
       // On other platforms, use regular stop
-      commonPrint.log('Smart Auto Stop: Using regular stop (updateStatus)');
       await globalState.appController.updateStatus(false);
       commonPrint.log('Smart Auto Stop: updateStatus(false) completed');
     }
   }
 
   Future<void> _restartVpn() async {
-    commonPrint.log('Smart Auto Stop: _restartVpn called, isInit=${globalState.isInit}, isAndroid=${system.isAndroid}');
+    commonPrint.log('Smart Auto Stop: _restartVpn called, isInit=${globalState.isInit}, isAndroid=${system.isAndroid}, isService=${globalState.isService}');
     if (!globalState.isInit) {
       commonPrint.log('Smart Auto Stop: globalState not initialized, cannot restart VPN');
       return;
@@ -222,16 +230,20 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
     
     // On Android, use smartResume to restart from smart-stopped state
     if (system.isAndroid) {
-      commonPrint.log('Smart Auto Stop: Using Android smartResume, service=$service');
-      final result = await service?.smartResume();
-      commonPrint.log('Smart Auto Stop: smartResume result=$result');
-      // Also update the Dart-side state
-      globalState.startTime = DateTime.now();
-      globalState.appController.addCheckIpNumDebounce();
-      commonPrint.log('Smart Auto Stop: smartResume completed, Dart state updated');
+      final serviceInstance = service;
+      commonPrint.log('Smart Auto Stop: Using Android smartResume, service=$serviceInstance');
+      if (serviceInstance != null) {
+        await serviceInstance.smartResume();
+        // Also update the Dart-side state
+        globalState.startTime = DateTime.now();
+        globalState.appController.addCheckIpNumDebounce();
+        commonPrint.log('Smart Auto Stop: smartResume completed');
+      } else {
+        commonPrint.log('Smart Auto Stop: service is null, falling back to updateStatus');
+        await globalState.appController.updateStatus(true);
+      }
     } else {
       // On other platforms, use regular start
-      commonPrint.log('Smart Auto Stop: Using regular start (updateStatus)');
       await globalState.appController.updateStatus(true);
       commonPrint.log('Smart Auto Stop: updateStatus(true) completed');
     }
