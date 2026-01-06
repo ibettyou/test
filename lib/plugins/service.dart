@@ -40,6 +40,32 @@ class Service {
   Future<bool?> stopVpn() async {
     return await methodChannel.invokeMethod<bool>('stopVpn');
   }
+
+  /// Smart stop: Stop VPN but keep foreground service running.
+  /// Used by Smart Auto Stop feature.
+  Future<bool?> smartStop() async {
+    return await methodChannel.invokeMethod<bool>('smartStop');
+  }
+
+  /// Smart resume: Resume VPN from smart-stopped state.
+  Future<bool?> smartResume() async {
+    final options = await clashLib?.getAndroidVpnOptions();
+    return await methodChannel.invokeMethod<bool>('smartResume', {
+      'data': json.encode(options),
+    });
+  }
+
+  /// Set the smart-stopped state in native code.
+  Future<void> setSmartStopped(bool value) async {
+    await methodChannel.invokeMethod<bool>('setSmartStopped', {'value': value});
+  }
+
+  /// Get local IP addresses from native Android code.
+  /// More reliable than connectivity_plus when VPN is running.
+  Future<List<String>> getLocalIpAddresses() async {
+    final result = await methodChannel.invokeMethod<List<dynamic>>('getLocalIpAddresses');
+    return result?.cast<String>() ?? [];
+  }
 }
 
 Service? get service =>

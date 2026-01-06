@@ -34,6 +34,28 @@ data object ServicePlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
             result.success(true)
         }
 
+        "smartStop" -> {
+            GlobalState.getCurrentVPNPlugin()?.handleSmartStop()
+            result.success(true)
+        }
+
+        "smartResume" -> {
+            val data = call.argument<String>("data")
+            val options = Gson().fromJson(data, VpnOptions::class.java)
+            GlobalState.getCurrentVPNPlugin()?.handleSmartResume(options)
+            result.success(true)
+        }
+
+        "setSmartStopped" -> {
+            val value = call.argument<Boolean>("value") ?: false
+            GlobalState.isSmartStopped = value
+            result.success(true)
+        }
+
+        "getLocalIpAddresses" -> {
+            result.success(GlobalState.getCurrentVPNPlugin()?.getLocalIpAddresses() ?: emptyList<String>())
+        }
+
         "init" -> {
             GlobalState.getCurrentAppPlugin()
                 ?.requestNotificationsPermission()

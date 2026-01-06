@@ -17,6 +17,9 @@ jobs:
           - platform: android
             os: ubuntu-latest
             arch: arm64
+          - platform: windows
+            os: windows-2022
+            arch: amd64
 
     steps:
       - name: Setup rust

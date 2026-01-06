@@ -129,7 +129,7 @@ data object VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
      * Get local IP addresses from all non-VPN networks.
      * This is more reliable than connectivity_plus when VPN is running.
      */
-    private fun getLocalIpAddresses(): List<String> {
+    fun getLocalIpAddresses(): List<String> {
         val ipAddresses = mutableListOf<String>()
         try {
             for (network in networks) {
