@@ -51,7 +51,15 @@ Future<void> _service(List<String> flags) async {
     ),
   );
 
-  vpn?.handleGetStartForegroundParams = () {
+  vpn?.handleGetStartForegroundParams = () async {
+    // Check if smart-stopped from native side
+    final isSmartStopped = await vpn?.isSmartStopped() ?? false;
+    if (isSmartStopped) {
+      return json.encode({
+        'title': clashLibHandler.getCurrentProfileName(),
+        'content': appLocalizations.smartAutoStopServiceRunning
+      });
+    }
     final traffic = clashLibHandler.getTraffic();
     return json.encode({
       'title': clashLibHandler.getCurrentProfileName(),

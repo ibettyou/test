@@ -95,10 +95,60 @@ data object VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
                 result.success(true)
             }
 
+            "getLocalIpAddresses" -> {
+                result.success(getLocalIpAddresses())
+            }
+
+            "setSmartStopped" -> {
+                val value = call.argument<Boolean>("value") ?: false
+                GlobalState.isSmartStopped = value
+                result.success(true)
+            }
+
+            "isSmartStopped" -> {
+                result.success(GlobalState.isSmartStopped)
+            }
+
+            "smartStop" -> {
+                handleSmartStop()
+                result.success(true)
+            }
+
+            "smartResume" -> {
+                val data = call.argument<String>("data")
+                result.success(handleSmartResume(Gson().fromJson(data, VpnOptions::class.java)))
+            }
+
             else -> {
                 result.notImplemented()
             }
         }
+    }
+
+    /**
+     * Get local IP addresses from all non-VPN networks.
+     * This is more reliable than connectivity_plus when VPN is running.
+     */
+    private fun getLocalIpAddresses(): List<String> {
+        val ipAddresses = mutableListOf<String>()
+        try {
+            for (network in networks) {
+                val linkProperties = connectivity?.getLinkProperties(network) ?: continue
+                for (linkAddress in linkProperties.linkAddresses) {
+                    val address = linkAddress.address
+                    if (address != null && !address.isLoopbackAddress) {
+                        val hostAddress = address.hostAddress
+                        if (hostAddress != null && !hostAddress.contains(":")) {
+                            // Only IPv4 addresses
+                            ipAddresses.add(hostAddress)
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Ignore errors
+        }
+        return ipAddresses
     }
 
     fun handleStart(options: VpnOptions): Boolean {
@@ -271,6 +321,58 @@ data object VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
             stopForegroundJob()
             Core.stopTun()
             GlobalState.handleTryDestroy()
+        }
+    }
+
+    /**
+     * Smart stop: Stop the TUN but keep the foreground service running.
+     * Used by Smart Auto Stop feature to maintain notification while VPN is paused.
+     */
+    fun handleSmartStop() {
+        GlobalState.runLock.withLock {
+            if (GlobalState.runState.value == RunState.STOP) return
+            GlobalState.runState.value = RunState.STOP
+            GlobalState.isSmartStopped = true
+            // Uninstall SuspendModule
+            suspendModule?.uninstall()
+            suspendModule = null
+            // Stop TUN but keep service running
+            Core.stopTun()
+            // Keep foreground job running to update notification
+            // The notification will show "智能启停服务运行中"
+        }
+    }
+
+    /**
+     * Smart resume: Resume VPN from smart-stopped state.
+     * Restarts the TUN without rebinding the service.
+     */
+    fun handleSmartResume(options: VpnOptions): Boolean {
+        GlobalState.runLock.withLock {
+            if (GlobalState.runState.value == RunState.START) return true
+            GlobalState.isSmartStopped = false
+            this.options = options
+            
+            if (liClashService == null) {
+                // Service was destroyed, need to rebind
+                bindService()
+                return true
+            }
+            
+            GlobalState.runState.value = RunState.START
+            val fd = liClashService?.start(options)
+            Core.startTun(
+                fd = fd ?: 0,
+                protect = this::protect,
+                resolverProcess = this::resolverProcess,
+            )
+            // Install SuspendModule if dozeSuspend is enabled
+            if (options.dozeSuspend == true) {
+                suspendModule?.uninstall()
+                suspendModule = SuspendModule(LiClashApplication.getAppContext())
+                suspendModule?.install()
+            }
+            return true
         }
     }
 

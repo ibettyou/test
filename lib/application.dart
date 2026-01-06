@@ -84,7 +84,9 @@ class ApplicationState extends ConsumerState<Application> {
         child: TrayManager(
           child: HotKeyManager(
             child: ProxyManager(
-              child: child,
+              child: SmartAutoStopManager(
+                child: child,
+              ),
             ),
           ),
         ),
@@ -92,7 +94,9 @@ class ApplicationState extends ConsumerState<Application> {
     }
     return AndroidManager(
       child: TileManager(
-        child: child,
+        child: SmartAutoStopManager(
+          child: child,
+        ),
       ),
     );
   }

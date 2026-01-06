@@ -31,6 +31,10 @@ object GlobalState {
     val runState: MutableLiveData<RunState> = MutableLiveData<RunState>(RunState.STOP)
     var flutterEngine: FlutterEngine? = null
     private var serviceEngine: FlutterEngine? = null
+    
+    // Smart Auto Stop state - when true, VPN was stopped by smart auto stop feature
+    @Volatile
+    var isSmartStopped: Boolean = false
 
     fun getCurrentAppPlugin(): AppPlugin? {
         val currentEngine = if (flutterEngine != null) flutterEngine else serviceEngine

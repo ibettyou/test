@@ -16,6 +16,7 @@ class SuspendModule(private val context: Context) {
     }
 
     private var isInstalled = false
+    private var isSuspended = false
 
     private val powerManager: PowerManager? by lazy {
         context.getSystemService<PowerManager>()
@@ -36,20 +37,35 @@ class SuspendModule(private val context: Context) {
         val screenOn = isScreenOn()
         val deviceIdle = isDeviceIdleMode
         
-        Log.d(TAG, "updateSuspendState - screenOn: $screenOn, deviceIdle: $deviceIdle")
+        Log.d(TAG, "updateSuspendState - screenOn: $screenOn, deviceIdle: $deviceIdle, currentSuspended: $isSuspended")
         
-        if (screenOn) {
-            Log.i(TAG, "Screen ON - Resume from suspend")
-            Core.suspended(false)
+        // 只有在进入 Device Idle 模式时才挂起
+        if (!screenOn && deviceIdle) {
+            if (!isSuspended) {
+                Log.i(TAG, "Device Idle Mode - Suspend enabled")
+                Core.suspended(true)
+                isSuspended = true
+            }
             return
         }
         
-        if (deviceIdle) {
-            Log.i(TAG, "Device Idle Mode - Suspend enabled")
-            Core.suspended(true)
-        } else {
-            Log.d(TAG, "Screen OFF but not in Device Idle - No suspend")
-            Core.suspended(false)
+        // 只有在屏幕亮起且退出 Device Idle 模式时才恢复
+        if (screenOn && !deviceIdle) {
+            if (isSuspended) {
+                Log.i(TAG, "Screen ON and Device Idle OFF - Resume from suspend")
+                Core.suspended(false)
+                isSuspended = false
+            } else {
+                Log.d(TAG, "Screen ON and Device Idle OFF - Already running")
+            }
+            return
+        }
+        
+        // 其他情况：屏幕关闭但未进入 Device Idle，或者屏幕亮起但仍在 Device Idle
+        if (!screenOn && !deviceIdle) {
+            Log.d(TAG, "Screen OFF but not in Device Idle - Keep running")
+        } else if (screenOn && deviceIdle) {
+            Log.d(TAG, "Screen ON but still in Device Idle - Keep suspended")
         }
     }
 
@@ -75,6 +91,7 @@ class SuspendModule(private val context: Context) {
     fun install() {
         if (isInstalled) return
         isInstalled = true
+        isSuspended = false
         
         val filter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
@@ -96,8 +113,12 @@ class SuspendModule(private val context: Context) {
         
         try {
             context.unregisterReceiver(receiver)
-            // Resume on uninstall
-            Core.suspended(false)
+            // Resume on uninstall if suspended
+            if (isSuspended) {
+                Log.i(TAG, "Uninstalling - Resume from suspend")
+                Core.suspended(false)
+                isSuspended = false
+            }
         } catch (e: Exception) {
             Log.w(TAG, "Failed to unregister receiver: ${e.message}")
         }

@@ -1,9 +1,75 @@
 import 'package:li_clash/common/common.dart';
+import 'package:li_clash/common/network_matcher.dart';
 import 'package:li_clash/providers/config.dart';
 import 'package:li_clash/providers/providers.dart';
 import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class SmartAutoStopItem extends ConsumerWidget {
+  const SmartAutoStopItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final smartAutoStop = ref.watch(
+      vpnSettingProvider.select((state) => state.smartAutoStop),
+    );
+    return ListItem.switchItem(
+      title: Text(appLocalizations.smartAutoStop),
+      subtitle: Text(appLocalizations.smartAutoStopDesc),
+      delegate: SwitchDelegate(
+        value: smartAutoStop,
+        onChanged: (bool value) {
+          ref.read(vpnSettingProvider.notifier).updateState(
+                (state) => state.copyWith(
+                  smartAutoStop: value,
+                ),
+              );
+        },
+      ),
+    );
+  }
+}
+
+class NetworkMatchItem extends ConsumerWidget {
+  const NetworkMatchItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final smartAutoStopNetworks = ref.watch(
+      vpnSettingProvider.select((state) => state.smartAutoStopNetworks),
+    );
+    return ListItem.input(
+      title: Text(appLocalizations.networkMatch),
+      subtitle: Text(
+        smartAutoStopNetworks.isEmpty
+            ? appLocalizations.networkMatchHint
+            : smartAutoStopNetworks,
+      ),
+      delegate: InputDelegate(
+        title: appLocalizations.networkMatch,
+        value: smartAutoStopNetworks,
+        onChanged: (String? value) {
+          if (value != null) {
+            ref.read(vpnSettingProvider.notifier).updateState(
+                  (state) => state.copyWith(
+                    smartAutoStopNetworks: value,
+                  ),
+                );
+          }
+        },
+        validator: (String? value) {
+          if (value == null || value.isEmpty) return null;
+          return NetworkMatcher.getValidationError(
+            value,
+            invalidFormatMsg: appLocalizations.invalidIpFormat,
+            tooManyRulesMsg: appLocalizations.tooManyRules,
+          );
+        },
+      ),
+    );
+  }
+}
 
 class DozeSuspendItem extends ConsumerWidget {
   const DozeSuspendItem({super.key});
@@ -30,21 +96,27 @@ class DozeSuspendItem extends ConsumerWidget {
   }
 }
 
-class OtherSettingView extends StatelessWidget {
+class OtherSettingView extends ConsumerWidget {
   const OtherSettingView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final smartAutoStop = ref.watch(
+      vpnSettingProvider.select((state) => state.smartAutoStop),
+    );
+    
     List<Widget> items = [
+      const SmartAutoStopItem(),
+      if (smartAutoStop) const NetworkMatchItem(),
       if (system.isAndroid) const DozeSuspendItem(),
     ];
-    
+
     if (items.isEmpty) {
       return const Center(
         child: Text('No settings available'),
       );
     }
-    
+
     return ListView.separated(
       itemBuilder: (_, index) {
         final item = items[index];

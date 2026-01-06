@@ -403,3 +403,13 @@ class SystemUiOverlayStyleState extends _$SystemUiOverlayStyleState
     );
   }
 }
+
+/// Provider to track if VPN was stopped by Smart Auto Stop feature.
+/// This is used to show different notification content when smart-stopped.
+@riverpod
+class IsSmartStopped extends _$IsSmartStopped {
+  @override
+  bool build() {
+    return false;
+  }
+}
