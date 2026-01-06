@@ -6,6 +6,7 @@ on:
       - 'v*'
 env:
   IS_STABLE: ${{ !contains(github.ref, '-') }}
+  GOEXPERIMENT: greenteagc
 
 jobs:
   build:
@@ -15,24 +16,6 @@ jobs:
         include:
           - platform: android
             os: ubuntu-latest
-            arch: arm64
-          - platform: windows
-            os: windows-2022
-            arch: amd64
-          - platform: windows
-            os: windows-11-arm
-            arch: arm64
-          - platform: macos
-            os: macos-15-intel
-            arch: amd64
-          - platform: macos
-            os: macos-latest
-            arch: arm64
-          - platform: linux
-            os: ubuntu-24.04
-            arch: amd64
-          - platform: linux
-            os: ubuntu-24.04-arm
             arch: arm64
 
     steps:
@@ -57,14 +40,6 @@ jobs:
           echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/local.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/local.properties
 
-      - name: Setup Java
-        if: startsWith(matrix.platform,'android')
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '18'
-          cache: 'gradle'
-
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -78,14 +53,14 @@ jobs:
         with:
           channel: 'master'
           cache: true
-          flutter-version: 3.32.0
+          flutter-version: 3.32.8
       - name: Setup Flutter
         if: ${{ !(startsWith(matrix.os, 'windows-11-arm') || startsWith(matrix.os, 'ubuntu-24.04-arm')) }}
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
-          flutter-version: 3.32.0
+          flutter-version: 3.32.8
 
       - name: Clean Flutter Build
         run: flutter clean
@@ -98,6 +73,8 @@ jobs:
 
       - name: Setup
         run: dart setup.dart ${{ matrix.platform }} ${{ matrix.arch && format('--arch {0}', matrix.arch) }} ${{ env.IS_STABLE == 'true' && '--env stable' || '' }}
+        env:
+          VERBOSE: 1
 
       - name: Upload
         uses: actions/upload-artifact@v4
