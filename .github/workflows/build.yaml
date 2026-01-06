@@ -50,6 +50,45 @@ jobs:
           distribution: 'temurin'
           java-version: '18'
 
+      - name: Setup Gradle
+        if: startsWith(matrix.platform,'android')
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+
+      - name: Configure Gradle Mirror
+        if: startsWith(matrix.platform,'android')
+        run: |
+          mkdir -p ~/.gradle
+          cat > ~/.gradle/init.gradle << 'EOF'
+          allprojects {
+            buildscript {
+              repositories {
+                maven { url 'https://maven.aliyun.com/repository/google' }
+                maven { url 'https://maven.aliyun.com/repository/public' }
+                maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+                google()
+                mavenCentral()
+              }
+            }
+            repositories {
+              maven { url 'https://maven.aliyun.com/repository/google' }
+              maven { url 'https://maven.aliyun.com/repository/public' }
+              maven { url 'https://maven.aliyun.com/repository/jcenter' }
+              google()
+              mavenCentral()
+            }
+          }
+          EOF
+          cat > ~/.gradle/gradle.properties << 'EOF'
+          org.gradle.daemon=true
+          org.gradle.parallel=true
+          org.gradle.caching=true
+          org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError
+          android.useAndroidX=true
+          android.enableJetifier=true
+          EOF
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
