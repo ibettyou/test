@@ -219,7 +219,8 @@ data object VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
     private suspend fun startForeground() {
         GlobalState.runLock.lock()
         try {
-            if (GlobalState.runState.value != RunState.START) return
+            // 允许在智能停止状态下更新通知
+            if (GlobalState.runState.value != RunState.START && !GlobalState.isSmartStopped) return
             val data = flutterMethodChannel.awaitResult<String>("getStartForegroundParams")
             val startForegroundParams = if (data != null) Gson().fromJson(
                 data, StartForegroundParams::class.java

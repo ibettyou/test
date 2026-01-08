@@ -40,7 +40,7 @@ class LiClashService : Service(), BaseServiceInterface {
         
         if (startIndex < combinedText.length) {
             spannable.setSpan(
-                android.text.style.RelativeSizeSpan(0.83f),
+                android.text.style.RelativeSizeSpan(0.80f),
                 startIndex,
                 combinedText.length,
                 android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE

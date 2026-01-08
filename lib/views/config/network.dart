@@ -232,8 +232,7 @@ class IcmpForwardingItem extends ConsumerWidget {
                   disableIcmpForwarding: !value,
                 ),
               );
-          // 像配置页面同步一样重载配置
-          await globalState.appController.applyProfile();
+          // 配置会通过 ClashManager 的监听器自动更新到内核
         },
       ),
     );
