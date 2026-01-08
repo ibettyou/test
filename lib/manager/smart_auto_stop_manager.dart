@@ -200,12 +200,9 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
        
        // Update Dart state to look "running"
        globalState.startTime = DateTime.now();
-       
-       // Reload config to ensure latest settings are applied
-       globalState.appController.applyProfileDebounce(silence: true);
        globalState.appController.addCheckIpNumDebounce();
     } else {
-      // Desktop: Full start (updateStatus already handles config reload)
+      // Desktop: Full start
       await globalState.appController.updateStatus(true);
     }
   }

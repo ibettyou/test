@@ -232,7 +232,8 @@ class IcmpForwardingItem extends ConsumerWidget {
                   disableIcmpForwarding: !value,
                 ),
               );
-          // vpnStateProvider 会监听此变化并触发 vpnTip 提示
+          // 直接调用 updateClashConfig() 立即重载配置并显示进度条
+          await globalState.appController.updateClashConfig();
         },
       ),
     );

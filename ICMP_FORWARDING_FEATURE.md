@@ -282,6 +282,16 @@ class UpdateParams with _$UpdateParams {
 
 ## 修复记录
 
+### 2025-01-08: 修复 ICMP 转发开关配置重载（安卓和桌面平台）
+- **问题**：ICMP 转发开关变更后调用了 `applyProfile()`，会重新加载整个配置文件，而不是立即更新配置
+- **原因**：错误地使用了 `applyProfile()` 而不是 `updateClashConfig()`
+- **解决方案**：改为直接调用 `updateClashConfig()` 立即重载配置并显示进度条
+- **影响**：
+  - 用户切换 ICMP 开关后会立即看到进度条提示
+  - 配置立即生效，与其他开关（如 TUN、栈模式）行为一致
+  - 安卓和桌面平台都能正确生效
+  - 配置通过 `updateParamsProvider` → `UpdateParams` → `Tun.disableIcmpForwarding` 正确传递到 Mihomo 内核
+
 ### 2025-01-01: 修复 ICMP 转发开关配置重载
 - **问题1**：ICMP 转发开关变更后没有显示进度条，配置重载不明显
 - **原因**：使用了防抖机制 `updateClashConfigDebounce()`，导致延迟执行且没有进度提示
