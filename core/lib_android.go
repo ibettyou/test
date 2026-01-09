@@ -110,7 +110,7 @@ func handleStartTun(fd int, callback unsafe.Pointer) {
 			limit:    semaphore.NewWeighted(4),
 		}
 		initTunHook()
-		tunListener, _ := t.Start(fd, currentConfig.General.Tun.Device, currentConfig.General.Tun.Stack)
+		tunListener, _ := t.Start(fd, currentConfig.General.Tun.Device, currentConfig.General.Tun.Stack, currentConfig.General.Tun.DisableICMPForwarding)
 		if tunListener != nil {
 			log.Infoln("TUN address: %v", tunListener.Address())
 			tunHandler.listener = tunListener
@@ -154,17 +154,18 @@ func handleGetAndroidVpnOptions() string {
 	tunLock.Lock()
 	defer tunLock.Unlock()
 	options := state.AndroidVpnOptions{
-		Enable:           state.CurrentState.VpnProps.Enable,
-		Port:             currentConfig.General.MixedPort,
-		Ipv4Address:      state.DefaultIpv4Address,
-		Ipv6Address:      state.GetIpv6Address(),
-		AccessControl:    state.CurrentState.VpnProps.AccessControl,
-		SystemProxy:      state.CurrentState.VpnProps.SystemProxy,
-		AllowBypass:      state.CurrentState.VpnProps.AllowBypass,
-		RouteAddress:     currentConfig.General.Tun.RouteAddress,
-		BypassDomain:     state.CurrentState.BypassDomain,
-		DnsServerAddress: state.GetDnsServerAddress(),
-		DozeSuspend:      state.CurrentState.VpnProps.DozeSuspend,
+		Enable:                state.CurrentState.VpnProps.Enable,
+		Port:                  currentConfig.General.MixedPort,
+		Ipv4Address:           state.DefaultIpv4Address,
+		Ipv6Address:           state.GetIpv6Address(),
+		AccessControl:         state.CurrentState.VpnProps.AccessControl,
+		SystemProxy:           state.CurrentState.VpnProps.SystemProxy,
+		AllowBypass:           state.CurrentState.VpnProps.AllowBypass,
+		RouteAddress:          currentConfig.General.Tun.RouteAddress,
+		BypassDomain:          state.CurrentState.BypassDomain,
+		DnsServerAddress:      state.GetDnsServerAddress(),
+		DozeSuspend:           state.CurrentState.VpnProps.DozeSuspend,
+		DisableIcmpForwarding: currentConfig.General.Tun.DisableICMPForwarding,
 	}
 	data, err := json.Marshal(options)
 	if err != nil {

@@ -24,7 +24,7 @@ type Props struct {
 	Dns6     string `json:"dns6"`
 }
 
-func Start(fd int, device string, stack constant.TUNStack) (*sing_tun.Listener, error) {
+func Start(fd int, device string, stack constant.TUNStack, disableIcmpForwarding bool) (*sing_tun.Listener, error) {
 	var prefix4 []netip.Prefix
 	tempPrefix4, err := netip.ParsePrefix(state.DefaultIpv4Address)
 	if err != nil {
@@ -46,16 +46,17 @@ func Start(fd int, device string, stack constant.TUNStack) (*sing_tun.Listener, 
 	dnsHijack = append(dnsHijack, net.JoinHostPort(state.GetDnsServerAddress(), "53"))
 
 	options := LC.Tun{
-		Enable:              true,
-		Device:              device,
-		Stack:               stack,
-		DNSHijack:           dnsHijack,
-		AutoRoute:           false,
-		AutoDetectInterface: false,
-		Inet4Address:        prefix4,
-		Inet6Address:        prefix6,
-		MTU:                 1480,
-		FileDescriptor:      fd,
+		Enable:                true,
+		Device:                device,
+		Stack:                 stack,
+		DNSHijack:             dnsHijack,
+		AutoRoute:             false,
+		AutoDetectInterface:   false,
+		Inet4Address:          prefix4,
+		Inet6Address:          prefix6,
+		MTU:                   1480,
+		FileDescriptor:        fd,
+		DisableICMPForwarding: disableIcmpForwarding,
 	}
 
 	listener, err := sing_tun.New(options, tunnel.Tunnel)
