@@ -32,8 +32,11 @@ class Service {
 
   Future<bool?> startVpn() async {
     final options = await clashLib?.getAndroidVpnOptions();
+    final jsonMap = options?.toJson() ?? {};
+    jsonMap['disableIcmpForwarding'] = globalState.config.tun.disableIcmpForwarding;
+
     return await methodChannel.invokeMethod<bool>('startVpn', {
-      'data': json.encode(options),
+      'data': json.encode(jsonMap),
     });
   }
 
@@ -50,8 +53,11 @@ class Service {
   /// Smart resume: Resume VPN from smart-stopped state.
   Future<bool?> smartResume() async {
     final options = await clashLib?.getAndroidVpnOptions();
+    final jsonMap = options?.toJson() ?? {};
+    jsonMap['disableIcmpForwarding'] = globalState.config.tun.disableIcmpForwarding;
+
     return await methodChannel.invokeMethod<bool>('smartResume', {
-      'data': json.encode(options),
+      'data': json.encode(jsonMap),
     });
   }
 

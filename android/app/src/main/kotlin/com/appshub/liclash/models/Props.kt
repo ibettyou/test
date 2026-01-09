@@ -27,6 +27,7 @@ data class VpnOptions(
     val ipv6Address: String,
     val dnsServerAddress: String,
     val dozeSuspend: Boolean = false,
+    val disableIcmpForwarding: Boolean = false,
 )
 
 data class StartForegroundParams(

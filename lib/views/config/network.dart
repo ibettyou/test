@@ -233,7 +233,13 @@ class IcmpForwardingItem extends ConsumerWidget {
                 ),
               );
           // 直接调用 updateClashConfig() 立即重载配置并显示进度条
-          await globalState.appController.updateClashConfig();
+          debouncer.call(
+            FunctionTag.icmpForwarding,
+            () async {
+              await globalState.appController.updateClashConfig();
+            },
+            duration: const Duration(milliseconds: 1000),
+          );
         },
       ),
     );
