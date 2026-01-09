@@ -317,7 +317,6 @@ enum FunctionTag {
   updateClashConfig,
   setupClashConfig,
   updateStatus,
-  icmpForwarding,
   updateGroups,
   addCheckIpNum,
   applyProfile,

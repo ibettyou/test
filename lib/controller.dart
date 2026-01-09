@@ -367,17 +367,6 @@ class AppController {
 
   Future<void> _updateClashConfig() async {
     final updateParams = _ref.read(updateParamsProvider);
-    
-    // Check if ICMP forwarding changed on Android to trigger restart
-    bool needRestart = false;
-    if (system.isAndroid) {
-       final oldConfig = globalState.config.patchClashConfig.tun.disableIcmpForwarding;
-       final newConfig = updateParams.tun.disableIcmpForwarding;
-       if (oldConfig != newConfig) {
-           needRestart = true;
-       }
-    }
-    
     final res = await _requestAdmin(updateParams.tun.enable);
     if (res.isError) {
       return;
@@ -389,20 +378,6 @@ class AppController {
       ),
     );
     if (message.isNotEmpty) throw message;
-    
-    if (needRestart && globalState.isStart) {
-       await globalState.handleStop();
-       await Future.delayed(const Duration(milliseconds: 200));
-       await globalState.handleStart();
-       
-       // Update globalState to reflect the change and avoid repeated restarts
-       final currentPatchConfig = globalState.config.patchClashConfig;
-       globalState.config = globalState.config.copyWith(
-          patchClashConfig: currentPatchConfig.copyWith.tun(
-            disableIcmpForwarding: updateParams.tun.disableIcmpForwarding,
-          ),
-       );
-    }
   }
 
   Future<Result<bool>> _requestAdmin(bool enableTun) async {

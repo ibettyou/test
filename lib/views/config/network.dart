@@ -232,14 +232,20 @@ class IcmpForwardingItem extends ConsumerWidget {
                   disableIcmpForwarding: !value,
                 ),
               );
-          // 直接调用 updateClashConfig() 立即重载配置并显示进度条
-          debouncer.call(
-            FunctionTag.icmpForwarding,
-            () async {
-              await globalState.appController.updateClashConfig();
-            },
-            duration: const Duration(milliseconds: 1000),
-          );
+          
+          // 检查 VPN/TUN 是否正在运行
+          final isRunning = ref.read(runTimeProvider) != null;
+          
+          if (isRunning) {
+            // VPN/TUN 正在运行，需要重建以应用新的 ICMP 设置
+            // 先停止，再启动
+            await globalState.appController.updateStatus(false);
+            await Future.delayed(const Duration(milliseconds: 500));
+            await globalState.appController.updateStatus(true);
+          } else {
+            // VPN/TUN 未运行，只需要更新配置（下次启动时生效）
+            await globalState.appController.updateClashConfig();
+          }
         },
       ),
     );
