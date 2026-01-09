@@ -211,7 +211,7 @@ class IcmpForwardingItem extends ConsumerWidget {
   const IcmpForwardingItem({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // 注意：这里取反，因为 disableIcmpForwarding=true 表示禁用
     // 而 UI 上显示的是"启用 ICMP 转发"
     final icmpForwarding = ref.watch(
