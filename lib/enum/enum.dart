@@ -343,6 +343,12 @@ enum DashboardWidget {
       child: NetworkSpeed(),
     ),
   ),
+  networkSpeedSmall(
+    GridItem(
+      crossAxisCellCount: 4,
+      child: NetworkSpeedSmall(),
+    ),
+  ),
   outboundModeV2(
     GridItem(
       crossAxisCellCount: 8,
@@ -400,6 +406,42 @@ enum DashboardWidget {
     GridItem(
       crossAxisCellCount: 4,
       child: MemoryInfo(),
+    ),
+  ),
+  connectionsCount(
+    GridItem(
+      crossAxisCellCount: 4,
+      child: ConnectionsCount(),
+    ),
+  ),
+  ipv6Switch(
+    GridItem(
+      crossAxisCellCount: 4,
+      child: Ipv6Switch(),
+    ),
+  ),
+  dnsOverride(
+    GridItem(
+      crossAxisCellCount: 4,
+      child: DnsOverride(),
+    ),
+  ),
+  providersInfo(
+    GridItem(
+      crossAxisCellCount: 4,
+      child: ProvidersInfo(),
+    ),
+  ),
+  fcmStatus(
+    GridItem(
+      crossAxisCellCount: 4,
+      child: FcmStatus(),
+    ),
+  ),
+  onlinePanel(
+    GridItem(
+      crossAxisCellCount: 4,
+      child: OnlinePanel(),
     ),
   ),
   startButton(

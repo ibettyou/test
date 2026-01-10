@@ -438,5 +438,9 @@
   "proxyChains": "Proxy chains",
   "log": "Log",
   "connection": "Connection",
-  "request": "Request"
+  "request": "Request",
+  "switch": "Switch",
+  "noStatusAvailable": "No Status Available",
+  "onlinePanel": "Online Panel",
+  "openDashboard": "Open Dashboard"
 }
