@@ -526,6 +526,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "asyncLoading": MessageLookupByLibrary.simpleMessage("异步加载"),
     "quickConfig": MessageLookupByLibrary.simpleMessage("快速配置"),
     "safeStartup": MessageLookupByLibrary.simpleMessage("安全启动"),
+    "switchLabel": MessageLookupByLibrary.simpleMessage("开关"),
+    "noStatusAvailable": MessageLookupByLibrary.simpleMessage("未获取到状态"),
+    "onlinePanel": MessageLookupByLibrary.simpleMessage("在线面板"),
+    "openDashboard": MessageLookupByLibrary.simpleMessage("打开 Dashboard"),
     "zh_CN": MessageLookupByLibrary.simpleMessage("中文简体"),
   };
 }

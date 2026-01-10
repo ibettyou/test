@@ -3386,6 +3386,46 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Switch`
+  String get switchLabel {
+    return Intl.message(
+      'Switch',
+      name: 'switchLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Status Available`
+  String get noStatusAvailable {
+    return Intl.message(
+      'No Status Available',
+      name: 'noStatusAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Online Panel`
+  String get onlinePanel {
+    return Intl.message(
+      'Online Panel',
+      name: 'onlinePanel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open Dashboard`
+  String get openDashboard {
+    return Intl.message(
+      'Open Dashboard',
+      name: 'openDashboard',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

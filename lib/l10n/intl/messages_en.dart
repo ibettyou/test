@@ -774,6 +774,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "asyncLoading": MessageLookupByLibrary.simpleMessage("Async loading"),
     "quickConfig": MessageLookupByLibrary.simpleMessage("Quick config"),
     "safeStartup": MessageLookupByLibrary.simpleMessage("Safe startup"),
+    "switchLabel": MessageLookupByLibrary.simpleMessage("Switch"),
+    "noStatusAvailable": MessageLookupByLibrary.simpleMessage("No Status Available"),
+    "onlinePanel": MessageLookupByLibrary.simpleMessage("Online Panel"),
+    "openDashboard": MessageLookupByLibrary.simpleMessage("Open Dashboard"),
     "zh_CN": MessageLookupByLibrary.simpleMessage("Simplified Chinese"),
   };
 }
