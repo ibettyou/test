@@ -440,7 +440,7 @@
   "log": "日志",
   "connection": "连接",
   "request": "请求",
-  "switch": "开关",
+  "switchLabel": "开关",
   "noStatusAvailable": "未获取到状态",
   "onlinePanel": "在线面板",
   "openDashboard": "打开 Dashboard"

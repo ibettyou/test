@@ -31,7 +31,7 @@ class Ipv6Switch extends StatelessWidget {
                 flex: 1,
                 child: TooltipText(
                   text: Text(
-                    appLocalizations.switch,
+                    appLocalizations.switchLabel,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)

@@ -439,7 +439,7 @@
   "log": "Log",
   "connection": "Connection",
   "request": "Request",
-  "switch": "Switch",
+  "switchLabel": "Switch",
   "noStatusAvailable": "No Status Available",
   "onlinePanel": "Online Panel",
   "openDashboard": "Open Dashboard"
