@@ -85,9 +85,9 @@ func (m *Manager) PushDownloaded(lastChain string, size int64) {
 	m.downloadTotal.Add(size)
 }
 
-func (m *Manager) Now() (up int64, down int64) {
-	return m.uploadBlip.Load(), m.downloadBlip.Load()
-}
+
+
+
 
 func (m *Manager) Memory() uint64 {
 	m.updateMemory()

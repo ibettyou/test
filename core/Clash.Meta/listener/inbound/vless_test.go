@@ -292,7 +292,7 @@ func TestInboundVless_Reality(t *testing.T) {
 			PublicKey: realityPublickey,
 			ShortID:   realityShortid,
 		},
-		ClientFingerprint: "chrome",
+		ClientFingerprint: "firefox",
 	}
 	testInboundVless(t, inboundOptions, outboundOptions)
 	t.Run("xtls-rprx-vision", func(t *testing.T) {
@@ -329,7 +329,7 @@ func TestInboundVless_Reality_Grpc(t *testing.T) {
 			PublicKey: realityPublickey,
 			ShortID:   realityShortid,
 		},
-		ClientFingerprint: "chrome",
+		ClientFingerprint: "firefox",
 		Network:           "grpc",
 		GrpcOpts:          outbound.GrpcOptions{GrpcServiceName: "GunService"},
 	}

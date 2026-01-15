@@ -67,6 +67,14 @@ type Listener struct {
 	dnsServerIp []string
 }
 
+type ListenerHandler struct {
+	*sing.ListenerHandler
+	DnsAddrPorts          []netip.AddrPort
+	Inet4Address          []netip.Prefix
+	Inet6Address          []netip.Prefix
+	DisableICMPForwarding bool
+}
+
 var emptyAddressSet = []*netipx.IPSet{{}}
 
 func CalculateInterfaceName(name string) (tunName string) {
@@ -173,7 +181,7 @@ func New(options LC.Tun, tunnel C.Tunnel, additions ...inbound.Addition) (l *Lis
 	})
 	tunMTU := options.MTU
 	if tunMTU == 0 {
-		tunMTU = 1480
+		tunMTU = 9000
 	}
 	var udpTimeout time.Duration
 	if options.UDPTimeout != 0 {
@@ -268,7 +276,9 @@ func New(options LC.Tun, tunnel C.Tunnel, additions ...inbound.Addition) (l *Lis
 
 	handler := &ListenerHandler{
 		ListenerHandler:       h,
-		DnsAdds:               dnsAdds,
+		DnsAddrPorts:          dnsAdds,
+		Inet4Address:          options.Inet4Address,
+		Inet6Address:          options.Inet6Address,
 		DisableICMPForwarding: options.DisableICMPForwarding,
 	}
 	l = &Listener{

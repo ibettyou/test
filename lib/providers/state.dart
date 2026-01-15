@@ -99,10 +99,11 @@ NavigationItemsState currentNavigationItemsState(Ref ref) {
 @riverpod
 CoreState coreState(Ref ref) {
   final vpnProps = ref.watch(vpnSettingProvider);
+  final routeMode = ref.watch(networkSettingProvider.select((state) => state.routeMode));
   final currentProfile = ref.watch(currentProfileProvider);
   final onlyStatisticsProxy = ref.watch(appSettingProvider).onlyStatisticsProxy;
   return CoreState(
-    vpnProps: vpnProps,
+    vpnProps: vpnProps.copyWith(routeMode: routeMode),
     onlyStatisticsProxy: onlyStatisticsProxy,
     currentProfileName: currentProfile?.label ?? currentProfile?.id ?? '',
   );

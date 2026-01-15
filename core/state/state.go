@@ -14,6 +14,7 @@ type AndroidVpnOptions struct {
 	SystemProxy           bool           `json:"systemProxy"`
 	BypassDomain          []string       `json:"bypassDomain"`
 	RouteAddress          []netip.Prefix `json:"routeAddress"`
+	RouteMode             string         `json:"routeMode"`
 	Ipv4Address           string         `json:"ipv4Address"`
 	Ipv6Address           string         `json:"ipv6Address"`
 	DnsServerAddress      string         `json:"dnsServerAddress"`
@@ -34,6 +35,7 @@ type AndroidVpnRawOptions struct {
 	AllowBypass   bool           `json:"allowBypass"`
 	SystemProxy   bool           `json:"systemProxy"`
 	Ipv6          bool           `json:"ipv6"`
+	RouteMode     string         `json:"routeMode"`
 	DozeSuspend   bool           `json:"dozeSuspend"`
 }
 

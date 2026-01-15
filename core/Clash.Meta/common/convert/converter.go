@@ -196,7 +196,7 @@ func ConvertsV2Ray(buf []byte) ([]map[string]any, error) {
 			}
 
 			if fingerprint := query.Get("fp"); fingerprint == "" {
-				trojan["client-fingerprint"] = "chrome"
+				trojan["client-fingerprint"] = "firefox"
 			} else {
 				trojan["client-fingerprint"] = fingerprint
 			}

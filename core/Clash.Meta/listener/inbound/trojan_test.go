@@ -181,7 +181,7 @@ func TestInboundTrojan_Reality(t *testing.T) {
 			PublicKey: realityPublickey,
 			ShortID:   realityShortid,
 		},
-		ClientFingerprint: "chrome",
+		ClientFingerprint: "firefox",
 	}
 	testInboundTrojan(t, inboundOptions, outboundOptions)
 }
@@ -202,7 +202,7 @@ func TestInboundTrojan_Reality_Grpc(t *testing.T) {
 			PublicKey: realityPublickey,
 			ShortID:   realityShortid,
 		},
-		ClientFingerprint: "chrome",
+		ClientFingerprint: "firefox",
 		Network:           "grpc",
 		GrpcOpts:          outbound.GrpcOptions{GrpcServiceName: "GunService"},
 	}

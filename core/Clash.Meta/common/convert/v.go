@@ -28,7 +28,7 @@ func handleVShareLink(names map[string]int, url *url.URL, scheme string, proxy m
 	if strings.HasSuffix(tls, "tls") || tls == "reality" {
 		proxy["tls"] = true
 		if fingerprint := query.Get("fp"); fingerprint == "" {
-			proxy["client-fingerprint"] = "chrome"
+			proxy["client-fingerprint"] = "firefox"
 		} else {
 			proxy["client-fingerprint"] = fingerprint
 		}

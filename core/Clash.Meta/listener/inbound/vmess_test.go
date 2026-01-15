@@ -265,7 +265,7 @@ func TestInboundVMess_Reality(t *testing.T) {
 			PublicKey: realityPublickey,
 			ShortID:   realityShortid,
 		},
-		ClientFingerprint: "chrome",
+		ClientFingerprint: "firefox",
 	}
 	testInboundVMess(t, inboundOptions, outboundOptions)
 }
@@ -287,7 +287,7 @@ func TestInboundVMess_Reality_Grpc(t *testing.T) {
 			PublicKey: realityPublickey,
 			ShortID:   realityShortid,
 		},
-		ClientFingerprint: "chrome",
+		ClientFingerprint: "firefox",
 		Network:           "grpc",
 		GrpcOpts:          outbound.GrpcOptions{GrpcServiceName: "GunService"},
 	}

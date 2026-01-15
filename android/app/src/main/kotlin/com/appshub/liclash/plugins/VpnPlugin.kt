@@ -324,9 +324,11 @@ data object VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
             // Uninstall SuspendModule
             suspendModule?.uninstall()
             suspendModule = null
+            // 先停止 TUN 设备，让 Android 系统清理路由表
+            Core.stopTun()
+            // 然后停止服务
             liClashService?.stop()
             stopForegroundJob()
-            Core.stopTun()
             GlobalState.handleTryDestroy()
         }
     }

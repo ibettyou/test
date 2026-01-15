@@ -112,7 +112,7 @@ func testInboundShadowSocksShadowTls(t *testing.T, inboundOptions inbound.Shadow
 	})
 	t.Run("UConn", func(t *testing.T) {
 		inboundOptions, outboundOptions := inboundOptions, outboundOptions // don't modify outside options value
-		outboundOptions.ClientFingerprint = "chrome"
+		outboundOptions.ClientFingerprint = "firefox"
 		testInboundShadowSocks(t, inboundOptions, outboundOptions, shadowsocksCipherShortLists, true)
 	})
 }

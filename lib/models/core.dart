@@ -90,6 +90,7 @@ class AndroidVpnOptions with _$AndroidVpnOptions {
     required String ipv4Address,
     required String ipv6Address,
     @Default([]) List<String> routeAddress,
+    @Default('config') String routeMode,
     required String dnsServerAddress,
     @Default(false) bool dozeSuspend,
   }) = _AndroidVpnOptions;

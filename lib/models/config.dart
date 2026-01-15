@@ -145,6 +145,7 @@ class VpnProps with _$VpnProps {
     @Default(true) bool systemProxy,
     @Default(false) bool ipv6,
     @Default(true) bool allowBypass,
+    @Default(RouteMode.config) RouteMode routeMode,
     @Default(false) bool dozeSuspend,
     @Default(false) bool smartAutoStop,
     @Default('') String smartAutoStopNetworks,

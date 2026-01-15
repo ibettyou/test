@@ -415,6 +415,23 @@ class GlobalState {
         rules = [...overrideData.runningRule, ...rules];
       }
     }
+    
+    // 如果启用了"绕过私有路由地址"，自动注入私有网络直连规则
+    // 这确保即使流量进入 Clash，也会被直连处理
+    if (config.networkProps.routeMode == RouteMode.bypassPrivate) {
+      final privateNetworkRules = [
+        'IP-CIDR,10.0.0.0/8,DIRECT,no-resolve',
+        'IP-CIDR,172.16.0.0/12,DIRECT,no-resolve',
+        'IP-CIDR,192.168.0.0/16,DIRECT,no-resolve',
+        'IP-CIDR,169.254.0.0/16,DIRECT,no-resolve',
+        'IP-CIDR,127.0.0.0/8,DIRECT,no-resolve',
+        'IP-CIDR6,fc00::/7,DIRECT,no-resolve',
+        'IP-CIDR6,fe80::/10,DIRECT,no-resolve',
+      ];
+      // 将私有网络规则插入到规则列表最前面，确保优先匹配
+      rules = [...privateNetworkRules, ...rules];
+    }
+    
     rawConfig['rule'] = rules;
     return rawConfig;
   }
