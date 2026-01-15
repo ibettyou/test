@@ -1096,6 +1096,7 @@ mixin _$VpnProps {
   bool get systemProxy => throw _privateConstructorUsedError;
   bool get ipv6 => throw _privateConstructorUsedError;
   bool get allowBypass => throw _privateConstructorUsedError;
+  RouteMode get routeMode => throw _privateConstructorUsedError;
   bool get dozeSuspend => throw _privateConstructorUsedError;
   bool get smartAutoStop => throw _privateConstructorUsedError;
   String get smartAutoStopNetworks => throw _privateConstructorUsedError;
@@ -1121,6 +1122,7 @@ abstract class $VpnPropsCopyWith<$Res> {
       bool systemProxy,
       bool ipv6,
       bool allowBypass,
+      RouteMode routeMode,
       bool dozeSuspend,
       bool smartAutoStop,
       String smartAutoStopNetworks,
@@ -1148,6 +1150,7 @@ class _$VpnPropsCopyWithImpl<$Res, $Val extends VpnProps>
     Object? systemProxy = null,
     Object? ipv6 = null,
     Object? allowBypass = null,
+    Object? routeMode = null,
     Object? dozeSuspend = null,
     Object? smartAutoStop = null,
     Object? smartAutoStopNetworks = null,
@@ -1170,6 +1173,10 @@ class _$VpnPropsCopyWithImpl<$Res, $Val extends VpnProps>
           ? _value.allowBypass
           : allowBypass // ignore: cast_nullable_to_non_nullable
               as bool,
+      routeMode: null == routeMode
+          ? _value.routeMode
+          : routeMode // ignore: cast_nullable_to_non_nullable
+              as RouteMode,
       dozeSuspend: null == dozeSuspend
           ? _value.dozeSuspend
           : dozeSuspend // ignore: cast_nullable_to_non_nullable
@@ -1213,6 +1220,7 @@ abstract class _$$VpnPropsImplCopyWith<$Res>
       bool systemProxy,
       bool ipv6,
       bool allowBypass,
+      RouteMode routeMode,
       bool dozeSuspend,
       bool smartAutoStop,
       String smartAutoStopNetworks,
@@ -1239,6 +1247,7 @@ class __$$VpnPropsImplCopyWithImpl<$Res>
     Object? systemProxy = null,
     Object? ipv6 = null,
     Object? allowBypass = null,
+    Object? routeMode = null,
     Object? dozeSuspend = null,
     Object? smartAutoStop = null,
     Object? smartAutoStopNetworks = null,
@@ -1261,6 +1270,10 @@ class __$$VpnPropsImplCopyWithImpl<$Res>
           ? _value.allowBypass
           : allowBypass // ignore: cast_nullable_to_non_nullable
               as bool,
+      routeMode: null == routeMode
+          ? _value.routeMode
+          : routeMode // ignore: cast_nullable_to_non_nullable
+              as RouteMode,
       dozeSuspend: null == dozeSuspend
           ? _value.dozeSuspend
           : dozeSuspend // ignore: cast_nullable_to_non_nullable
@@ -1289,6 +1302,7 @@ class _$VpnPropsImpl implements _VpnProps {
       this.systemProxy = true,
       this.ipv6 = false,
       this.allowBypass = true,
+      this.routeMode = RouteMode.config,
       this.dozeSuspend = false,
       this.smartAutoStop = false,
       this.smartAutoStopNetworks = '',
@@ -1311,6 +1325,9 @@ class _$VpnPropsImpl implements _VpnProps {
   final bool allowBypass;
   @override
   @JsonKey()
+  final RouteMode routeMode;
+  @override
+  @JsonKey()
   final bool dozeSuspend;
   @override
   @JsonKey()
@@ -1324,7 +1341,7 @@ class _$VpnPropsImpl implements _VpnProps {
 
   @override
   String toString() {
-    return 'VpnProps(enable: $enable, systemProxy: $systemProxy, ipv6: $ipv6, allowBypass: $allowBypass, dozeSuspend: $dozeSuspend, smartAutoStop: $smartAutoStop, smartAutoStopNetworks: $smartAutoStopNetworks, accessControl: $accessControl)';
+    return 'VpnProps(enable: $enable, systemProxy: $systemProxy, ipv6: $ipv6, allowBypass: $allowBypass, routeMode: $routeMode, dozeSuspend: $dozeSuspend, smartAutoStop: $smartAutoStop, smartAutoStopNetworks: $smartAutoStopNetworks, accessControl: $accessControl)';
   }
 
   @override
@@ -1338,6 +1355,8 @@ class _$VpnPropsImpl implements _VpnProps {
             (identical(other.ipv6, ipv6) || other.ipv6 == ipv6) &&
             (identical(other.allowBypass, allowBypass) ||
                 other.allowBypass == allowBypass) &&
+            (identical(other.routeMode, routeMode) ||
+                other.routeMode == routeMode) &&
             (identical(other.dozeSuspend, dozeSuspend) ||
                 other.dozeSuspend == dozeSuspend) &&
             (identical(other.smartAutoStop, smartAutoStop) ||
@@ -1356,6 +1375,7 @@ class _$VpnPropsImpl implements _VpnProps {
       systemProxy,
       ipv6,
       allowBypass,
+      routeMode,
       dozeSuspend,
       smartAutoStop,
       smartAutoStopNetworks,
@@ -1383,6 +1403,7 @@ abstract class _VpnProps implements VpnProps {
       final bool systemProxy,
       final bool ipv6,
       final bool allowBypass,
+      final RouteMode routeMode,
       final bool dozeSuspend,
       final bool smartAutoStop,
       final String smartAutoStopNetworks,
@@ -1399,6 +1420,8 @@ abstract class _VpnProps implements VpnProps {
   bool get ipv6;
   @override
   bool get allowBypass;
+  @override
+  RouteMode get routeMode;
   @override
   bool get dozeSuspend;
   @override

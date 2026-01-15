@@ -63,6 +63,7 @@ const _$RecoveryStrategyEnumMap = {
 
 const _$DashboardWidgetEnumMap = {
   DashboardWidget.networkSpeed: 'networkSpeed',
+  DashboardWidget.networkSpeedSmall: 'networkSpeedSmall',
   DashboardWidget.outboundModeV2: 'outboundModeV2',
   DashboardWidget.outboundMode: 'outboundMode',
   DashboardWidget.trafficUsage: 'trafficUsage',
@@ -72,6 +73,12 @@ const _$DashboardWidgetEnumMap = {
   DashboardWidget.systemProxyButton: 'systemProxyButton',
   DashboardWidget.intranetIp: 'intranetIp',
   DashboardWidget.memoryInfo: 'memoryInfo',
+  DashboardWidget.connectionsCount: 'connectionsCount',
+  DashboardWidget.ipv6Switch: 'ipv6Switch',
+  DashboardWidget.dnsOverride: 'dnsOverride',
+  DashboardWidget.providersInfo: 'providersInfo',
+  DashboardWidget.fcmStatus: 'fcmStatus',
+  DashboardWidget.onlinePanel: 'onlinePanel',
   DashboardWidget.startButton: 'startButton',
 };
 
@@ -140,6 +147,8 @@ _$VpnPropsImpl _$$VpnPropsImplFromJson(Map<String, dynamic> json) =>
       systemProxy: json['systemProxy'] as bool? ?? true,
       ipv6: json['ipv6'] as bool? ?? false,
       allowBypass: json['allowBypass'] as bool? ?? true,
+      routeMode: $enumDecodeNullable(_$RouteModeEnumMap, json['routeMode']) ??
+          RouteMode.config,
       dozeSuspend: json['dozeSuspend'] as bool? ?? false,
       smartAutoStop: json['smartAutoStop'] as bool? ?? false,
       smartAutoStopNetworks: json['smartAutoStopNetworks'] as String? ?? '',
@@ -155,11 +164,17 @@ Map<String, dynamic> _$$VpnPropsImplToJson(_$VpnPropsImpl instance) =>
       'systemProxy': instance.systemProxy,
       'ipv6': instance.ipv6,
       'allowBypass': instance.allowBypass,
+      'routeMode': _$RouteModeEnumMap[instance.routeMode]!,
       'dozeSuspend': instance.dozeSuspend,
       'smartAutoStop': instance.smartAutoStop,
       'smartAutoStopNetworks': instance.smartAutoStopNetworks,
       'accessControl': instance.accessControl,
     };
+
+const _$RouteModeEnumMap = {
+  RouteMode.bypassPrivate: 'bypassPrivate',
+  RouteMode.config: 'config',
+};
 
 _$NetworkPropsImpl _$$NetworkPropsImplFromJson(Map<String, dynamic> json) =>
     _$NetworkPropsImpl(
@@ -180,11 +195,6 @@ Map<String, dynamic> _$$NetworkPropsImplToJson(_$NetworkPropsImpl instance) =>
       'routeMode': _$RouteModeEnumMap[instance.routeMode]!,
       'autoSetSystemDns': instance.autoSetSystemDns,
     };
-
-const _$RouteModeEnumMap = {
-  RouteMode.bypassPrivate: 'bypassPrivate',
-  RouteMode.config: 'config',
-};
 
 _$ProxiesStyleImpl _$$ProxiesStyleImplFromJson(Map<String, dynamic> json) =>
     _$ProxiesStyleImpl(
