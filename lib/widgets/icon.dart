@@ -31,24 +31,39 @@ class _CommonTargetIconState extends State<CommonTargetIcon> {
   void didUpdateWidget(covariant CommonTargetIcon oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.src != widget.src) {
+      _file = null;
       _init();
     }
   }
 
-  void _init() {
+  Future<void> _init() async {
     if (widget.src.isEmpty) {
       return;
     }
     if (widget.src.getBase64 != null) {
       return;
     }
-    DefaultCacheManager().getSingleFile(widget.src).then((file) {
+    
+    // First try to get from cache without making any network calls
+    final fileInfo = await DefaultCacheManager().getFileFromCache(widget.src);
+    if (fileInfo != null && mounted && widget.src.isNotEmpty) {
+      setState(() {
+        _file = fileInfo.file;
+      });
+      return;
+    }
+
+    // If not in cache, then fetch (download)
+    try {
+      final file = await DefaultCacheManager().getSingleFile(widget.src);
       if (mounted && widget.src.isNotEmpty) {
         setState(() {
           _file = file;
         });
       }
-    });
+    } catch (e) {
+      // Handle download error
+    }
   }
 
   Widget _defaultIcon() {
@@ -101,7 +116,13 @@ class _CommonTargetIconState extends State<CommonTargetIcon> {
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: _buildIcon(),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: KeyedSubtree(
+          key: ValueKey<String>('${widget.src}_${_file?.path}'),
+          child: _buildIcon(),
+        ),
+      ),
     );
   }
 }

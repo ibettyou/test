@@ -66,7 +66,11 @@ class LiClashTileService : TileService() {
 
     override fun onClick() {
         super.onClick()
-        activityTransfer()
+        try {
+            activityTransfer()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         GlobalState.handleToggle()
     }
 

@@ -93,6 +93,7 @@ class InputDialog extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final AutovalidateMode? autovalidateMode;
   final bool? obscureText;
+  final bool autofocus;
 
   const InputDialog({
     super.key,
@@ -104,6 +105,7 @@ class InputDialog extends StatefulWidget {
     this.validator,
     this.obscureText,
     this.labelText,
+    this.autofocus = false,
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
   });
 
@@ -170,6 +172,7 @@ class _InputDialogState extends State<InputDialog> {
           runSpacing: 16,
           children: [
             TextFormField(
+              autofocus: widget.autofocus,
               obscureText: widget.obscureText ?? false,
               keyboardType: TextInputType.url,
               maxLines: widget.obscureText == true ? 1 : 5,
