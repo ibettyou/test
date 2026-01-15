@@ -722,28 +722,21 @@ class AppController {
         ? true
         : _ref.read(appSettingProvider).autoRun;
 
-    if (system.isAndroid && status) {
+    if (system.isAndroid) {
       final prefs = await preferences.sharedPreferencesCompleter.future;
       final packageInfo = await PackageInfo.fromPlatform();
       final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
       final lastVersion = prefs?.getString('last_run_version');
 
       if (lastVersion != currentVersion) {
-        // 升级检测：采用"主动握手清理"策略
-        // 1. 先强制启动：强制系统将 TUN 接口句柄移交给当前新进程（即使路由可能不完整）
-        await updateStatus(true);
-        // 给系统一点时间建立连接
-        await Future.delayed(const Duration(seconds: 2));
-
-        // 2. 再强制停止：触发系统完整的 VPN 拆除流程，清理残留路由表
         await updateStatus(false);
-        // 等待清理完成
-        await Future.delayed(const Duration(seconds: 1));
-
         await prefs?.setString('last_run_version', currentVersion);
+        if (status) {
+          await Future.delayed(const Duration(seconds: 1));
+        }
       }
     } else {
-      // For non-Android or non-auto-run cases, just update version if changed
+      // For non-Android cases, just update version if changed
       final prefs = await preferences.sharedPreferencesCompleter.future;
       final packageInfo = await PackageInfo.fromPlatform();
       final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';

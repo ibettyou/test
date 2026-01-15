@@ -38,40 +38,17 @@ class LiClashTileService : TileService() {
         GlobalState.runState.observeForever(observer)
     }
 
-    @SuppressLint("StartActivityAndCollapseDeprecated")
-    private fun activityTransfer() {
-        val intent = Intent(this, TempActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-        val pendingIntent = if (Build.VERSION.SDK_INT >= 31) {
-            PendingIntent.getActivity(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        } else {
-            PendingIntent.getActivity(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            startActivityAndCollapse(pendingIntent)
-        } else {
-            startActivityAndCollapse(intent)
-        }
-    }
+
 
     override fun onClick() {
         super.onClick()
-        try {
-            activityTransfer()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (isLocked) {
+            unlockAndRun {
+                GlobalState.handleToggle()
+            }
+        } else {
+            GlobalState.handleToggle()
         }
-        GlobalState.handleToggle()
     }
 
     override fun onDestroy() {
