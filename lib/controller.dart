@@ -770,15 +770,15 @@ class AppController {
         await Future.delayed(const Duration(milliseconds: 500));
         
         // 步骤3：重启内核，确保内核状态纯净
-        commonPrint.log('Restarting core...');
-        await restartCore();
+        // commonPrint.log('Restarting core...');
+        // await restartCore();
         
         // 步骤4：重载配置
         await applyProfile();
         
         // 步骤5：如果开启了自动运行，延迟执行启动
         if (autoRun) {
-          commonPrint.log('AutoRun is enabled, waiting for system stabilization...');
+          commonPrint.log('Waiting for system stabilization...');
           // 延迟 1500ms，模拟用户"手动启动"的时间差
           await Future.delayed(const Duration(milliseconds: 1500));
           
@@ -801,6 +801,14 @@ class AppController {
         : _ref.read(appSettingProvider).autoRun;
 
     await updateStatus(status);
+    
+    // 强制同步配置：解决Android端异常退出（划掉APP）后重启无法连接的问题
+    // 这种情况下Core虽然启动了但可能配置缺失，需要手动再次下发
+    if (system.isAndroid && status) {
+       commonPrint.log('Force applying profile for Android recovery...');
+       await applyProfile(silence: true);
+    }
+
     if (!status) {
       addCheckIpNumDebounce();
     }
