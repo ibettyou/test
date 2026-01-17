@@ -718,33 +718,37 @@ class AppController {
     if (system.isAndroid) {
       await globalState.updateStartTime();
     }
+    
+    // 检测是否为安卓端更新后的首次启动
+    final prefs = await preferences.sharedPreferencesCompleter.future;
+    final packageInfo = await PackageInfo.fromPlatform();
+    final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+    final lastVersion = prefs?.getString('last_run_version');
+    final isPostUpdateFirstLaunch = system.isAndroid && lastVersion != null && lastVersion != currentVersion;
+    
+    // 安卓端更新后首次启动：先清理VPN残留路由
+    // 这可以解决小米手机等设备更新APK后代理失效的问题
+    if (isPostUpdateFirstLaunch) {
+      commonPrint.log('Post-update first launch detected, cleaning up VPN service...');
+      // 调用 handleStop 清理VPN服务和残留路由
+      await globalState.handleStop();
+      await Future.delayed(const Duration(milliseconds: 1000));
+      // 更新版本记录
+      await prefs?.setString('last_run_version', currentVersion);
+      commonPrint.log('VPN cleanup completed, autoRun disabled for this launch');
+      // 更新后首次启动不执行自动运行，让用户手动启动VPN
+      addCheckIpNumDebounce();
+      return;
+    }
+    
+    // 非更新后启动：正常处理版本记录和自动运行
+    if (lastVersion != currentVersion) {
+      await prefs?.setString('last_run_version', currentVersion);
+    }
+    
     final status = globalState.isStart == true
         ? true
         : _ref.read(appSettingProvider).autoRun;
-
-    if (system.isAndroid) {
-      final prefs = await preferences.sharedPreferencesCompleter.future;
-      final packageInfo = await PackageInfo.fromPlatform();
-      final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
-      final lastVersion = prefs?.getString('last_run_version');
-
-      if (lastVersion != currentVersion) {
-        await updateStatus(false);
-        await prefs?.setString('last_run_version', currentVersion);
-        if (status) {
-          await Future.delayed(const Duration(seconds: 1));
-        }
-      }
-    } else {
-      // For non-Android cases, just update version if changed
-      final prefs = await preferences.sharedPreferencesCompleter.future;
-      final packageInfo = await PackageInfo.fromPlatform();
-      final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
-      final lastVersion = prefs?.getString('last_run_version');
-      if (lastVersion != currentVersion) {
-        await prefs?.setString('last_run_version', currentVersion);
-      }
-    }
 
     await updateStatus(status);
     if (!status) {
