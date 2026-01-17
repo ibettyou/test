@@ -135,6 +135,8 @@ class GlobalState {
     startTime ??= DateTime.now();
     await clashCore.startListener();
     await service?.startVpn();
+    await (await preferences.sharedPreferencesCompleter.future)
+        ?.setBool('is_vpn_running', true);
     startUpdateTasks(tasks);
   }
 
@@ -146,6 +148,8 @@ class GlobalState {
     startTime = null;
     await clashCore.stopListener();
     await service?.stopVpn();
+    await (await preferences.sharedPreferencesCompleter.future)
+        ?.setBool('is_vpn_running', false);
     stopUpdateTasks();
   }
 

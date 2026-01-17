@@ -745,6 +745,13 @@ class AppController {
         isReinstall = true;
       }
 
+      // 3. 检测异常退出（划掉APP）：如果标记显示上次运行中，但Current Native State (isStart) 为 false (Core dead)
+      final isVpnRunningFlag = prefs?.getBool('is_vpn_running') ?? false;
+      final isAbnormalExit = !globalState.isStart && isVpnRunningFlag;
+      if (isAbnormalExit) {
+        commonPrint.log('Abnormal exit detected (was running but core is dead)');
+      }
+
       // 无论如何，更新最新的状态记录
       if (savedApkUpdateTime != apkLastUpdateTime) {
         await prefs?.setInt('apk_last_update_time', apkLastUpdateTime);
@@ -753,8 +760,10 @@ class AppController {
         await prefs?.setString('last_run_version', currentVersion);
       }
       
-      if (isReinstall) {
-        final autoRun = _ref.read(appSettingProvider).autoRun;
+      if (isReinstall || isAbnormalExit) {
+        final settingsAutoRun = _ref.read(appSettingProvider).autoRun;
+        // 如果是异常退出恢复（或更新前在运行），强制自动连接以恢复状态
+        final autoRun = settingsAutoRun || isAbnormalExit;
         
         commonPrint.log('Handling APK reinstall recovery...');
         
@@ -770,8 +779,8 @@ class AppController {
         await Future.delayed(const Duration(milliseconds: 500));
         
         // 步骤3：重启内核，确保内核状态纯净
-        commonPrint.log('Restarting core...');
-        await restartCore();
+        // commonPrint.log('Restarting core...');
+        // await restartCore();
         
         // 步骤4：重载配置
         await applyProfile();
