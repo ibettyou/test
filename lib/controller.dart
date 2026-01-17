@@ -719,31 +719,35 @@ class AppController {
       await globalState.updateStartTime();
     }
     
-    // 检测是否为安卓端更新后的首次启动
+    // 检测版本号变化（安卓端适用）
     final prefs = await preferences.sharedPreferencesCompleter.future;
     final packageInfo = await PackageInfo.fromPlatform();
     final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
     final lastVersion = prefs?.getString('last_run_version');
-    final isPostUpdateFirstLaunch = system.isAndroid && lastVersion != null && lastVersion != currentVersion;
+    // 安卓端：只要版本号变化（包括首次安装和更新安装），都执行清理流程
+    final isAndroidVersionChange = system.isAndroid && lastVersion != currentVersion;
     
-    // 安卓端更新后首次启动：先清理VPN残留路由
+    // 安卓端安装/更新后首次启动：先清理VPN残留路由
     // 这可以解决小米手机等设备更新APK后代理失效的问题
-    if (isPostUpdateFirstLaunch) {
-      commonPrint.log('Post-update first launch detected, cleaning up VPN service...');
+    if (isAndroidVersionChange) {
+      commonPrint.log('Android version change detected (${lastVersion ?? "new install"} -> $currentVersion), cleaning up VPN service...');
+      // 在清理流程期间禁用启动按钮
+      _ref.read(initProvider.notifier).value = false;
       // 调用 handleStop 清理VPN服务和残留路由
       await globalState.handleStop();
-      await Future.delayed(const Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 500));
       // 更新版本记录
       await prefs?.setString('last_run_version', currentVersion);
-      commonPrint.log('VPN cleanup completed, autoRun disabled for this launch');
-      // 更新后首次启动不执行自动运行，让用户手动启动VPN
+      commonPrint.log('VPN cleanup completed, reloading configuration...');
+      // 延迟后强制重载当前配置，确保配置被正确应用
+      await Future.delayed(const Duration(milliseconds: 500));
+      await applyProfile(silence: true);
+      // 清理流程完成，启用启动按钮
+      _ref.read(initProvider.notifier).value = true;
+      commonPrint.log('Configuration reloaded, autoRun disabled for this launch');
+      // 安装/更新后首次启动不执行自动运行，让用户手动启动VPN
       addCheckIpNumDebounce();
       return;
-    }
-    
-    // 非更新后启动：正常处理版本记录和自动运行
-    if (lastVersion != currentVersion) {
-      await prefs?.setString('last_run_version', currentVersion);
     }
     
     final status = globalState.isStart == true
