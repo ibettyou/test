@@ -770,8 +770,8 @@ class AppController {
         await Future.delayed(const Duration(milliseconds: 500));
         
         // 步骤3：重启内核，确保内核状态纯净
-        commonPrint.log('Restarting core...');
-        await restartCore();
+        // commonPrint.log('Restarting core...');
+        // await restartCore();
         
         // 步骤4：重载配置
         await applyProfile();
