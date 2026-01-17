@@ -721,18 +721,39 @@ class AppController {
     
     final prefs = await preferences.sharedPreferencesCompleter.future;
     
-    // 安卓端：检测APK是否被重新安装（使用APK的lastUpdateTime）
-    // 无论版本是否变化，只要APK被重新安装就执行内核重启和配置重载
+    // 安卓端：检测APK是否被重新安装
     if (system.isAndroid && app != null) {
       final apkLastUpdateTime = await app!.getSelfLastUpdateTime();
       final savedApkUpdateTime = prefs?.getInt('apk_last_update_time') ?? 0;
-      final isApkReinstalled = savedApkUpdateTime != 0 && savedApkUpdateTime != apkLastUpdateTime;
       
-      if (isApkReinstalled) {
-        commonPrint.log('APK reinstall detected (lastUpdateTime changed: $savedApkUpdateTime -> $apkLastUpdateTime)');
-        // 更新保存的APK安装时间
+      final packageInfo = await PackageInfo.fromPlatform();
+      final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+      final lastRunVersion = prefs?.getString('last_run_version');
+      
+      bool isReinstall = false;
+      
+      // 1. 基于时间的检测：如果之前记录过时间，且时间发生了变化（覆盖安装/升级）
+      if (savedApkUpdateTime != 0 && savedApkUpdateTime != apkLastUpdateTime) {
+        commonPrint.log('Reinstall detected by time: $savedApkUpdateTime -> $apkLastUpdateTime');
+        isReinstall = true;
+      }
+      
+      // 2. 基于版本的检测：如果之前运行过（有版本记录），且版本发生了变化（升级/降级）
+      // 这可以捕获从旧版本（未记录apk_last_update_time）升级上来的情况
+      if (lastRunVersion != null && lastRunVersion != currentVersion) {
+        commonPrint.log('Reinstall detected by version: $lastRunVersion -> $currentVersion');
+        isReinstall = true;
+      }
+
+      // 无论如何，更新最新的状态记录
+      if (savedApkUpdateTime != apkLastUpdateTime) {
         await prefs?.setInt('apk_last_update_time', apkLastUpdateTime);
-        
+      }
+      if (lastRunVersion != currentVersion) {
+        await prefs?.setString('last_run_version', currentVersion);
+      }
+      
+      if (isReinstall) {
         final autoRun = _ref.read(appSettingProvider).autoRun;
         
         commonPrint.log('Handling APK reinstall recovery...');
@@ -772,11 +793,6 @@ class AppController {
         
         // 直接返回，跳过底部的默认启动逻辑
         return;
-      }
-      
-      // 首次启动时保存APK安装时间
-      if (savedApkUpdateTime == 0) {
-        await prefs?.setInt('apk_last_update_time', apkLastUpdateTime);
       }
     }
     
