@@ -722,7 +722,7 @@ class AppController {
     final prefs = await preferences.sharedPreferencesCompleter.future;
     
     // 安卓端：检测APK是否被重新安装（使用APK的lastUpdateTime）
-    // 无论版本是否变化，只要APK被重新安装就执行清理和重启流程
+    // 无论版本是否变化，只要APK被重新安装就执行内核重启和配置重载
     if (system.isAndroid && app != null) {
       final apkLastUpdateTime = await app!.getSelfLastUpdateTime();
       final savedApkUpdateTime = prefs?.getInt('apk_last_update_time') ?? 0;
@@ -733,32 +733,44 @@ class AppController {
         // 更新保存的APK安装时间
         await prefs?.setInt('apk_last_update_time', apkLastUpdateTime);
         
-        // ========== 关键修复 ==========
-        // 在自动运行之前先清理VPN残留路由
-        // 这样可以确保自动启动时不会受到旧路由的影响
-        commonPrint.log('Step 1: Stopping VPN service...');
-        await globalState.handleStop();
-        await Future.delayed(const Duration(milliseconds: 500));
-        
-        // 重启内核
-        commonPrint.log('Step 2: Restarting core...');
-        await restartCore();
-        await Future.delayed(const Duration(milliseconds: 500));
-        
-        // 重载配置
-        commonPrint.log('Step 3: Reloading config...');
-        await applyProfile();
-        await Future.delayed(const Duration(milliseconds: 500));
-        
-        // 现在根据autoRun设置决定是否启动VPN
         final autoRun = _ref.read(appSettingProvider).autoRun;
+        
+        commonPrint.log('Handling APK reinstall recovery...');
+        
+        // 关键逻辑：
+        // 1. 即使 autoRun 为 true，也不要立即启动。
+        // 2. 使用 await 确保在恢复完成前不解锁UI（initProvider 不会变为 true），防止用户误触。
+        // 3. 顺序执行：清理 -> 等待 -> 重启内核 -> 重载配置 -> (可选)自动启动
+        
+        // 步骤1：先清理可能的残留状态
+        await globalState.handleStop();
+        
+        // 步骤2：等待一小会儿让系统清理VPN资源
+        await Future.delayed(const Duration(milliseconds: 500));
+        
+        // 步骤3：重启内核，确保内核状态纯净
+        commonPrint.log('Restarting core...');
+        await restartCore();
+        
+        // 步骤4：重载配置
+        await applyProfile();
+        
+        // 步骤5：如果开启了自动运行，延迟执行启动
         if (autoRun) {
-          commonPrint.log('Step 4: Starting VPN service...');
+          commonPrint.log('AutoRun is enabled, waiting for system stabilization...');
+          // 延迟 1500ms，模拟用户"手动启动"的时间差
+          await Future.delayed(const Duration(milliseconds: 1500));
+          
+          commonPrint.log('Executing delayed AutoRun...');
           await updateStatus(true);
+        } else {
+            commonPrint.log('AutoRun disabled, waiting for user action.');
         }
         
         addCheckIpNumDebounce();
-        commonPrint.log('APK reinstall recovery completed');
+        commonPrint.log('APK reinstall recovery sequence completed');
+        
+        // 直接返回，跳过底部的默认启动逻辑
         return;
       }
       
