@@ -722,7 +722,7 @@ class AppController {
     final prefs = await preferences.sharedPreferencesCompleter.future;
     
     // 安卓端：检测APK是否被重新安装（使用APK的lastUpdateTime）
-    // 无论版本是否变化，只要APK被重新安装就执行内核重启和配置重载
+    // 无论版本是否变化，只要APK被重新安装就执行清理和重启流程
     if (system.isAndroid && app != null) {
       final apkLastUpdateTime = await app!.getSelfLastUpdateTime();
       final savedApkUpdateTime = prefs?.getInt('apk_last_update_time') ?? 0;
@@ -733,29 +733,32 @@ class AppController {
         // 更新保存的APK安装时间
         await prefs?.setInt('apk_last_update_time', apkLastUpdateTime);
         
-        // 先正常启动，然后1秒后重启内核
-        final status = globalState.isStart == true
-            ? true
-            : _ref.read(appSettingProvider).autoRun;
-        await updateStatus(status);
+        // ========== 关键修复 ==========
+        // 在自动运行之前先清理VPN残留路由
+        // 这样可以确保自动启动时不会受到旧路由的影响
+        commonPrint.log('Step 1: Stopping VPN service...');
+        await globalState.handleStop();
+        await Future.delayed(const Duration(milliseconds: 500));
         
-        // 1秒后重启内核
-        Future.delayed(const Duration(milliseconds: 1000), () async {
-          commonPrint.log('Restarting core after APK reinstall...');
-          await restartCore();
-          
-          // 再过1秒后重载配置
-          Future.delayed(const Duration(milliseconds: 1000), () async {
-            commonPrint.log('Reloading config after APK reinstall...');
-            await applyProfile();
-            addCheckIpNumDebounce();
-            commonPrint.log('APK reinstall recovery completed');
-          });
-        });
+        // 重启内核
+        commonPrint.log('Step 2: Restarting core...');
+        await restartCore();
+        await Future.delayed(const Duration(milliseconds: 500));
         
-        if (!status) {
-          addCheckIpNumDebounce();
+        // 重载配置
+        commonPrint.log('Step 3: Reloading config...');
+        await applyProfile();
+        await Future.delayed(const Duration(milliseconds: 500));
+        
+        // 现在根据autoRun设置决定是否启动VPN
+        final autoRun = _ref.read(appSettingProvider).autoRun;
+        if (autoRun) {
+          commonPrint.log('Step 4: Starting VPN service...');
+          await updateStatus(true);
         }
+        
+        addCheckIpNumDebounce();
+        commonPrint.log('APK reinstall recovery completed');
         return;
       }
       
