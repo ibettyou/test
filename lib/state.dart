@@ -51,8 +51,9 @@ class GlobalState {
   // GlobalKey<CommonScaffoldState> homeScaffoldKey = GlobalKey();
   bool isInit = false;
   
-  /// 标记安卓端更新后的首次启动，用于在启动VPN时延迟重载配置
-  bool isAndroidPostUpdate = false;
+  // 标记是否为安卓端更新安装后首次启动
+  // 用于在用户手动启动VPN后延迟重启内核
+  bool isPostUpdateFirstLaunch = false;
 
   bool get isStart => startTime != null && startTime!.isBeforeNow;
 

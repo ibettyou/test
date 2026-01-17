@@ -94,6 +94,18 @@ class AppController {
       // 后台异步加载其他数据
       // 注意：对于桌面 TUN 模式，_fastStart 内部会延迟调用 _backgroundLoad
       // 以避免与 TUN 配置更新产生竞态条件
+      
+      // 安卓端更新后首次启动：用户手动启动VPN后延迟重启内核
+      // 这可以确保更新后的代码完全生效
+      if (globalState.isPostUpdateFirstLaunch && system.isAndroid) {
+        globalState.isPostUpdateFirstLaunch = false;
+        commonPrint.log('Post-update first start detected, scheduling core restart...');
+        Future.delayed(const Duration(milliseconds: 1000), () async {
+          commonPrint.log('Restarting core after post-update first start...');
+          await restartCore();
+          commonPrint.log('Core restart completed');
+        });
+      }
     } else {
       await globalState.handleStop();
       clashCore.resetTraffic();
@@ -108,28 +120,6 @@ class AppController {
   Future<void> _fastStart() async {
     final patchConfig = _ref.read(patchClashConfigProvider);
     final isDesktop = system.isDesktop;
-    
-    // 安卓端更新后首次启动的特殊处理
-    // 先启动VPN，然后延迟500ms执行配置重载
-    if (globalState.isAndroidPostUpdate) {
-      globalState.isAndroidPostUpdate = false; // 重置标志
-      
-      await globalState.handleStart([
-        updateRunTime,
-        updateTraffic,
-      ]);
-      
-      // 延迟500ms后执行配置重载
-      Future.delayed(const Duration(milliseconds: 500), () async {
-        commonPrint.log('Post-update: reloading configuration after VPN start...');
-        await applyProfile(silence: true);
-        commonPrint.log('Post-update: configuration reloaded successfully');
-        _backgroundLoad();
-      });
-      
-      addCheckIpNumDebounce();
-      return;
-    }
     
     // 桌面端优化：如果启用了虚拟网卡，先以关闭网卡状态启动核心，再开启网卡
     // 这样可以避免网卡初始化阻塞导致启动按钮响应迟缓
@@ -760,15 +750,15 @@ class AppController {
       await Future.delayed(const Duration(milliseconds: 500));
       // 更新版本记录
       await prefs?.setString('last_run_version', currentVersion);
-      commonPrint.log('VPN cleanup completed, restarting core...');
-      // 延迟后重启内核，确保内核状态正确
+      commonPrint.log('VPN cleanup completed, reloading configuration...');
+      // 延迟后强制重载当前配置，确保配置被正确应用
       await Future.delayed(const Duration(milliseconds: 500));
-      await restartCore();
-      // 设置标志：在用户点击启动按钮后的500ms执行配置重载
-      globalState.isAndroidPostUpdate = true;
+      await applyProfile(silence: true);
       // 清理流程完成，启用启动按钮
       _ref.read(initProvider.notifier).value = true;
-      commonPrint.log('Core restarted, autoRun disabled for this launch. Config will reload on first start.');
+      // 标记为更新后首次启动，用户手动启动VPN后需要重启内核
+      globalState.isPostUpdateFirstLaunch = true;
+      commonPrint.log('Configuration reloaded, autoRun disabled for this launch');
       // 安装/更新后首次启动不执行自动运行，让用户手动启动VPN
       addCheckIpNumDebounce();
       return;
