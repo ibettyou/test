@@ -94,18 +94,6 @@ class AppController {
       // 后台异步加载其他数据
       // 注意：对于桌面 TUN 模式，_fastStart 内部会延迟调用 _backgroundLoad
       // 以避免与 TUN 配置更新产生竞态条件
-      
-      // 安卓端更新后首次启动：用户手动启动VPN后延迟重启内核
-      // 这可以确保更新后的代码完全生效
-      if (globalState.isPostUpdateFirstLaunch && system.isAndroid) {
-        globalState.isPostUpdateFirstLaunch = false;
-        commonPrint.log('Post-update first start detected, scheduling core restart...');
-        Future.delayed(const Duration(milliseconds: 1000), () async {
-          commonPrint.log('Restarting core after post-update first start...');
-          await restartCore();
-          commonPrint.log('Core restart completed');
-        });
-      }
     } else {
       await globalState.handleStop();
       clashCore.resetTraffic();
@@ -731,37 +719,50 @@ class AppController {
       await globalState.updateStartTime();
     }
     
-    // 检测版本号变化（安卓端适用）
     final prefs = await preferences.sharedPreferencesCompleter.future;
-    final packageInfo = await PackageInfo.fromPlatform();
-    final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
-    final lastVersion = prefs?.getString('last_run_version');
-    // 安卓端：只要版本号变化（包括首次安装和更新安装），都执行清理流程
-    final isAndroidVersionChange = system.isAndroid && lastVersion != currentVersion;
     
-    // 安卓端安装/更新后首次启动：先清理VPN残留路由
-    // 这可以解决小米手机等设备更新APK后代理失效的问题
-    if (isAndroidVersionChange) {
-      commonPrint.log('Android version change detected (${lastVersion ?? "new install"} -> $currentVersion), cleaning up VPN service...');
-      // 在清理流程期间禁用启动按钮
-      _ref.read(initProvider.notifier).value = false;
-      // 调用 handleStop 清理VPN服务和残留路由
-      await globalState.handleStop();
-      await Future.delayed(const Duration(milliseconds: 500));
-      // 更新版本记录
-      await prefs?.setString('last_run_version', currentVersion);
-      commonPrint.log('VPN cleanup completed, reloading configuration...');
-      // 延迟后强制重载当前配置，确保配置被正确应用
-      await Future.delayed(const Duration(milliseconds: 500));
-      await applyProfile(silence: true);
-      // 清理流程完成，启用启动按钮
-      _ref.read(initProvider.notifier).value = true;
-      // 标记为更新后首次启动，用户手动启动VPN后需要重启内核
-      globalState.isPostUpdateFirstLaunch = true;
-      commonPrint.log('Configuration reloaded, autoRun disabled for this launch');
-      // 安装/更新后首次启动不执行自动运行，让用户手动启动VPN
-      addCheckIpNumDebounce();
-      return;
+    // 安卓端：检测APK是否被重新安装（使用APK的lastUpdateTime）
+    // 无论版本是否变化，只要APK被重新安装就执行内核重启和配置重载
+    if (system.isAndroid && app != null) {
+      final apkLastUpdateTime = await app!.getSelfLastUpdateTime();
+      final savedApkUpdateTime = prefs?.getInt('apk_last_update_time') ?? 0;
+      final isApkReinstalled = savedApkUpdateTime != 0 && savedApkUpdateTime != apkLastUpdateTime;
+      
+      if (isApkReinstalled) {
+        commonPrint.log('APK reinstall detected (lastUpdateTime changed: $savedApkUpdateTime -> $apkLastUpdateTime)');
+        // 更新保存的APK安装时间
+        await prefs?.setInt('apk_last_update_time', apkLastUpdateTime);
+        
+        // 先正常启动，然后1秒后重启内核
+        final status = globalState.isStart == true
+            ? true
+            : _ref.read(appSettingProvider).autoRun;
+        await updateStatus(status);
+        
+        // 1秒后重启内核
+        Future.delayed(const Duration(milliseconds: 1000), () async {
+          commonPrint.log('Restarting core after APK reinstall...');
+          await restartCore();
+          
+          // 再过1秒后重载配置
+          Future.delayed(const Duration(milliseconds: 1000), () async {
+            commonPrint.log('Reloading config after APK reinstall...');
+            await applyProfile();
+            addCheckIpNumDebounce();
+            commonPrint.log('APK reinstall recovery completed');
+          });
+        });
+        
+        if (!status) {
+          addCheckIpNumDebounce();
+        }
+        return;
+      }
+      
+      // 首次启动时保存APK安装时间
+      if (savedApkUpdateTime == 0) {
+        await prefs?.setInt('apk_last_update_time', apkLastUpdateTime);
+      }
     }
     
     final status = globalState.isStart == true

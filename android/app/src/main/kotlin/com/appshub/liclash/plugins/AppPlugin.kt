@@ -216,6 +216,24 @@ class AppPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware 
                 result.success(true)
             }
 
+            "getSelfLastUpdateTime" -> {
+                // 获取当前应用自身的APK最后更新时间
+                // 用于检测APK是否被重新安装（包括升级、降级、覆盖安装等）
+                val packageManager = LiClashApplication.getAppContext().packageManager
+                val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    packageManager?.getPackageInfo(
+                        LiClashApplication.getAppContext().packageName,
+                        PackageManager.PackageInfoFlags.of(0)
+                    )
+                } else {
+                    packageManager?.getPackageInfo(
+                        LiClashApplication.getAppContext().packageName,
+                        0
+                    )
+                }
+                result.success(packageInfo?.lastUpdateTime ?: 0L)
+            }
+
             else -> {
                 result.notImplemented()
             }
