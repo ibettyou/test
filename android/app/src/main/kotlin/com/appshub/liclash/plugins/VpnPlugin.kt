@@ -76,6 +76,16 @@ data object VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
         }
         flutterMethodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "vpn")
         flutterMethodChannel.setMethodCallHandler(this)
+        
+        // 如果VPN服务已在运行但服务连接丢失，重新绑定服务
+        // 这解决了用户进入APP-返回桌面-再进入APP后代理失效的问题
+        if (GlobalState.runState.value == RunState.START && liClashService == null) {
+            android.util.Log.d("VpnPlugin", "VPN is running but service connection lost, rebinding...")
+            // 使用保存的options重新绑定服务
+            if (options != null) {
+                bindService()
+            }
+        }
     }
 
     override fun onDetachedFromEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -273,7 +283,15 @@ data object VpnPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
             return
         }
         GlobalState.runLock.withLock {
-            if (GlobalState.runState.value == RunState.START) return
+            if (GlobalState.runState.value == RunState.START) {
+                // 服务已经在运行，可能是重新绑定的情况
+                // 确保foregroundJob正在运行以保持通知更新
+                if (timerJob == null || timerJob?.isActive != true) {
+                    android.util.Log.d("VpnPlugin", "Service reconnected, restarting foreground job")
+                    startForegroundJob()
+                }
+                return
+            }
             GlobalState.runState.value = RunState.START
             val fd = liClashService?.start(options!!)
             Core.startTun(

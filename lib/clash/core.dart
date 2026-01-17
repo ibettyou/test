@@ -36,27 +36,31 @@ class ClashCore {
   static Future<void> initGeo() async {
     final homePath = await appPath.homeDirPath;
     final homeDir = Directory(homePath);
-    if (!await homeDir.exists()) {
+    final isExists = await homeDir.exists();
+    if (!isExists) {
       await homeDir.create(recursive: true);
     }
-
     const geoFileNameList = [
       mmdbFileName,
       geoIpFileName,
       geoSiteFileName,
       asnFileName,
     ];
-
     try {
-      await Future.wait(geoFileNameList.map((geoFileName) async {
-        final geoFile = File(join(homePath, geoFileName));
-        if (!await geoFile.exists()) {
-          final data = await rootBundle.load('assets/data/$geoFileName');
-          await geoFile.writeAsBytes(data.buffer.asUint8List(), flush: true);
+      for (final geoFileName in geoFileNameList) {
+        final geoFile = File(
+          join(homePath, geoFileName),
+        );
+        final isExists = await geoFile.exists();
+        if (isExists) {
+          continue;
         }
-      }));
+        final data = await rootBundle.load('assets/data/$geoFileName');
+        List<int> bytes = data.buffer.asUint8List();
+        await geoFile.writeAsBytes(bytes, flush: true);
+      }
     } catch (e) {
-      commonPrint.log('initGeo error: $e');
+      exit(0);
     }
   }
 
@@ -101,31 +105,28 @@ class ClashCore {
   Future<List<Group>> getProxiesGroups() async {
     final proxies = await clashInterface.getProxies();
     if (proxies.isEmpty) return [];
-
-    return Isolate.run(() {
-      final groupNames = [
-        UsedProxy.GLOBAL.name,
-        ...(proxies[UsedProxy.GLOBAL.name]['all'] as List).where((e) {
-          final proxy = proxies[e] ?? {};
-          return GroupTypeExtension.valueList.contains(proxy['type']);
-        })
-      ];
-      final groupsRaw = groupNames.map((groupName) {
-        final group = proxies[groupName];
-        group['all'] = ((group['all'] ?? []) as List)
-            .map(
-              (name) => proxies[name],
-            )
-            .where((proxy) => proxy != null)
-            .toList();
-        return group;
-      }).toList();
-      return groupsRaw
+    final groupNames = [
+      UsedProxy.GLOBAL.name,
+      ...(proxies[UsedProxy.GLOBAL.name]['all'] as List).where((e) {
+        final proxy = proxies[e] ?? {};
+        return GroupTypeExtension.valueList.contains(proxy['type']);
+      })
+    ];
+    final groupsRaw = groupNames.map((groupName) {
+      final group = proxies[groupName];
+      group['all'] = ((group['all'] ?? []) as List)
           .map(
-            (e) => Group.fromJson(e),
+            (name) => proxies[name],
           )
+          .where((proxy) => proxy != null)
           .toList();
-    });
+      return group;
+    }).toList();
+    return groupsRaw
+        .map(
+          (e) => Group.fromJson(e),
+        )
+        .toList();
   }
 
   FutureOr<String> changeProxy(ChangeProxyParams changeProxyParams) async {
@@ -134,11 +135,9 @@ class ClashCore {
 
   Future<List<TrackerInfo>> getConnections() async {
     final res = await clashInterface.getConnections();
-    return Isolate.run(() {
-      final connectionsData = json.decode(res) as Map;
-      final connectionsRaw = connectionsData['connections'] as List? ?? [];
-      return connectionsRaw.map((e) => TrackerInfo.fromJson(e)).toList();
-    });
+    final connectionsData = json.decode(res) as Map;
+    final connectionsRaw = connectionsData['connections'] as List? ?? [];
+    return connectionsRaw.map((e) => TrackerInfo.fromJson(e)).toList();
   }
 
   void closeConnection(String id) {
@@ -176,10 +175,13 @@ class ClashCore {
       String externalProviderName) async {
     final externalProvidersRawString =
         await clashInterface.getExternalProvider(externalProviderName);
-    if (externalProvidersRawString?.isEmpty ?? true) {
+    if (externalProvidersRawString.isEmpty) {
       return null;
     }
-    return ExternalProvider.fromJson(json.decode(externalProvidersRawString!));
+    if (externalProvidersRawString.isEmpty) {
+      return null;
+    }
+    return ExternalProvider.fromJson(json.decode(externalProvidersRawString));
   }
 
   Future<String> updateGeoData(UpdateGeoDataParams params) {

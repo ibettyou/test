@@ -43,7 +43,14 @@ object GlobalState {
 
     fun syncStatus() {
         CoroutineScope(Dispatchers.Default).launch {
-            val status = getCurrentVPNPlugin()?.getStatus() ?: false
+            // VpnPlugin是data object(单例)，可以直接调用
+            // 不需要通过serviceEngine获取
+            val status = try {
+                VpnPlugin.getStatus() ?: false
+            } catch (e: Exception) {
+                // 如果channel未初始化，返回false
+                false
+            }
             withContext(Dispatchers.Main){
                 runState.value = if (status) RunState.START else RunState.STOP
             }
