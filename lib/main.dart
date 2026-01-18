@@ -17,6 +17,7 @@ import 'clash/core.dart';
 import 'clash/lib.dart';
 import 'common/common.dart';
 import 'models/models.dart';
+import 'sentry_config.dart';
 
 Future<void> main() async {
   globalState.isService = false;
@@ -24,12 +25,21 @@ Future<void> main() async {
   final version = await system.version;
   await clashCore.preload();
   await globalState.initApp(version);
-  await android?.init();
-  await window?.init(version);
-  HttpOverrides.global = LiClashHttpOverrides();
-  runApp(ProviderScope(
-    child: const Application(),
-  ));
+  
+  // 检查用户是否启用崩溃分析
+  final enableCrashAnalytics = globalState.config.appSetting.enableCrashAnalytics;
+  
+  await initSentry(
+    enabled: enableCrashAnalytics,
+    appRunner: () async {
+      await android?.init();
+      await window?.init(version);
+      HttpOverrides.global = LiClashHttpOverrides();
+      runApp(ProviderScope(
+        child: const Application(),
+      ));
+    },
+  );
 }
 
 @pragma('vm:entry-point')

@@ -9,54 +9,52 @@ class DnsOverride extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: SizedBox(
-        height: getWidgetHeight(1),
-        child: CommonCard(
-          info: Info(
-            label: 'DNS',
-            iconData: Icons.dns,
+    return SizedBox(
+      height: getWidgetHeight(1),
+      child: CommonCard(
+        info: Info(
+          label: 'DNS',
+          iconData: Icons.dns,
+        ),
+        onPressed: () {},
+        child: Container(
+          padding: baseInfoEdgeInsets.copyWith(
+            top: 4,
+            bottom: 8,
+            right: 8,
           ),
-          onPressed: () {},
-          child: Container(
-            padding: baseInfoEdgeInsets.copyWith(
-              top: 4,
-              bottom: 8,
-              right: 8,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: TooltipText(
-                    text: Text(
-                      appLocalizations.override,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.adjustSize(-2)
-                          .toLight,
-                    ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 1,
+                child: TooltipText(
+                  text: Text(
+                    appLocalizations.override,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.adjustSize(-2)
+                        .toLight,
                   ),
                 ),
-                Consumer(
-                  builder: (_, ref, __) {
-                    final override = ref.watch(overrideDnsProvider);
-                    return Switch(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      value: override,
-                      onChanged: (value) {
-                        ref.read(overrideDnsProvider.notifier).value = value;
-                      },
-                    );
-                  },
-                )
-              ],
-            ),
+              ),
+              Consumer(
+                builder: (_, ref, __) {
+                  final override = ref.watch(overrideDnsProvider);
+                  return Switch(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    value: override,
+                    onChanged: (value) {
+                      ref.read(overrideDnsProvider.notifier).value = value;
+                    },
+                  );
+                },
+              )
+            ],
           ),
         ),
       ),

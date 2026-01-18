@@ -111,10 +111,14 @@ class StartButton extends ConsumerWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Icon(
-            Icons.play_arrow,
-            size: 16,
-            color: context.colorScheme.primary,
+          SizedBox(
+            width: 20,
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.play_arrow,
+              size: 16,
+              color: context.colorScheme.primary,
+            ),
           ),
           const SizedBox(width: 4),
           Expanded(
@@ -133,13 +137,17 @@ class StartButton extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Icon(
-          Icons.pause,
-          size: 16,
-          color: context.colorScheme.primary,
+        SizedBox(
+          width: 20,
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.pause,
+            size: 16,
+            color: context.colorScheme.primary,
+          ),
         ),
         const SizedBox(width: 4),
-        Text('  ', style: context.textTheme.bodyMedium?.toLight.adjustSize(1)),
+        Text(' ', style: context.textTheme.bodyMedium?.toLight.adjustSize(1)),
         Expanded(
           child: Text(
             _formatRunTime(runTime),

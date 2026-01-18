@@ -472,6 +472,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Crash Analytics`
+  String get crashAnalytics {
+    return Intl.message(
+      'Crash Analytics',
+      name: 'crashAnalytics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Help improve app stability`
+  String get crashAnalyticsDesc {
+    return Intl.message(
+      'Help improve app stability',
+      name: 'crashAnalyticsDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `AccessControl`
   String get accessControl {
     return Intl.message(

@@ -1,6 +1,7 @@
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/providers/config.dart';
 import 'package:li_clash/widgets/widgets.dart';
+import 'package:li_clash/sentry_config.dart' as sentry;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -205,6 +206,38 @@ class OpenLogsItem extends ConsumerWidget {
   }
 }
 
+
+class CrashAnalyticsItem extends ConsumerWidget {
+  const CrashAnalyticsItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final enableCrashAnalytics = ref.watch(
+      appSettingProvider.select((state) => state.enableCrashAnalytics),
+    );
+    return ListItem.switchItem(
+      title: Text(appLocalizations.crashAnalytics),
+      subtitle: Text(appLocalizations.crashAnalyticsDesc),
+      delegate: SwitchDelegate(
+        value: enableCrashAnalytics,
+        onChanged: (bool value) async {
+          ref.read(appSettingProvider.notifier).updateState(
+                (state) => state.copyWith(
+                  enableCrashAnalytics: value,
+                ),
+              );
+          // 动态更新 Sentry 状态
+          try {
+            await sentry.updateSentryStatus(value);
+          } catch (e) {
+            // 如果更新失败，静默处理（下次重启时会生效）
+          }
+        },
+      ),
+    );
+  }
+}
+
 class AutoCheckUpdateItem extends ConsumerWidget {
   const AutoCheckUpdateItem({super.key});
 
@@ -253,6 +286,7 @@ class ApplicationSettingView extends StatelessWidget {
       OpenLogsItem(),
       CloseConnectionsItem(),
       UsageItem(),
+      CrashAnalyticsItem(),
       AutoCheckUpdateItem(),
     ];
     return ListView.separated(

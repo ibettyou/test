@@ -54,7 +54,7 @@ class _ConnectionsCountState extends State<ConnectionsCount> {
         height: getWidgetHeight(1),
         child: CommonCard(
           info: Info(
-            iconData: Icons.swap_horiz,
+            iconData: Icons.ballot,
             label: appLocalizations.connection,
           ),
           onPressed: () {
