@@ -765,7 +765,7 @@ class AppController {
         // 如果是异常退出恢复（或更新前在运行），强制自动连接以恢复状态
         final autoRun = settingsAutoRun || isAbnormalExit;
         
-        commonPrint.log('Handling APK reinstall recovery...');
+        commonPrint.log('Handling Recovery...');
         
         // 关键逻辑：
         // 1. 即使 autoRun 为 true，也不要立即启动。
@@ -794,11 +794,11 @@ class AppController {
           commonPrint.log('Executing delayed AutoRun...');
           await updateStatus(true);
         } else {
-            commonPrint.log('AutoRun disabled, waiting for user action.');
+            commonPrint.log('Waiting for user action...');
         }
         
         addCheckIpNumDebounce();
-        commonPrint.log('APK reinstall recovery sequence completed');
+        commonPrint.log('rRecovery sequence completed');
         
         // 直接返回，跳过底部的默认启动逻辑
         return;
@@ -814,7 +814,7 @@ class AppController {
     // 强制同步配置：解决Android端异常退出（划掉APP）后重启无法连接的问题
     // 这种情况下Core虽然启动了但可能配置缺失，需要手动再次下发
     if (system.isAndroid && status) {
-       commonPrint.log('Force applying profile for Android recovery...');
+       commonPrint.log('Force applying profile...');
        await applyProfile(silence: true);
     }
 

@@ -29,19 +29,24 @@ class LineChart extends StatefulWidget {
 
 class _LineChartState extends State<LineChart>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  AnimationController? _controller;
   List<Point> prevPoints = [];
   List<Point> points = [];
+  bool get _hasAnimation => widget.duration != Duration.zero;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
     points = widget.points;
     prevPoints = points;
+    
+    // 只在需要动画时创建 AnimationController
+    if (_hasAnimation) {
+      _controller = AnimationController(
+        vsync: this,
+        duration: widget.duration,
+      );
+    }
   }
 
   @override
@@ -50,29 +55,56 @@ class _LineChartState extends State<LineChart>
     if (widget.points != points) {
       prevPoints = points;
       points = widget.points;
-      _controller.forward(from: 0);
+      
+      // 只在有动画时触发
+      if (_hasAnimation) {
+        _controller?.forward(from: 0);
+      } else {
+        // 无动画时直接触发重绘
+        setState(() {});
+      }
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, container) {
+      // 无动画快速路径：直接绘制，避免 AnimatedBuilder 开销
+      if (!_hasAnimation) {
+        return CustomPaint(
+          painter: LineChartPainter(
+            prevPoints: points,
+            points: points,
+            progress: 1.0,
+            gradient: widget.gradient,
+            color: widget.color,
+            hasAnimation: false,
+          ),
+          child: SizedBox(
+            height: container.maxHeight,
+            width: container.maxWidth,
+          ),
+        );
+      }
+      
+      // 有动画时使用 AnimatedBuilder
       return AnimatedBuilder(
-        animation: _controller.view,
+        animation: _controller!.view,
         builder: (_, __) {
           return CustomPaint(
             painter: LineChartPainter(
               prevPoints: prevPoints,
               points: points,
-              progress: _controller.value,
+              progress: _controller!.value,
               gradient: widget.gradient,
               color: widget.color,
+              hasAnimation: true,
             ),
             child: SizedBox(
               height: container.maxHeight,
@@ -91,6 +123,7 @@ class LineChartPainter extends CustomPainter {
   final double progress;
   final Color color;
   final bool gradient;
+  final bool hasAnimation;
 
   LineChartPainter({
     required this.prevPoints,
@@ -98,6 +131,7 @@ class LineChartPainter extends CustomPainter {
     required this.progress,
     required this.color,
     required this.gradient,
+    this.hasAnimation = true,
   });
 
   List<Point> getRenderPoints(List<Point> points) {
@@ -168,19 +202,27 @@ class LineChartPainter extends CustomPainter {
         getInterpolatePoints(prevPoints, points, progress);
     final path = getPath(interpolatedPoints, size);
 
+    // 昂贵操作：只在有动画时执行
     final metric = path.computeMetrics().first;
     final length = metric.length;
-    return metric.extractPath(
-      0,
-      length,
-    );
+    return metric.extractPath(0, length);
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final strokeWidth = 2.0;
+    const strokeWidth = 2.0;
     final chartSize = Size(size.width, size.height * 0.7);
-    final path = getAnimatedPath(chartSize);
+    
+    // 无动画快速路径：跳过 computeMetrics 和 extractPath
+    final Path path;
+    if (!hasAnimation || progress >= 1.0) {
+      // 直接使用完整点集绘制，无需插值和路径提取
+      final renderPoints = getRenderPoints(points);
+      path = getPath(renderPoints, chartSize);
+    } else {
+      // 有动画且未完成：使用动画路径
+      path = getAnimatedPath(chartSize);
+    }
 
     if (gradient) {
       final fillPath = Path.from(path);

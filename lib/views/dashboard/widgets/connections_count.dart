@@ -15,7 +15,7 @@ class ConnectionsCount extends StatefulWidget {
 
 class _ConnectionsCountState extends State<ConnectionsCount> {
   Timer? _timer;
-  int _count = 0;
+  final _countNotifier = ValueNotifier<int>(0);
 
   @override
   void initState() {
@@ -26,6 +26,7 @@ class _ConnectionsCountState extends State<ConnectionsCount> {
   @override
   void dispose() {
     _timer?.cancel();
+    _countNotifier.dispose();
     super.dispose();
   }
 
@@ -35,9 +36,7 @@ class _ConnectionsCountState extends State<ConnectionsCount> {
     try {
       final connections = await clashCore.getConnections();
       if (mounted) {
-        setState(() {
-          _count = connections.length;
-        });
+        _countNotifier.value = connections.length;
       }
     } catch (e) {
       // 忽略错误，保持当前值
@@ -50,42 +49,47 @@ class _ConnectionsCountState extends State<ConnectionsCount> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: getWidgetHeight(1),
-      child: CommonCard(
-        info: Info(
-          iconData: Icons.swap_horiz,
-          label: appLocalizations.connection,
-        ),
-        onPressed: () {
-          showExtend(
-            context,
-            builder: (_, type) {
-              return const ConnectionsView();
-            },
-          );
-        },
-        child: Container(
-          padding: baseInfoEdgeInsets.copyWith(
-            top: 0,
+    return RepaintBoundary(
+      child: SizedBox(
+        height: getWidgetHeight(1),
+        child: CommonCard(
+          info: Info(
+            iconData: Icons.swap_horiz,
+            label: appLocalizations.connection,
           ),
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  '$_count',
-                  style: context.textTheme.bodyLarge?.toLight.adjustSize(2),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  ' Connections',
-                  style: context.textTheme.bodyMedium?.toLight.adjustSize(0),
-                ),
-              ],
+          onPressed: () {
+            showExtend(
+              context,
+              builder: (_, type) {
+                return const ConnectionsView();
+              },
+            );
+          },
+          child: Container(
+            padding: baseInfoEdgeInsets.copyWith(top: 0),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: ValueListenableBuilder<int>(
+                valueListenable: _countNotifier,
+                builder: (_, count, __) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        '$count',
+                        style: context.textTheme.bodyLarge?.toLight.adjustSize(2),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        ' Connections',
+                        style: context.textTheme.bodyMedium?.toLight.adjustSize(0),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),

@@ -10,76 +10,78 @@ class TUNButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: getWidgetHeight(1),
-      child: CommonCard(
-        onPressed: () {
-          showSheet(
-            context: context,
-            builder: (_, type) {
-              return AdaptiveSheetScaffold(
-                type: type,
-                body: generateListView(
-                  generateSection(
-                    items: [
-                      if (system.isDesktop) const TUNItem(),
-                      if (system.isMacOS) const AutoSetSystemDnsItem(),
-                      const IcmpForwardingItem(),
-                      const TunStackItem(),
-                    ],
+    return RepaintBoundary(
+      child: SizedBox(
+        height: getWidgetHeight(1),
+        child: CommonCard(
+          onPressed: () {
+            showSheet(
+              context: context,
+              builder: (_, type) {
+                return AdaptiveSheetScaffold(
+                  type: type,
+                  body: generateListView(
+                    generateSection(
+                      items: [
+                        if (system.isDesktop) const TUNItem(),
+                        if (system.isMacOS) const AutoSetSystemDnsItem(),
+                        const IcmpForwardingItem(),
+                        const TunStackItem(),
+                      ],
+                    ),
                   ),
-                ),
-                title: appLocalizations.tun,
-              );
-            },
-          );
-        },
-        info: Info(
-          label: appLocalizations.tun,
-          iconData: Icons.stacked_line_chart,
-        ),
-        child: Container(
-          padding: baseInfoEdgeInsets.copyWith(
-            top: 4,
-            bottom: 8,
-            right: 8,
+                  title: appLocalizations.tun,
+                );
+              },
+            );
+          },
+          info: Info(
+            label: appLocalizations.tun,
+            iconData: Icons.stacked_line_chart,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                flex: 1,
-                child: TooltipText(
-                  text: Text(
-                    appLocalizations.options,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.adjustSize(-2)
-                        .toLight,
+          child: Container(
+            padding: baseInfoEdgeInsets.copyWith(
+              top: 4,
+              bottom: 8,
+              right: 8,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: TooltipText(
+                    text: Text(
+                      appLocalizations.options,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.adjustSize(-2)
+                          .toLight,
+                    ),
                   ),
                 ),
-              ),
-              Consumer(
-                builder: (_, ref, __) {
-                  final enable = ref.watch(patchClashConfigProvider
-                      .select((state) => state.tun.enable));
-                  return Switch(
-                    value: enable,
-                    onChanged: (value) {
-                      ref.read(patchClashConfigProvider.notifier).updateState(
-                            (state) => state.copyWith.tun(
-                              enable: value,
-                            ),
-                          );
-                    },
-                  );
-                },
-              )
-            ],
+                Consumer(
+                  builder: (_, ref, __) {
+                    final enable = ref.watch(patchClashConfigProvider
+                        .select((state) => state.tun.enable));
+                    return Switch(
+                      value: enable,
+                      onChanged: (value) {
+                        ref.read(patchClashConfigProvider.notifier).updateState(
+                              (state) => state.copyWith.tun(
+                                enable: value,
+                              ),
+                            );
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -92,75 +94,77 @@ class SystemProxyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: getWidgetHeight(1),
-      child: CommonCard(
-        onPressed: () {
-          showSheet(
-            context: context,
-            builder: (_, type) {
-              return AdaptiveSheetScaffold(
-                type: type,
-                body: generateListView(
-                  generateSection(
-                    items: [
-                      SystemProxyItem(),
-                      BypassDomainItem(),
-                    ],
+    return RepaintBoundary(
+      child: SizedBox(
+        height: getWidgetHeight(1),
+        child: CommonCard(
+          onPressed: () {
+            showSheet(
+              context: context,
+              builder: (_, type) {
+                return AdaptiveSheetScaffold(
+                  type: type,
+                  body: generateListView(
+                    generateSection(
+                      items: [
+                        SystemProxyItem(),
+                        BypassDomainItem(),
+                      ],
+                    ),
                   ),
-                ),
-                title: appLocalizations.systemProxy,
-              );
-            },
-          );
-        },
-        info: Info(
-          label: appLocalizations.systemProxy,
-          iconData: Icons.shuffle,
-        ),
-        child: Container(
-          padding: baseInfoEdgeInsets.copyWith(
-            top: 4,
-            bottom: 8,
-            right: 8,
+                  title: appLocalizations.systemProxy,
+                );
+              },
+            );
+          },
+          info: Info(
+            label: appLocalizations.systemProxy,
+            iconData: Icons.shuffle,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                flex: 1,
-                child: TooltipText(
-                  text: Text(
-                    appLocalizations.options,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.adjustSize(-2)
-                        .toLight,
+          child: Container(
+            padding: baseInfoEdgeInsets.copyWith(
+              top: 4,
+              bottom: 8,
+              right: 8,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: TooltipText(
+                    text: Text(
+                      appLocalizations.options,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.adjustSize(-2)
+                          .toLight,
+                    ),
                   ),
                 ),
-              ),
-              Consumer(
-                builder: (_, ref, __) {
-                  final systemProxy = ref.watch(networkSettingProvider
-                      .select((state) => state.systemProxy));
-                  return Switch(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    value: systemProxy,
-                    onChanged: (value) {
-                      ref.read(networkSettingProvider.notifier).updateState(
-                            (state) => state.copyWith(
-                              systemProxy: value,
-                            ),
-                          );
-                    },
-                  );
-                },
-              )
-            ],
+                Consumer(
+                  builder: (_, ref, __) {
+                    final systemProxy = ref.watch(networkSettingProvider
+                        .select((state) => state.systemProxy));
+                    return Switch(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      value: systemProxy,
+                      onChanged: (value) {
+                        ref.read(networkSettingProvider.notifier).updateState(
+                              (state) => state.copyWith(
+                                systemProxy: value,
+                              ),
+                            );
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -173,78 +177,80 @@ class VpnButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: getWidgetHeight(1),
-      child: CommonCard(
-        onPressed: () {
-          showSheet(
-            context: context,
-            builder: (_, type) {
-              return AdaptiveSheetScaffold(
-                type: type,
-                body: generateListView(
-                  generateSection(
-                    items: [
-                      const VPNItem(),
-                      const VpnSystemProxyItem(),
-                      const TunStackItem(),
-                    ],
-                  ),
-                ),
-                title: 'VPN',
-              );
-            },
-          );
-        },
-        info: Info(
-          label: 'VPN',
-          iconData: Icons.stacked_line_chart,
-        ),
-        child: Container(
-          padding: baseInfoEdgeInsets.copyWith(
-            top: 4,
-            bottom: 8,
-            right: 8,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                flex: 1,
-                child: TooltipText(
-                  text: Text(
-                    appLocalizations.options,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.adjustSize(-2)
-                        .toLight,
-                  ),
-                ),
-              ),
-              Consumer(
-                builder: (_, ref, __) {
-                  final enable = ref.watch(
-                    vpnSettingProvider.select(
-                      (state) => state.enable,
+    return RepaintBoundary(
+      child: SizedBox(
+        height: getWidgetHeight(1),
+        child: CommonCard(
+          onPressed: () {
+            showSheet(
+              context: context,
+              builder: (_, type) {
+                return AdaptiveSheetScaffold(
+                  type: type,
+                  body: generateListView(
+                    generateSection(
+                      items: [
+                        const VPNItem(),
+                        const VpnSystemProxyItem(),
+                        const TunStackItem(),
+                      ],
                     ),
-                  );
-                  return Switch(
-                    value: enable,
-                    onChanged: (value) {
-                      ref.read(vpnSettingProvider.notifier).updateState(
-                            (state) => state.copyWith(
-                              enable: value,
-                            ),
-                          );
-                    },
-                  );
-                },
-              )
-            ],
+                  ),
+                  title: 'VPN',
+                );
+              },
+            );
+          },
+          info: Info(
+            label: 'VPN',
+            iconData: Icons.stacked_line_chart,
+          ),
+          child: Container(
+            padding: baseInfoEdgeInsets.copyWith(
+              top: 4,
+              bottom: 8,
+              right: 8,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: TooltipText(
+                    text: Text(
+                      appLocalizations.options,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.adjustSize(-2)
+                          .toLight,
+                    ),
+                  ),
+                ),
+                Consumer(
+                  builder: (_, ref, __) {
+                    final enable = ref.watch(
+                      vpnSettingProvider.select(
+                        (state) => state.enable,
+                      ),
+                    );
+                    return Switch(
+                      value: enable,
+                      onChanged: (value) {
+                        ref.read(vpnSettingProvider.notifier).updateState(
+                              (state) => state.copyWith(
+                                enable: value,
+                              ),
+                            );
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

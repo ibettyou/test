@@ -85,14 +85,14 @@ class _FcmStatusState extends State<FcmStatus> {
       child: SizedBox(
         height: getWidgetHeight(1),
         child: CommonCard(
+          // 添加空回调以启用按压效果，保持一致性
+          onPressed: () {},
           info: const Info(
             iconData: Icons.cloud_outlined,
             label: 'FCM',
           ),
           child: Container(
-            padding: baseInfoEdgeInsets.copyWith(
-              top: 0,
-            ),
+            padding: baseInfoEdgeInsets.copyWith(top: 0),
             child: Align(
               alignment: Alignment.bottomLeft,
               child: ValueListenableBuilder<FcmStatusData>(
