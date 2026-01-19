@@ -208,6 +208,10 @@ class _HotkeyItem extends StatelessWidget {
   }
 }
 
+import 'package:li_clash/widgets/uwp_loopback_dialog.dart';
+import 'dart:io';
+import 'package:path/path.dart' show dirname, join;
+
 class _LoopbackItem extends StatelessWidget {
   const _LoopbackItem();
 
@@ -218,11 +222,7 @@ class _LoopbackItem extends StatelessWidget {
       title: Text(appLocalizations.loopback),
       subtitle: Text(appLocalizations.loopbackDesc),
       onTap: () {
-        windows?.runas(
-          '"${join(dirname(Platform.resolvedExecutable), "EnableLoopback.exe")}"',
-          '',
-          showWindow: true,
-        );
+        UwpLoopbackDialog.show(context);
       },
     );
   }
