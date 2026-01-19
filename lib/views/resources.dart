@@ -26,80 +26,6 @@ class GeoItem {
 class ResourcesView extends StatelessWidget {
   const ResourcesView({super.key});
 
-  // 一键更新所有资源
-  Future<void> _updateAllResources(BuildContext context) async {
-    const geoItems = <GeoItem>[
-      GeoItem(
-        label: 'GeoIp',
-        fileName: geoIpFileName,
-        key: 'geoip',
-      ),
-      GeoItem(
-        label: 'GeoSite',
-        fileName: geoSiteFileName,
-        key: 'geosite',
-      ),
-      GeoItem(
-        label: 'MMDB',
-        fileName: mmdbFileName,
-        key: 'mmdb',
-      ),
-      GeoItem(
-        label: 'ASN',
-        fileName: asnFileName,
-        key: 'asn',
-      ),
-    ];
-
-    final messages = [];
-    final updateTasks = geoItems.map<Future>((geoItem) async {
-      try {
-        final message = await clashCore.updateGeoData(
-          UpdateGeoDataParams(
-            geoName: geoItem.fileName,
-            geoType: geoItem.label,
-          ),
-        );
-        if (message.isNotEmpty) {
-          messages.add('${geoItem.label}: $message\n');
-        }
-      } catch (e) {
-        messages.add('${geoItem.label}: $e\n');
-      }
-    });
-
-    await Future.wait(updateTasks);
-
-    if (messages.isNotEmpty && context.mounted) {
-      final titleMedium = context.textTheme.titleMedium;
-      globalState.showMessage(
-        title: appLocalizations.tip,
-        message: TextSpan(
-          children: [
-            for (final message in messages)
-              TextSpan(text: message, style: titleMedium)
-          ],
-        ),
-      );
-    }
-  }
-
-  List<Widget> _buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          globalState.appController.safeRun(
-            () async {
-              await _updateAllResources(context);
-            },
-            silence: false,
-          );
-        },
-        icon: const Icon(Icons.sync),
-      ),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     const geoItems = <GeoItem>[
@@ -127,7 +53,6 @@ class ResourcesView extends StatelessWidget {
 
     return CommonScaffold(
       title: appLocalizations.resources,
-      actions: _buildActions(context),
       body: ListView.separated(
         itemBuilder: (_, index) {
           final geoItem = geoItems[index];

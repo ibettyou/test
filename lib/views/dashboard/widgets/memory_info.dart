@@ -35,66 +35,65 @@ class _MemoryInfoState extends State<MemoryInfo> {
   }
 
   Future<void> _updateMemory() async {
-    if (!mounted) return;
-    
-    try {
-      final memory = await clashCore.getMemory();
-      _memoryInfoStateNotifier.value = TrafficValue(value: memory);
-    } catch (e) {
-      // 忽略错误，保持当前值
-    }
-    
-    if (!mounted) return;
-    
-    timer = Timer(const Duration(seconds: 2), _updateMemory);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // final rss = ProcessInfo.currentRss;
+      _memoryInfoStateNotifier.value = TrafficValue(
+        value: await clashCore.getMemory(),
+      );
+      timer = Timer(Duration(seconds: 2), () async {
+        _updateMemory();
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: SizedBox(
-        height: getWidgetHeight(1),
-        child: CommonCard(
-          info: Info(
-            iconData: Icons.memory,
-            label: appLocalizations.memoryInfo,
+    return SizedBox(
+      height: getWidgetHeight(1),
+      child: CommonCard(
+        info: Info(
+          iconData: Icons.memory,
+          label: appLocalizations.memoryInfo,
+        ),
+        onPressed: () {
+          clashCore.requestGc();
+        },
+        child: Container(
+          padding: baseInfoEdgeInsets.copyWith(
+            top: 0,
           ),
-          onPressed: () {
-            clashCore.requestGc();
-          },
-          child: Container(
-            padding: baseInfoEdgeInsets.copyWith(top: 0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: globalState.measure.bodyMediumHeight + 2,
-                  child: ValueListenableBuilder(
-                    valueListenable: _memoryInfoStateNotifier,
-                    builder: (_, trafficValue, __) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            trafficValue.showValue,
-                            style: context.textTheme.bodyMedium?.toLight
-                                .adjustSize(1),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            trafficValue.showUnit,
-                            style: context.textTheme.bodyMedium?.toLight
-                                .adjustSize(1),
-                          )
-                        ],
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: globalState.measure.bodyMediumHeight + 2,
+                child: ValueListenableBuilder(
+                  valueListenable: _memoryInfoStateNotifier,
+                  builder: (_, trafficValue, __) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          trafficValue.showValue,
+                          style: context.textTheme.bodyMedium?.toLight
+                              .adjustSize(1),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          trafficValue.showUnit,
+                          style: context.textTheme.bodyMedium?.toLight
+                              .adjustSize(1),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              )
+            ],
           ),
         ),
       ),
