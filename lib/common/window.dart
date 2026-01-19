@@ -5,6 +5,7 @@ import 'package:li_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
 import 'package:screen_retriever/screen_retriever.dart';
+import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
 
 class Window {
@@ -65,12 +66,11 @@ class Window {
       await windowManager.setPreventClose(true);
     });
     
-    // 如果窗口被锁定，应用锁定状态
     if (props.isLocked) {
       try {
         await windowManager.setResizable(false);
       } catch (e) {
-        commonPrint.log('应用窗口锁定状态失败: $e');
+        commonPrint.log('Failed to apply the locked state: $e');
       }
     }
   }
@@ -96,6 +96,13 @@ class Window {
   }
 
   Future<void> close() async {
+    try {
+      await trayManager.destroy();
+      commonPrint.log('The tray icon has been destroyed.');
+    } catch (e) {
+      commonPrint.log('Failed to destroy the tray icon: $e');
+    }
+    
     exit(0);
   }
 

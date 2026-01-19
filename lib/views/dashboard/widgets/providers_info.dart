@@ -34,7 +34,7 @@ class ProvidersInfo extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                'Rule Ξ Providers',
+                'Rule & Providers',
                 style: context.textTheme.bodyMedium?.toLight.adjustSize(0),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
