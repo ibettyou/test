@@ -60,6 +60,8 @@
   "autoRunDesc": "Auto run when the application is opened",
   "logcat": "Logcat",
   "logcatDesc": "Disabling will hide the log entry",
+  "enableCrashReport": "Crash analytics",
+  "enableCrashReportDesc": "Auto submit app crash logs",
   "autoCheckUpdate": "Auto check updates",
   "autoCheckUpdateDesc": "Auto check for updates when the app starts",
   "accessControl": "AccessControl",

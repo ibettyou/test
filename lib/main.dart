@@ -11,6 +11,7 @@ import 'package:li_clash/plugins/vpn.dart';
 import 'package:li_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'application.dart';
 import 'clash/core.dart';
@@ -18,12 +19,42 @@ import 'clash/lib.dart';
 import 'common/common.dart';
 import 'models/models.dart';
 
+// Sentry DSN从环境变量获取，编译时替换
+const String? _sentryDsn = String.fromEnvironment(
+  'SENTRY_DSN',
+  defaultValue: '',
+);
+
 Future<void> main() async {
+  // 初始化基础服务
   globalState.isService = false;
   WidgetsFlutterBinding.ensureInitialized();
   final version = await system.version;
   await clashCore.preload();
   await globalState.initApp(version);
+  
+  // 检查用户是否启用崩溃分析
+  final enableCrashReport = globalState.config.appSetting.enableCrashReport;
+  
+  if (enableCrashReport && _sentryDsn != null && _sentryDsn!.isNotEmpty) {
+    // 启用Sentry
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = _sentryDsn;
+        options.sendDefaultPii = true;
+        // 设置环境信息
+        options.environment = 'production';
+        options.release = globalState.config.appSetting.toString();
+      },
+      appRunner: () => _runApp(version),
+    );
+  } else {
+    // 不启用Sentry，直接运行
+    await _runApp(version);
+  }
+}
+
+Future<void> _runApp(int version) async {
   await android?.init();
   await window?.init(version);
   HttpOverrides.global = LiClashHttpOverrides();
