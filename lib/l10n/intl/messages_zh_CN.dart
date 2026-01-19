@@ -79,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "application": MessageLookupByLibrary.simpleMessage("应用程序"),
     "applicationDesc": MessageLookupByLibrary.simpleMessage("修改应用程序相关设置"),
     "auto": MessageLookupByLibrary.simpleMessage("自动"),
+    "enableCrashReport": MessageLookupByLibrary.simpleMessage("崩溃分析"),
+    "enableCrashReportDesc": MessageLookupByLibrary.simpleMessage("自动提交应用崩溃日志"),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage("自动检查更新"),
     "autoCheckUpdateDesc": MessageLookupByLibrary.simpleMessage("应用启动时自动检查更新"),
     "autoCloseConnections": MessageLookupByLibrary.simpleMessage("自动关闭连接"),

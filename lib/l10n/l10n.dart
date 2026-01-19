@@ -452,6 +452,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Crash analytics`
+  String get enableCrashReport {
+    return Intl.message(
+      'Crash analytics',
+      name: 'enableCrashReport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Auto submit app crash logs`
+  String get enableCrashReportDesc {
+    return Intl.message(
+      'Auto submit app crash logs',
+      name: 'enableCrashReportDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Auto check updates`
   String get autoCheckUpdate {
     return Intl.message(

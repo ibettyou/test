@@ -105,6 +105,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Modify application related settings",
     ),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
+    "enableCrashReport": MessageLookupByLibrary.simpleMessage(
+      "Crash analytics",
+    ),
+    "enableCrashReportDesc": MessageLookupByLibrary.simpleMessage(
+      "Auto submit app crash logs",
+    ),
     "autoCheckUpdate": MessageLookupByLibrary.simpleMessage(
       "Auto check updates",
     ),

@@ -1,7 +1,7 @@
 name: li_clash
 description: A multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free.
 publish_to: 'none'
-version: 1.11.28+2026011906
+version: 1.11.29+2026011907
 environment:
   sdk: '>=3.1.0 <4.0.0'
 
