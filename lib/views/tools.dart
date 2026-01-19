@@ -208,12 +208,27 @@ class _HotkeyItem extends StatelessWidget {
   }
 }
 
-import 'package:li_clash/widgets/uwp_loopback_dialog.dart';
-import 'dart:io';
-import 'package:path/path.dart' show dirname, join;
-
 class _LoopbackItem extends StatelessWidget {
   const _LoopbackItem();
+
+  String _getLoopbackManagerPath() {
+    final appDir = dirname(Platform.resolvedExecutable);
+    
+    // 根据系统架构选择对应的 loopback_manager
+    final arch = Abi.current().toString();
+    String folderName;
+    
+    if (arch.contains('x64')) {
+      folderName = 'loopback_manager-windows-x64';
+    } else if (arch.contains('arm64')) {
+      folderName = 'loopback_manager-windows-arm64';
+    } else {
+      // 默认使用 x64
+      folderName = 'loopback_manager-windows-x64';
+    }
+    
+    return join(appDir, folderName, 'loopback_manager.exe');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +237,11 @@ class _LoopbackItem extends StatelessWidget {
       title: Text(appLocalizations.loopback),
       subtitle: Text(appLocalizations.loopbackDesc),
       onTap: () {
-        UwpLoopbackDialog.show(context);
+        windows?.runas(
+          '"${_getLoopbackManagerPath()}"',
+          '',
+          showWindow: true,
+        );
       },
     );
   }

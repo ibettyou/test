@@ -32,6 +32,7 @@ mixin _$AppSettingProps {
   bool get closeConnections => throw _privateConstructorUsedError;
   String get testUrl => throw _privateConstructorUsedError;
   bool get isAnimateToPage => throw _privateConstructorUsedError;
+  bool get enableCrashReport => throw _privateConstructorUsedError;
   bool get autoCheckUpdate => throw _privateConstructorUsedError;
   bool get showLabel => throw _privateConstructorUsedError;
   bool get disclaimerAccepted => throw _privateConstructorUsedError;
@@ -68,6 +69,7 @@ abstract class $AppSettingPropsCopyWith<$Res> {
       bool closeConnections,
       String testUrl,
       bool isAnimateToPage,
+      bool enableCrashReport,
       bool autoCheckUpdate,
       bool showLabel,
       bool disclaimerAccepted,
@@ -102,6 +104,7 @@ class _$AppSettingPropsCopyWithImpl<$Res, $Val extends AppSettingProps>
     Object? closeConnections = null,
     Object? testUrl = null,
     Object? isAnimateToPage = null,
+    Object? enableCrashReport = null,
     Object? autoCheckUpdate = null,
     Object? showLabel = null,
     Object? disclaimerAccepted = null,
@@ -150,6 +153,10 @@ class _$AppSettingPropsCopyWithImpl<$Res, $Val extends AppSettingProps>
       isAnimateToPage: null == isAnimateToPage
           ? _value.isAnimateToPage
           : isAnimateToPage // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableCrashReport: null == enableCrashReport
+          ? _value.enableCrashReport
+          : enableCrashReport // ignore: cast_nullable_to_non_nullable
               as bool,
       autoCheckUpdate: null == autoCheckUpdate
           ? _value.autoCheckUpdate
@@ -203,6 +210,7 @@ abstract class _$$AppSettingPropsImplCopyWith<$Res>
       bool closeConnections,
       String testUrl,
       bool isAnimateToPage,
+      bool enableCrashReport,
       bool autoCheckUpdate,
       bool showLabel,
       bool disclaimerAccepted,
@@ -235,6 +243,7 @@ class __$$AppSettingPropsImplCopyWithImpl<$Res>
     Object? closeConnections = null,
     Object? testUrl = null,
     Object? isAnimateToPage = null,
+    Object? enableCrashReport = null,
     Object? autoCheckUpdate = null,
     Object? showLabel = null,
     Object? disclaimerAccepted = null,
@@ -284,6 +293,10 @@ class __$$AppSettingPropsImplCopyWithImpl<$Res>
           ? _value.isAnimateToPage
           : isAnimateToPage // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableCrashReport: null == enableCrashReport
+          ? _value.enableCrashReport
+          : enableCrashReport // ignore: cast_nullable_to_non_nullable
+              as bool,
       autoCheckUpdate: null == autoCheckUpdate
           ? _value.autoCheckUpdate
           : autoCheckUpdate // ignore: cast_nullable_to_non_nullable
@@ -331,6 +344,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
       this.closeConnections = true,
       this.testUrl = defaultTestUrl,
       this.isAnimateToPage = true,
+      this.enableCrashReport = false,
       this.autoCheckUpdate = true,
       this.showLabel = false,
       this.disclaimerAccepted = false,
@@ -381,6 +395,9 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
   final bool isAnimateToPage;
   @override
   @JsonKey()
+  final bool enableCrashReport;
+  @override
+  @JsonKey()
   final bool autoCheckUpdate;
   @override
   @JsonKey()
@@ -403,7 +420,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
 
   @override
   String toString() {
-    return 'AppSettingProps(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden, developerMode: $developerMode, recoveryStrategy: $recoveryStrategy)';
+    return 'AppSettingProps(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, enableCrashReport: $enableCrashReport, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden, developerMode: $developerMode, recoveryStrategy: $recoveryStrategy)';
   }
 
   @override
@@ -428,6 +445,8 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
             (identical(other.testUrl, testUrl) || other.testUrl == testUrl) &&
             (identical(other.isAnimateToPage, isAnimateToPage) ||
                 other.isAnimateToPage == isAnimateToPage) &&
+            (identical(other.enableCrashReport, enableCrashReport) ||
+                other.enableCrashReport == enableCrashReport) &&
             (identical(other.autoCheckUpdate, autoCheckUpdate) ||
                 other.autoCheckUpdate == autoCheckUpdate) &&
             (identical(other.showLabel, showLabel) ||
@@ -457,6 +476,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
       closeConnections,
       testUrl,
       isAnimateToPage,
+      enableCrashReport,
       autoCheckUpdate,
       showLabel,
       disclaimerAccepted,
@@ -495,6 +515,7 @@ abstract class _AppSettingProps implements AppSettingProps {
       final bool closeConnections,
       final String testUrl,
       final bool isAnimateToPage,
+      final bool enableCrashReport,
       final bool autoCheckUpdate,
       final bool showLabel,
       final bool disclaimerAccepted,
@@ -527,6 +548,8 @@ abstract class _AppSettingProps implements AppSettingProps {
   String get testUrl;
   @override
   bool get isAnimateToPage;
+  @override
+  bool get enableCrashReport;
   @override
   bool get autoCheckUpdate;
   @override
