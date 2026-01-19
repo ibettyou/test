@@ -238,11 +238,25 @@ class IcmpForwardingItem extends ConsumerWidget {
           final isRunning = ref.read(runTimeProvider) != null;
           
           if (isRunning) {
-            // VPN/TUN 正在运行，需要重建以应用新的 ICMP 设置
-            // 先停止，再启动
-            await globalState.appController.updateStatus(false);
-            await Future.delayed(const Duration(milliseconds: 500));
-            await globalState.appController.updateStatus(true);
+            if (system.isAndroid) {
+              // Android端：使用温和的恢复流程，避免内核重启
+              // 步骤1：先清理可能的残留状态
+              await globalState.handleStop();
+              
+              // 步骤2：等待一小会儿让系统清理VPN资源
+              await Future.delayed(const Duration(milliseconds: 500));
+              
+              // 步骤3：重载配置
+              await globalState.appController.applyProfile();
+              
+              // 步骤4：直接启动
+              await globalState.appController.updateStatus(true);
+            } else {
+              // 桌面端：简单的停止-启动流程
+              await globalState.appController.updateStatus(false);
+              await Future.delayed(const Duration(milliseconds: 500));
+              await globalState.appController.updateStatus(true);
+            }
           } else {
             // VPN/TUN 未运行，只需要更新配置（下次启动时生效）
             await globalState.appController.updateClashConfig();

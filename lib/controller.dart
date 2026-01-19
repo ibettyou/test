@@ -778,14 +778,10 @@ class AppController {
         // 步骤2：等待一小会儿让系统清理VPN资源
         await Future.delayed(const Duration(milliseconds: 500));
         
-        // 步骤3：重启内核，确保内核状态纯净
-        // commonPrint.log('Restarting core...');
-        // await restartCore();
-        
-        // 步骤4：重载配置
+        // 步骤3：重载配置
         await applyProfile();
         
-        // 步骤5：如果开启了自动运行，延迟执行启动
+        // 步骤4：如果开启了自动运行，延迟执行启动
         if (autoRun) {
           commonPrint.log('Waiting for system stabilization...');
           // 延迟 1500ms，模拟用户"手动启动"的时间差
