@@ -53,14 +53,15 @@ class TrafficUsage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = globalState.theme.darken3PrimaryContainer;
     final secondaryColor = globalState.theme.darken2SecondaryContainer;
-    return SizedBox(
-      height: getWidgetHeight(2),
-      child: CommonCard(
-        info: Info(
-          label: appLocalizations.trafficUsage,
-          iconData: Icons.data_saver_off,
-        ),
-        onPressed: () {},
+    return RepaintBoundary(
+      child: SizedBox(
+        height: getWidgetHeight(2),
+        child: CommonCard(
+          info: Info(
+            label: appLocalizations.trafficUsage,
+            iconData: Icons.data_saver_off,
+          ),
+          onPressed: () {},
         child: Consumer(
           builder: (_, ref, __) {
             final totalTraffic = ref.watch(totalTrafficProvider);
