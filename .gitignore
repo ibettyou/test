@@ -35,7 +35,7 @@ migrate_working_dir/
 .pub/
 /build/
 /dist/
-/test/
+.test/
 
 # Symbolication related
 app.*.symbols
