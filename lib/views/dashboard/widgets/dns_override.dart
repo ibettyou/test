@@ -23,7 +23,7 @@ class DnsOverride extends StatelessWidget {
           final result = await globalState.showCommonDialog<bool>(
             child: CommonDialog(
               title: appLocalizations.clearCacheTitle,
-              content: Text(appLocalizations.clearCacheDesc),
+              child: Text(appLocalizations.clearCacheDesc),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -43,18 +43,10 @@ class DnsOverride extends StatelessWidget {
           
           // 用户确认后清理缓存
           if (result == true) {
-            try {
-              await clashCore.flushFakeIP();
-              await clashCore.flushDnsCache();
-              globalState.showSnackBar(
-                context,
-                message: '${appLocalizations.clearCacheTitle} ${appLocalizations.success}',
-              );
-            } catch (e) {
-              globalState.showSnackBar(
-                context,
-                message: '${appLocalizations.clearCacheTitle} ${appLocalizations.error}: $e',
-              );
+            await clashCore.flushFakeIP();
+            await clashCore.flushDnsCache();
+            if (context.mounted) {
+              context.showSnackBar(appLocalizations.clearCacheTitle);
             }
           }
         },

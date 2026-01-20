@@ -95,7 +95,7 @@ class _FcmStatusState extends State<FcmStatus> {
             await globalState.showCommonDialog<void>(
               child: CommonDialog(
                 title: 'FCM',
-                content: Text(appLocalizations.fcmTip),
+                child: Text(appLocalizations.fcmTip),
                 actions: [
                   TextButton(
                     onPressed: () {

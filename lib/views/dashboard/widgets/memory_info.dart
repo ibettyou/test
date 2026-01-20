@@ -60,7 +60,7 @@ class _MemoryInfoState extends State<MemoryInfo> {
           final result = await globalState.showCommonDialog<bool>(
             child: CommonDialog(
               title: appLocalizations.forceGCTitle,
-              content: Text(appLocalizations.forceGCDesc),
+              child: Text(appLocalizations.forceGCDesc),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -80,17 +80,9 @@ class _MemoryInfoState extends State<MemoryInfo> {
           
           // 用户确认后执行强制GC
           if (result == true) {
-            try {
-              await clashCore.requestGc();
-              globalState.showSnackBar(
-                context,
-                message: '${appLocalizations.forceGCTitle} ${appLocalizations.success}',
-              );
-            } catch (e) {
-              globalState.showSnackBar(
-                context,
-                message: '${appLocalizations.forceGCTitle} ${appLocalizations.error}: $e',
-              );
+            await clashCore.requestGc();
+            if (context.mounted) {
+              context.showSnackBar(appLocalizations.forceGCTitle);
             }
           }
         },
