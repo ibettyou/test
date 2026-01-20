@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:li_clash/clash/clash.dart';
 import 'package:li_clash/common/common.dart';
+import 'package:li_clash/state.dart';
 import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -89,6 +90,23 @@ class _FcmStatusState extends State<FcmStatus> {
             iconData: Icons.cloud_outlined,
             label: 'FCM',
           ),
+          onPressed: () async {
+            // 显示提示对话框
+            await globalState.showCommonDialog<void>(
+              child: CommonDialog(
+                title: 'FCM',
+                content: Text(appLocalizations.fcmTip),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(appLocalizations.confirm),
+                  ),
+                ],
+              ),
+            );
+          },
           child: Container(
             padding: baseInfoEdgeInsets.copyWith(
               top: 0,

@@ -172,6 +172,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "The current application is already the latest version",
     ),
     "checking": MessageLookupByLibrary.simpleMessage("Checking..."),
+    "clearCacheTitle": MessageLookupByLibrary.simpleMessage("Clear Cache"),
+    "clearCacheDesc": MessageLookupByLibrary.simpleMessage(
+      "Do you want to clear FakeIP & DNS cache?",
+    ),
     "clearData": MessageLookupByLibrary.simpleMessage("Clear Data"),
     "clipboardExport": MessageLookupByLibrary.simpleMessage("Export clipboard"),
     "clipboardImport": MessageLookupByLibrary.simpleMessage("Clipboard import"),
@@ -293,6 +297,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Generally use offshore DNS",
     ),
     "fallbackFilter": MessageLookupByLibrary.simpleMessage("Fallback filter"),
+    "fcmTip": MessageLookupByLibrary.simpleMessage(
+      "FCM connection and support depend on the device itself, results are for reference only. Due to Android's underlying permission reasons, on your phone you need to disable the \"Allow Bypass VPN\" option in the network settings to get more accurate results",
+    ),
     "fidelityScheme": MessageLookupByLibrary.simpleMessage("Fidelity"),
     "file": MessageLookupByLibrary.simpleMessage("File"),
     "fileDesc": MessageLookupByLibrary.simpleMessage("Directly upload profile"),
@@ -301,6 +308,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "filterSystemApp": MessageLookupByLibrary.simpleMessage(
       "Filter system app",
+    ),
+    "forceGCTitle": MessageLookupByLibrary.simpleMessage("Force Garbage Collection"),
+    "forceGCDesc": MessageLookupByLibrary.simpleMessage(
+      "Do you want to force kernel garbage collection? Experimental feature, use with caution",
     ),
     "findProcessMode": MessageLookupByLibrary.simpleMessage("Find process"),
     "findProcessModeDesc": MessageLookupByLibrary.simpleMessage(

@@ -2,14 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"net/netip"
+	"time"
+
 	"github.com/metacubex/mihomo/adapter/provider"
 	P "github.com/metacubex/mihomo/component/process"
 	"github.com/metacubex/mihomo/config"
 	"github.com/metacubex/mihomo/constant"
 	"github.com/metacubex/mihomo/log"
 	"github.com/metacubex/mihomo/tunnel"
-	"net/netip"
-	"time"
 )
 
 type InitParams struct {
@@ -106,6 +107,8 @@ const (
 	crashMethod                    Method = "crash"
 	setupConfigMethod              Method = "setupConfig"
 	getConfigMethod                Method = "getConfig"
+	flushFakeIPMethod              Method = "flushFakeIP"
+	flushDnsCacheMethod            Method = "flushDnsCache"
 )
 
 type Method string

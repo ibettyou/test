@@ -1,6 +1,8 @@
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/providers/config.dart';
 import 'package:li_clash/widgets/widgets.dart';
+import 'package:li_clash/clash/core.dart';
+import 'package:li_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +18,46 @@ class DnsOverride extends StatelessWidget {
           label: 'DNS',
           iconData: Icons.dns,
         ),
-        onPressed: () {},
+        onPressed: () async {
+          // 显示确认对话框
+          final result = await globalState.showCommonDialog<bool>(
+            child: CommonDialog(
+              title: appLocalizations.clearCacheTitle,
+              content: Text(appLocalizations.clearCacheDesc),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(appLocalizations.cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(appLocalizations.confirm),
+                ),
+              ],
+            ),
+          );
+          
+          // 用户确认后清理缓存
+          if (result == true) {
+            try {
+              await clashCore.flushFakeIP();
+              await clashCore.flushDnsCache();
+              globalState.showSnackBar(
+                context,
+                message: '${appLocalizations.clearCacheTitle} ${appLocalizations.success}',
+              );
+            } catch (e) {
+              globalState.showSnackBar(
+                context,
+                message: '${appLocalizations.clearCacheTitle} ${appLocalizations.error}: $e',
+              );
+            }
+          }
+        },
         child: Container(
           padding: baseInfoEdgeInsets.copyWith(
             top: 4,

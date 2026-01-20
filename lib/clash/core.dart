@@ -276,6 +276,14 @@ class ClashCore {
     await clashInterface.forceGc();
   }
 
+  Future<void> flushFakeIP() async {
+    await clashInterface.flushFakeIP();
+  }
+
+  Future<void> flushDnsCache() async {
+    await clashInterface.flushDnsCache();
+  }
+
   Future<void> destroy() async {
     await clashInterface.destroy();
   }

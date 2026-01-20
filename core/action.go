@@ -179,6 +179,13 @@ func handleAction(action *Action, result ActionResult) {
 		data := action.Data.(string)
 		handleSetState(data)
 		result.success(true)
+	case flushFakeIPMethod:
+		result.success(handleFlushFakeIP())
+		return
+	case flushDnsCacheMethod:
+		handleFlushDnsCache()
+		result.success(true)
+		return
 	case crashMethod:
 		result.success(true)
 		handleCrash()

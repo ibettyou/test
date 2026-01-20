@@ -5,6 +5,12 @@ import (
 	"core/state"
 	"encoding/json"
 	"fmt"
+	"net"
+	"runtime"
+	"sort"
+	"strconv"
+	"time"
+
 	"github.com/metacubex/mihomo/adapter"
 	"github.com/metacubex/mihomo/adapter/outboundgroup"
 	"github.com/metacubex/mihomo/common/observable"
@@ -20,11 +26,6 @@ import (
 	"github.com/metacubex/mihomo/log"
 	"github.com/metacubex/mihomo/tunnel"
 	"github.com/metacubex/mihomo/tunnel/statistic"
-	"net"
-	"runtime"
-	"sort"
-	"strconv"
-	"time"
 )
 
 var (
@@ -434,6 +435,21 @@ func handleGetConfig(path string) (*config.RawConfig, error) {
 		return nil, err
 	}
 	return prof, nil
+}
+
+func handleFlushFakeIP() bool {
+	err := resolver.FlushFakeIP()
+	if err != nil {
+		log.Errorln("[APP] Flush FakeIP error: %v", err)
+		return false
+	}
+	log.Infoln("[APP] FakeIP pool flushed")
+	return true
+}
+
+func handleFlushDnsCache() {
+	resolver.ClearCache()
+	log.Infoln("[APP] DNS cache flushed")
 }
 
 func handleCrash() {

@@ -294,6 +294,8 @@ enum ActionMethod {
   getMemory,
   crash,
   setupConfig,
+  flushFakeIP,
+  flushDnsCache,
 
   ///Android,
   setState,

@@ -512,6 +512,56 @@ class AppLocalizations {
     );
   }
 
+  /// `Clear Cache`
+  String get clearCacheTitle {
+    return Intl.message(
+      'Clear Cache',
+      name: 'clearCacheTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to clear FakeIP & DNS cache?`
+  String get clearCacheDesc {
+    return Intl.message(
+      'Do you want to clear FakeIP & DNS cache?',
+      name: 'clearCacheDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Force Garbage Collection`
+  String get forceGCTitle {
+    return Intl.message(
+      'Force Garbage Collection',
+      name: 'forceGCTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to force kernel garbage collection? Experimental feature, use with caution`
+  String get forceGCDesc {
+    return Intl.message(
+      'Do you want to force kernel garbage collection? Experimental feature, use with caution',
+      name: 'forceGCDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `FCM connection and support depend on the device itself, results are for reference only. Due to Android's underlying permission reasons, on your phone you need to disable the "Allow Bypass VPN" option in the network settings to get more accurate results`
+  String get fcmTip {
+    return Intl.message(
+      'FCM connection and support depend on the device itself, results are for reference only. Due to Android\'s underlying permission reasons, on your phone you need to disable the "Allow Bypass VPN" option in the network settings to get more accurate results',
+      name: 'fcmTip',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Application`
   String get application {
     return Intl.message('Application', name: 'application', desc: '', args: []);

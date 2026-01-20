@@ -96,20 +96,8 @@ install(PROGRAMS "${CLASH_DIR}/LiClashCore.exe" DESTINATION "${INSTALL_BUNDLE_LI
 install(PROGRAMS "${CLASH_DIR}/LiClashHelperService.exe" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
   COMPONENT Runtime)
 
-# 根据架构安装对应的 UWP Loopback 管理器
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64")
-  set(LOOPBACK_MANAGER_DIR "loopback_manager-windows-arm64")
-else()
-  # 默认 x64
-  set(LOOPBACK_MANAGER_DIR "loopback_manager-windows-x64")
-endif()
-
-install(DIRECTORY "${LOOPBACK_MANAGER_DIR}/" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}/${LOOPBACK_MANAGER_DIR}"
-  COMPONENT Runtime
-  FILES_MATCHING 
-  PATTERN "*.exe"
-  PATTERN "*.dll"
-  PATTERN "data/*")
+install(FILES "EnableLoopback.exe" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+  COMPONENT Runtime)
 
 if(PLUGIN_BUNDLED_LIBRARIES)
   install(FILES "${PLUGIN_BUNDLED_LIBRARIES}"

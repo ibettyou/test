@@ -55,8 +55,44 @@ class _MemoryInfoState extends State<MemoryInfo> {
           iconData: Icons.memory,
           label: appLocalizations.memoryInfo,
         ),
-        onPressed: () {
-          clashCore.requestGc();
+        onPressed: () async {
+          // 显示确认对话框
+          final result = await globalState.showCommonDialog<bool>(
+            child: CommonDialog(
+              title: appLocalizations.forceGCTitle,
+              content: Text(appLocalizations.forceGCDesc),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(appLocalizations.cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(appLocalizations.confirm),
+                ),
+              ],
+            ),
+          );
+          
+          // 用户确认后执行强制GC
+          if (result == true) {
+            try {
+              await clashCore.requestGc();
+              globalState.showSnackBar(
+                context,
+                message: '${appLocalizations.forceGCTitle} ${appLocalizations.success}',
+              );
+            } catch (e) {
+              globalState.showSnackBar(
+                context,
+                message: '${appLocalizations.forceGCTitle} ${appLocalizations.error}: $e',
+              );
+            }
+          }
         },
         child: Container(
           padding: baseInfoEdgeInsets.copyWith(
