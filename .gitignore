@@ -36,6 +36,7 @@ migrate_working_dir/
 /build/
 /dist/
 .test/
+.vscode/
 
 # Symbolication related
 app.*.symbols

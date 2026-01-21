@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:li_clash/clash/clash.dart';
 import 'package:li_clash/common/common.dart';
@@ -60,7 +59,6 @@ class _MemoryInfoState extends State<MemoryInfo> {
           final result = await globalState.showCommonDialog<bool>(
             child: CommonDialog(
               title: appLocalizations.forceGCTitle,
-              child: Text(appLocalizations.forceGCDesc),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -75,9 +73,10 @@ class _MemoryInfoState extends State<MemoryInfo> {
                   child: Text(appLocalizations.confirm),
                 ),
               ],
+              child: Text(appLocalizations.forceGCDesc),
             ),
           );
-          
+
           // 用户确认后执行强制GC
           if (result == true) {
             await clashCore.requestGc();

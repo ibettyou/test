@@ -47,7 +47,7 @@ class _FcmStatusState extends State<FcmStatus> {
 
     try {
       final connections = await clashCore.getConnections();
-      
+
       // 筛选 FCM 连接：host 包含 google.com + 端口 5228/5229/5230
       final fcmConnections = connections.where((conn) {
         final host = conn.metadata.host.toLowerCase();
@@ -95,7 +95,6 @@ class _FcmStatusState extends State<FcmStatus> {
             await globalState.showCommonDialog<void>(
               child: CommonDialog(
                 title: 'FCM',
-                child: Text(appLocalizations.fcmTip),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -104,6 +103,7 @@ class _FcmStatusState extends State<FcmStatus> {
                     child: Text(appLocalizations.confirm),
                   ),
                 ],
+                child: Text(appLocalizations.fcmTip),
               ),
             );
           },
@@ -138,8 +138,8 @@ class _FcmStatusState extends State<FcmStatus> {
                   } else {
                     return Text(
                       appLocalizations.noStatusAvailable,
-                      style: context.textTheme.bodyMedium?.toLight
-                          .adjustSize(0),
+                      style:
+                          context.textTheme.bodyMedium?.toLight.adjustSize(0),
                     );
                   }
                 },

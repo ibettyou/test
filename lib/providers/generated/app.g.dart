@@ -382,7 +382,7 @@ final systemUiOverlayStyleStateProvider = AutoDisposeNotifierProvider<
 );
 
 typedef _$SystemUiOverlayStyleState = AutoDisposeNotifier<SystemUiOverlayStyle>;
-String _$isSmartStoppedHash() => r'a75b6e26a7d3bf1a7a0aba2419875badb7f0b42f';
+String _$isSmartStoppedHash() => r'3f053dad10b19a0ee35a9bbbd5391395f0dcb5f7';
 
 /// Provider to track if VPN was stopped by Smart Auto Stop feature.
 /// This is used to show different notification content when smart-stopped.
