@@ -78,12 +78,16 @@ class _MemoryInfoState extends State<MemoryInfo> {
             ),
           );
           
-          // 用户确认后执行强制GC
+          // 用户确认后，在新的微任务中执行GC
           if (result == true) {
-            await clashCore.requestGc();
-            if (context.mounted) {
-              context.showSnackBar(appLocalizations.forceGCTitle);
-            }
+            Future.delayed(Duration.zero, () async {
+              try {
+                await clashCore.requestGc();
+                globalState.showNotifier(appLocalizations.forceGCTitle);
+              } catch (e) {
+                globalState.showNotifier('${appLocalizations.forceGCTitle}: $e');
+              }
+            });
           }
         },
         child: Container(

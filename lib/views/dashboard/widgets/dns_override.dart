@@ -41,13 +41,17 @@ class DnsOverride extends StatelessWidget {
             ),
           );
           
-          // 用户确认后清理缓存
+          // 用户确认后，在新的微任务中执行清理
           if (result == true) {
-            await clashCore.flushFakeIP();
-            await clashCore.flushDnsCache();
-            if (context.mounted) {
-              context.showSnackBar(appLocalizations.clearCacheTitle);
-            }
+            Future.delayed(Duration.zero, () async {
+              try {
+                await clashCore.flushFakeIP();
+                await clashCore.flushDnsCache();
+                globalState.showNotifier(appLocalizations.clearCacheTitle);
+              } catch (e) {
+                globalState.showNotifier('${appLocalizations.clearCacheTitle}: $e');
+              }
+            });
           }
         },
         child: Container(
