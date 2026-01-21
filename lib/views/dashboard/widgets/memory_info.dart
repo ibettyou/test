@@ -64,13 +64,13 @@ class _MemoryInfoState extends State<MemoryInfo> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(false);
+                    Navigator.of(context, rootNavigator: true).pop(false);
                   },
                   child: Text(appLocalizations.cancel),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(true);
+                    Navigator.of(context, rootNavigator: true).pop(true);
                   },
                   child: Text(appLocalizations.confirm),
                 ),
@@ -78,16 +78,10 @@ class _MemoryInfoState extends State<MemoryInfo> {
             ),
           );
           
-          // 用户确认后，在新的微任务中执行GC
+          // 用户确认后执行强制GC
           if (result == true) {
-            Future.delayed(Duration.zero, () async {
-              try {
-                await clashCore.requestGc();
-                globalState.showNotifier(appLocalizations.forceGCTitle);
-              } catch (e) {
-                globalState.showNotifier('${appLocalizations.forceGCTitle}: $e');
-              }
-            });
+            await clashCore.requestGc();
+            globalState.showNotifier(appLocalizations.forceGCTitle);
           }
         },
         child: Container(

@@ -27,13 +27,13 @@ class DnsOverride extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(false);
+                    Navigator.of(context, rootNavigator: true).pop(false);
                   },
                   child: Text(appLocalizations.cancel),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(true);
+                    Navigator.of(context, rootNavigator: true).pop(true);
                   },
                   child: Text(appLocalizations.confirm),
                 ),
@@ -41,17 +41,11 @@ class DnsOverride extends StatelessWidget {
             ),
           );
           
-          // 用户确认后，在新的微任务中执行清理
+          // 用户确认后清理缓存
           if (result == true) {
-            Future.delayed(Duration.zero, () async {
-              try {
-                await clashCore.flushFakeIP();
-                await clashCore.flushDnsCache();
-                globalState.showNotifier(appLocalizations.clearCacheTitle);
-              } catch (e) {
-                globalState.showNotifier('${appLocalizations.clearCacheTitle}: $e');
-              }
-            });
+            await clashCore.flushFakeIP();
+            await clashCore.flushDnsCache();
+            globalState.showNotifier(appLocalizations.clearCacheTitle);
           }
         },
         child: Container(
