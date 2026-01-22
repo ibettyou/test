@@ -71,7 +71,7 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
       // Feature disabled, if we were smart-stopped, resume.
       final isSmartStopped = ref.read(isSmartStoppedProvider);
       if (isSmartStopped) {
-        ref.read(isSmartStoppedProvider.notifier).set(false);
+        ref.read(isSmartStoppedProvider.notifier).state = false;
         _restartVpn();
       }
       return;
@@ -144,7 +144,7 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
       if (isRunning) {
         if (!isSmartStopped) {
           // Only mark as smart-stopped if we are currently running normally
-          ref.read(isSmartStoppedProvider.notifier).set(true);
+          ref.read(isSmartStoppedProvider.notifier).state = true;
         }
         commonPrint.log('Smart Auto Stop: Stopping VPN...');
         await _stopVpn();
@@ -152,7 +152,7 @@ class _SmartAutoStopManagerState extends ConsumerState<SmartAutoStopManager> {
     } else {
       // Rule NOT matched: VPN should be RUNNING (if it was smart-stopped)
       if (!isRunning && isSmartStopped) {
-        ref.read(isSmartStoppedProvider.notifier).set(false);
+        ref.read(isSmartStoppedProvider.notifier).state = false;
         commonPrint.log('Smart Auto Stop: Restarting VPN...');
         await _restartVpn();
       }

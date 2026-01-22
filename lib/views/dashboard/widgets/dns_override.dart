@@ -23,6 +23,7 @@ class DnsOverride extends StatelessWidget {
           final result = await globalState.showCommonDialog<bool>(
             child: CommonDialog(
               title: appLocalizations.clearCacheTitle,
+              child: Text(appLocalizations.clearCacheDesc),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -37,7 +38,6 @@ class DnsOverride extends StatelessWidget {
                   child: Text(appLocalizations.confirm),
                 ),
               ],
-              child: Text(appLocalizations.clearCacheDesc),
             ),
           );
 

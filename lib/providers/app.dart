@@ -412,8 +412,4 @@ class IsSmartStopped extends _$IsSmartStopped {
   bool build() {
     return false;
   }
-
-  void set(bool value) {
-    state = value;
-  }
 }
