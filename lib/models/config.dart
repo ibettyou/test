@@ -94,9 +94,8 @@ class AppSettingProps with _$AppSettingProps {
       _$AppSettingPropsFromJson(json);
 
   factory AppSettingProps.safeFromJson(Map<String, Object?>? json) {
-    final props = json == null
-        ? defaultAppSettingProps
-        : AppSettingProps.fromJson(json);
+    final props =
+        json == null ? defaultAppSettingProps : AppSettingProps.fromJson(json);
     // 确保 minimizeOnExit 始终为 true，防止用户通过备份恢复改变此设置
     return props.copyWith(minimizeOnExit: true);
   }

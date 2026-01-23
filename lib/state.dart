@@ -304,7 +304,7 @@ class GlobalState {
       tun: patchConfig.tun.getRealTun(config.networkProps.routeMode),
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
-    rawConfig['external-ui'] = '';
+    rawConfig['external-ui'] = '/ui';
     rawConfig['interface-name'] = '';
     rawConfig['external-ui-url'] =
         'https://github.com/Zephyruso/zashboard/releases/download/v2.6.0/dist-no-fonts.zip';
@@ -422,8 +422,7 @@ class GlobalState {
       }
     }
 
-    // 如果启用了"绕过私有路由地址"，自动注入私有网络直连规则
-    // 这确保即使流量进入 Clash，也会被直连处理
+    // 确保私有网络直连规则直连处理，确保优先匹配
     if (config.networkProps.routeMode == RouteMode.bypassPrivate) {
       final privateNetworkRules = [
         'IP-CIDR,10.0.0.0/8,DIRECT,no-resolve',
@@ -434,7 +433,6 @@ class GlobalState {
         'IP-CIDR6,fc00::/7,DIRECT,no-resolve',
         'IP-CIDR6,fe80::/10,DIRECT,no-resolve',
       ];
-      // 将私有网络规则插入到规则列表最前面，确保优先匹配
       rules = [...privateNetworkRules, ...rules];
     }
 
