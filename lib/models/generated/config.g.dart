@@ -282,6 +282,8 @@ _$ThemePropsImpl _$$ThemePropsImplFromJson(Map<String, dynamic> json) =>
               _$DynamicSchemeVariantEnumMap, json['schemeVariant']) ??
           DynamicSchemeVariant.content,
       pureBlack: json['pureBlack'] as bool? ?? false,
+      enableDazzle: json['enableDazzle'] as bool? ?? false,
+      wallpaper: json['wallpaper'] as String?,
       textScale: json['textScale'] == null
           ? const TextScale()
           : TextScale.fromJson(json['textScale'] as Map<String, dynamic>),
@@ -294,6 +296,8 @@ Map<String, dynamic> _$$ThemePropsImplToJson(_$ThemePropsImpl instance) =>
       'themeMode': _$ThemeModeEnumMap[instance.themeMode]!,
       'schemeVariant': _$DynamicSchemeVariantEnumMap[instance.schemeVariant]!,
       'pureBlack': instance.pureBlack,
+      'enableDazzle': instance.enableDazzle,
+      'wallpaper': instance.wallpaper,
       'textScale': instance.textScale,
     };
 

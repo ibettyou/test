@@ -450,5 +450,7 @@
   "switchLabel": "开关",
   "noStatusAvailable": "未获取到状态",
   "onlinePanel": "在线面板",
-  "openDashboard": "打开 Dashboard"
+  "openDashboard": "打开 Dashboard",
+  "dazzleMode": "炫彩模式",
+  "wallpaper": "壁纸"
 }

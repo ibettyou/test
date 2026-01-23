@@ -1,7 +1,10 @@
+import 'dart:ui';
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/enum/enum.dart';
 import 'package:li_clash/widgets/fade_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:li_clash/providers/config.dart';
 
 import 'text.dart';
 
@@ -108,7 +111,20 @@ class CommonCard extends StatelessWidget {
   // final WidgetStateProperty<Color?>? backgroundColor;
   // final WidgetStateProperty<BorderSide?>? borderSide;
 
-  BorderSide getBorderSide(BuildContext context, Set<WidgetState> states) {
+  BorderSide getBorderSide(
+      BuildContext context, Set<WidgetState> states, bool enableDazzle) {
+    if (enableDazzle) {
+      if (isSelected) {
+        return BorderSide(
+          color: context.colorScheme.primary.withOpacity(0.5),
+          width: 0.5,
+        );
+      }
+      return BorderSide(
+        color: Colors.white.withOpacity(0.2),
+        width: 0.5,
+      );
+    }
     final colorScheme = context.colorScheme;
     if (type == CommonCardType.filled) {
       return BorderSide.none;
@@ -130,7 +146,14 @@ class CommonCard extends StatelessWidget {
     );
   }
 
-  Color? getBackgroundColor(BuildContext context, Set<WidgetState> states) {
+  Color? getBackgroundColor(
+      BuildContext context, Set<WidgetState> states, bool enableDazzle) {
+    if (enableDazzle) {
+      if (isSelected) {
+        return context.colorScheme.primary.withOpacity(0.2);
+      }
+      return Colors.black.withOpacity(0.3);
+    }
     final colorScheme = context.colorScheme;
     if (type == CommonCardType.filled) {
       if (isSelected) {
@@ -146,68 +169,84 @@ class CommonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var childWidget = child;
+    return Consumer(
+      builder: (context, ref, _) {
+        var childWidget = child;
+        final enableDazzle =
+            ref.watch(themeSettingProvider.select((s) => s.enableDazzle));
 
-    if (info != null) {
-      childWidget = Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          InfoHeader(
-            padding: baseInfoEdgeInsets.copyWith(
-              bottom: 0,
+        if (info != null) {
+          childWidget = Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InfoHeader(
+                padding: baseInfoEdgeInsets.copyWith(
+                  bottom: 0,
+                ),
+                info: info!,
+              ),
+              Flexible(
+                flex: 1,
+                child: child,
+              ),
+            ],
+          );
+        }
+
+        if (selectWidget != null && isSelected) {
+          final List<Widget> children = [];
+          children.add(childWidget);
+          children.add(
+            Positioned.fill(
+              child: selectWidget!,
             ),
-            info: info!,
-          ),
-          Flexible(
-            flex: 1,
-            child: child,
-          ),
-        ],
-      );
-    }
+          );
+          childWidget = Stack(
+            children: children,
+          );
+        }
 
-    if (selectWidget != null && isSelected) {
-      final List<Widget> children = [];
-      children.add(childWidget);
-      children.add(
-        Positioned.fill(
-          child: selectWidget!,
-        ),
-      );
-      childWidget = Stack(
-        children: children,
-      );
-    }
+        Widget card = OutlinedButton(
+          onLongPress: null,
+          clipBehavior: Clip.antiAlias,
+          style: ButtonStyle(
+            padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius),
+              ),
+            ),
+            iconColor: WidgetStatePropertyAll(context.colorScheme.primary),
+            iconSize: WidgetStateProperty.all(20),
+            backgroundColor: WidgetStateProperty.resolveWith(
+              (states) => getBackgroundColor(context, states, enableDazzle),
+            ),
+            side: WidgetStateProperty.resolveWith(
+              (states) => getBorderSide(context, states, enableDazzle),
+            ),
+          ),
+          onPressed: onPressed,
+          child: childWidget,
+        );
 
-    final card = OutlinedButton(
-      onLongPress: null,
-      clipBehavior: Clip.antiAlias,
-      style: ButtonStyle(
-        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
+        if (enableDazzle) {
+          card = ClipRRect(
             borderRadius: BorderRadius.circular(radius),
-          ),
-        ),
-        iconColor: WidgetStatePropertyAll(context.colorScheme.primary),
-        iconSize: WidgetStateProperty.all(20),
-        backgroundColor: WidgetStateProperty.resolveWith(
-          (states) => getBackgroundColor(context, states),
-        ),
-        side: WidgetStateProperty.resolveWith(
-          (states) => getBorderSide(context, states),
-        ),
-      ),
-      onPressed: onPressed,
-      child: childWidget,
-    );
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: card,
+            ),
+          );
+        }
 
-    return switch (enterAnimated) {
-      true => FadeScaleEnterBox(
-          child: card,
-        ),
-      false => card,
-    };
+        return switch (enterAnimated) {
+          true => FadeScaleEnterBox(
+              child: card,
+            ),
+          false => card,
+        };
+      },
+    );
   }
 }
 

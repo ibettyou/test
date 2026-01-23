@@ -2142,6 +2142,8 @@ mixin _$ThemeProps {
   ThemeMode get themeMode => throw _privateConstructorUsedError;
   DynamicSchemeVariant get schemeVariant => throw _privateConstructorUsedError;
   bool get pureBlack => throw _privateConstructorUsedError;
+  bool get enableDazzle => throw _privateConstructorUsedError;
+  String? get wallpaper => throw _privateConstructorUsedError;
   TextScale get textScale => throw _privateConstructorUsedError;
 
   /// Serializes this ThemeProps to a JSON map.
@@ -2166,6 +2168,8 @@ abstract class $ThemePropsCopyWith<$Res> {
       ThemeMode themeMode,
       DynamicSchemeVariant schemeVariant,
       bool pureBlack,
+      bool enableDazzle,
+      String? wallpaper,
       TextScale textScale});
 
   $TextScaleCopyWith<$Res> get textScale;
@@ -2191,6 +2195,8 @@ class _$ThemePropsCopyWithImpl<$Res, $Val extends ThemeProps>
     Object? themeMode = null,
     Object? schemeVariant = null,
     Object? pureBlack = null,
+    Object? enableDazzle = null,
+    Object? wallpaper = freezed,
     Object? textScale = null,
   }) {
     return _then(_value.copyWith(
@@ -2214,6 +2220,14 @@ class _$ThemePropsCopyWithImpl<$Res, $Val extends ThemeProps>
           ? _value.pureBlack
           : pureBlack // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableDazzle: null == enableDazzle
+          ? _value.enableDazzle
+          : enableDazzle // ignore: cast_nullable_to_non_nullable
+              as bool,
+      wallpaper: freezed == wallpaper
+          ? _value.wallpaper
+          : wallpaper // ignore: cast_nullable_to_non_nullable
+              as String?,
       textScale: null == textScale
           ? _value.textScale
           : textScale // ignore: cast_nullable_to_non_nullable
@@ -2246,6 +2260,8 @@ abstract class _$$ThemePropsImplCopyWith<$Res>
       ThemeMode themeMode,
       DynamicSchemeVariant schemeVariant,
       bool pureBlack,
+      bool enableDazzle,
+      String? wallpaper,
       TextScale textScale});
 
   @override
@@ -2270,6 +2286,8 @@ class __$$ThemePropsImplCopyWithImpl<$Res>
     Object? themeMode = null,
     Object? schemeVariant = null,
     Object? pureBlack = null,
+    Object? enableDazzle = null,
+    Object? wallpaper = freezed,
     Object? textScale = null,
   }) {
     return _then(_$ThemePropsImpl(
@@ -2293,6 +2311,14 @@ class __$$ThemePropsImplCopyWithImpl<$Res>
           ? _value.pureBlack
           : pureBlack // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableDazzle: null == enableDazzle
+          ? _value.enableDazzle
+          : enableDazzle // ignore: cast_nullable_to_non_nullable
+              as bool,
+      wallpaper: freezed == wallpaper
+          ? _value.wallpaper
+          : wallpaper // ignore: cast_nullable_to_non_nullable
+              as String?,
       textScale: null == textScale
           ? _value.textScale
           : textScale // ignore: cast_nullable_to_non_nullable
@@ -2310,6 +2336,8 @@ class _$ThemePropsImpl implements _ThemeProps {
       this.themeMode = ThemeMode.light,
       this.schemeVariant = DynamicSchemeVariant.content,
       this.pureBlack = false,
+      this.enableDazzle = false,
+      this.wallpaper,
       this.textScale = const TextScale()})
       : _primaryColors = primaryColors;
 
@@ -2338,11 +2366,16 @@ class _$ThemePropsImpl implements _ThemeProps {
   final bool pureBlack;
   @override
   @JsonKey()
+  final bool enableDazzle;
+  @override
+  final String? wallpaper;
+  @override
+  @JsonKey()
   final TextScale textScale;
 
   @override
   String toString() {
-    return 'ThemeProps(primaryColor: $primaryColor, primaryColors: $primaryColors, themeMode: $themeMode, schemeVariant: $schemeVariant, pureBlack: $pureBlack, textScale: $textScale)';
+    return 'ThemeProps(primaryColor: $primaryColor, primaryColors: $primaryColors, themeMode: $themeMode, schemeVariant: $schemeVariant, pureBlack: $pureBlack, enableDazzle: $enableDazzle, wallpaper: $wallpaper, textScale: $textScale)';
   }
 
   @override
@@ -2360,6 +2393,10 @@ class _$ThemePropsImpl implements _ThemeProps {
                 other.schemeVariant == schemeVariant) &&
             (identical(other.pureBlack, pureBlack) ||
                 other.pureBlack == pureBlack) &&
+            (identical(other.enableDazzle, enableDazzle) ||
+                other.enableDazzle == enableDazzle) &&
+            (identical(other.wallpaper, wallpaper) ||
+                other.wallpaper == wallpaper) &&
             (identical(other.textScale, textScale) ||
                 other.textScale == textScale));
   }
@@ -2373,6 +2410,8 @@ class _$ThemePropsImpl implements _ThemeProps {
       themeMode,
       schemeVariant,
       pureBlack,
+      enableDazzle,
+      wallpaper,
       textScale);
 
   /// Create a copy of ThemeProps
@@ -2398,6 +2437,8 @@ abstract class _ThemeProps implements ThemeProps {
       final ThemeMode themeMode,
       final DynamicSchemeVariant schemeVariant,
       final bool pureBlack,
+      final bool enableDazzle,
+      final String? wallpaper,
       final TextScale textScale}) = _$ThemePropsImpl;
 
   factory _ThemeProps.fromJson(Map<String, dynamic> json) =
@@ -2413,6 +2454,10 @@ abstract class _ThemeProps implements ThemeProps {
   DynamicSchemeVariant get schemeVariant;
   @override
   bool get pureBlack;
+  @override
+  bool get enableDazzle;
+  @override
+  String? get wallpaper;
   @override
   TextScale get textScale;
 

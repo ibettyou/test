@@ -449,5 +449,7 @@
   "switchLabel": "Switch",
   "noStatusAvailable": "No Status Available",
   "onlinePanel": "Online Panel",
-  "openDashboard": "Open Dashboard"
+  "openDashboard": "Open Dashboard",
+  "dazzleMode": "Dazzle mode",
+  "wallpaper": "Wallpaper"
 }

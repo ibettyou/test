@@ -46,6 +46,9 @@ class ThemeView extends ConsumerWidget {
       _ThemeModeItem(),
       _PrimaryColorItem(),
       if (brightness == Brightness.dark) _PrueBlackItem(),
+      _DazzleModeItem(),
+      if (ref.watch(themeSettingProvider.select((s) => s.enableDazzle)))
+        _WallpaperItem(),
       _TextScaleFactorItem(),
       const SizedBox(
         height: 64,
@@ -742,4 +745,113 @@ class _SliderDefaultsM3 extends SliderThemeData {
 
   @override
   double? get trackGap => 6.0;
+}
+
+class _DazzleModeItem extends ConsumerWidget {
+  const _DazzleModeItem();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final enableDazzle = ref.watch(
+      themeSettingProvider.select(
+        (state) => state.enableDazzle,
+      ),
+    );
+    return ListItem.switchItem(
+      leading: Icon(
+        Icons.auto_awesome,
+      ),
+      horizontalTitleGap: 12,
+      title: Text(
+        appLocalizations.dazzleMode,
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
+            ),
+      ),
+      delegate: SwitchDelegate(
+        value: enableDazzle,
+        onChanged: (value) {
+          ref.read(themeSettingProvider.notifier).updateState(
+                (state) => state.copyWith(
+                  enableDazzle: value,
+                ),
+              );
+        },
+      ),
+    );
+  }
+}
+
+class _WallpaperItem extends ConsumerWidget {
+  const _WallpaperItem();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentWallpaper = ref.watch(
+      themeSettingProvider.select((state) => state.wallpaper),
+    );
+
+    return ItemCard(
+      info: Info(
+        label: appLocalizations.wallpaper,
+      ),
+      child: SizedBox(
+        height: 200,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          itemCount: 11,
+          separatorBuilder: (_, __) => SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            final path = 'assets/images/wallpaper/${index + 1}.webp';
+            final isSelected = currentWallpaper == path;
+
+            return GestureDetector(
+              onTap: () {
+                ref.read(themeSettingProvider.notifier).updateState(
+                      (state) => state.copyWith(
+                        wallpaper: path,
+                      ),
+                    );
+              },
+              child: Container(
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: isSelected
+                      ? Border.all(
+                          color: context.colorScheme.primary,
+                          width: 2,
+                        )
+                      : null,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        path,
+                        fit: BoxFit.cover,
+                      ),
+                      if (isSelected)
+                        Container(
+                          color: Colors.black26,
+                          child: Center(
+                            child: Icon(
+                              Icons.check_circle,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 }

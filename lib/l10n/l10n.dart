@@ -28,10 +28,9 @@ class AppLocalizations {
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<AppLocalizations> load(Locale locale) {
-    final name =
-        (locale.countryCode?.isEmpty ?? false)
-            ? locale.languageCode
-            : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -53,6 +52,16 @@ class AppLocalizations {
 
   static AppLocalizations? maybeOf(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
+
+  /// `Dazzle mode`
+  String get dazzleMode {
+    return Intl.message('Dazzle mode', name: 'dazzleMode', desc: '', args: []);
+  }
+
+  /// `Wallpaper`
+  String get wallpaper {
+    return Intl.message('Wallpaper', name: 'wallpaper', desc: '', args: []);
   }
 
   /// `Rule`
@@ -232,57 +241,68 @@ class AppLocalizations {
 
   /// `Other Settings`
   String get otherSettings {
-    return Intl.message('Other Settings', name: 'otherSettings', desc: '', args: []);
+    return Intl.message('Other Settings',
+        name: 'otherSettings', desc: '', args: []);
   }
 
   /// `Modify other related settings`
   String get otherSettingsDesc {
-    return Intl.message('Modify other related settings', name: 'otherSettingsDesc', desc: '', args: []);
+    return Intl.message('Modify other related settings',
+        name: 'otherSettingsDesc', desc: '', args: []);
   }
 
   /// `Smart Auto-Stop`
   String get smartAutoStop {
-    return Intl.message('Smart Auto-Stop', name: 'smartAutoStop', desc: '', args: []);
+    return Intl.message('Smart Auto-Stop',
+        name: 'smartAutoStop', desc: '', args: []);
   }
 
   /// `Stop VPN when connected to specified intranet`
   String get smartAutoStopDesc {
-    return Intl.message('Stop VPN when connected to specified intranet', name: 'smartAutoStopDesc', desc: '', args: []);
+    return Intl.message('Stop VPN when connected to specified intranet',
+        name: 'smartAutoStopDesc', desc: '', args: []);
   }
 
   /// `Network Match`
   String get networkMatch {
-    return Intl.message('Network Match', name: 'networkMatch', desc: '', args: []);
+    return Intl.message('Network Match',
+        name: 'networkMatch', desc: '', args: []);
   }
 
   /// `Enter IP or CIDR, max 2, comma separated`
   String get networkMatchHint {
-    return Intl.message('Enter IP or CIDR, max 2, comma separated', name: 'networkMatchHint', desc: '', args: []);
+    return Intl.message('Enter IP or CIDR, max 2, comma separated',
+        name: 'networkMatchHint', desc: '', args: []);
   }
 
   /// `Smart Auto-Stop service running`
   String get smartAutoStopServiceRunning {
-    return Intl.message('Smart Auto-Stop service running', name: 'smartAutoStopServiceRunning', desc: '', args: []);
+    return Intl.message('Smart Auto-Stop service running',
+        name: 'smartAutoStopServiceRunning', desc: '', args: []);
   }
 
   /// `Invalid IP or CIDR format`
   String get invalidIpFormat {
-    return Intl.message('Invalid IP or CIDR format', name: 'invalidIpFormat', desc: '', args: []);
+    return Intl.message('Invalid IP or CIDR format',
+        name: 'invalidIpFormat', desc: '', args: []);
   }
 
   /// `Maximum 2 rules allowed`
   String get tooManyRules {
-    return Intl.message('Maximum 2 rules allowed', name: 'tooManyRules', desc: '', args: []);
+    return Intl.message('Maximum 2 rules allowed',
+        name: 'tooManyRules', desc: '', args: []);
   }
 
   /// `Doze Suspend`
   String get dozeSuspend {
-    return Intl.message('Doze Suspend', name: 'dozeSuspend', desc: '', args: []);
+    return Intl.message('Doze Suspend',
+        name: 'dozeSuspend', desc: '', args: []);
   }
 
   /// `Enable Doze suspend mode support`
   String get dozeSuspendDesc {
-    return Intl.message('Enable Doze suspend mode support', name: 'dozeSuspendDesc', desc: '', args: []);
+    return Intl.message('Enable Doze suspend mode support',
+        name: 'dozeSuspendDesc', desc: '', args: []);
   }
 
   /// `About`
@@ -294,8 +314,6 @@ class AppLocalizations {
   String get en {
     return Intl.message('English', name: 'en', desc: '', args: []);
   }
-
-
 
   /// `Simplified Chinese`
   String get zh_CN {
@@ -1944,7 +1962,8 @@ class AppLocalizations {
 
   /// `Power Switch`
   String get powerSwitch {
-    return Intl.message('Power Switch', name: 'powerSwitch', desc: '', args: []);
+    return Intl.message('Power Switch',
+        name: 'powerSwitch', desc: '', args: []);
   }
 
   /// `Run Time`
@@ -1954,12 +1973,14 @@ class AppLocalizations {
 
   /// `Please check or add profile`
   String get checkOrAddProfile {
-    return Intl.message('Please check or add profile', name: 'checkOrAddProfile', desc: '', args: []);
+    return Intl.message('Please check or add profile',
+        name: 'checkOrAddProfile', desc: '', args: []);
   }
 
   /// `Service ready`
   String get serviceReady {
-    return Intl.message('Service ready', name: 'serviceReady', desc: '', args: []);
+    return Intl.message('Service ready',
+        name: 'serviceReady', desc: '', args: []);
   }
 
   /// `Processing app related settings`
@@ -2464,12 +2485,14 @@ class AppLocalizations {
 
   /// `ICMP Forwarding`
   String get icmpForwarding {
-    return Intl.message('ICMP Forwarding', name: 'icmpForwarding', desc: '', args: []);
+    return Intl.message('ICMP Forwarding',
+        name: 'icmpForwarding', desc: '', args: []);
   }
 
   /// `Enable ICMPing Support`
   String get icmpForwardingDesc {
-    return Intl.message('Enable ICMPing Support', name: 'icmpForwardingDesc', desc: '', args: []);
+    return Intl.message('Enable ICMPing Support',
+        name: 'icmpForwardingDesc', desc: '', args: []);
   }
 
   /// `Network`
