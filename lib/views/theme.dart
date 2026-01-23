@@ -7,6 +7,7 @@ import 'package:li_clash/common/common.dart';
 import 'package:li_clash/enum/enum.dart';
 import 'package:li_clash/models/selector.dart';
 import 'package:li_clash/providers/config.dart';
+import 'package:li_clash/providers/state.dart';
 import 'package:li_clash/state.dart';
 import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -35,15 +36,16 @@ class FontFamilyItem {
   });
 }
 
-class ThemeView extends StatelessWidget {
+class ThemeView extends ConsumerWidget {
   const ThemeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final brightness = ref.watch(currentBrightnessProvider);
     final items = [
       _ThemeModeItem(),
       _PrimaryColorItem(),
-      _PrueBlackItem(),
+      if (brightness == Brightness.dark) _PrueBlackItem(),
       _TextScaleFactorItem(),
       const SizedBox(
         height: 64,

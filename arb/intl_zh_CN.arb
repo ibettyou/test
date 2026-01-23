@@ -26,7 +26,7 @@
   "defaultText": "默认",
   "more": "查看",
   "other": "其他",
-  "otherSettings": "其他设置",
+  "otherSettings": "其他工具",
   "otherSettingsDesc": "修改其他相关设置",
   "smartAutoStop": "智能启停",
   "smartAutoStopDesc": "连接指定内网后停止代理服务",

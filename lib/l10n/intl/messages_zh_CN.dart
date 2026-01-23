@@ -322,7 +322,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "options": MessageLookupByLibrary.simpleMessage("选项"),
     "other": MessageLookupByLibrary.simpleMessage("其他"),
-    "otherSettings": MessageLookupByLibrary.simpleMessage("其他设置"),
+    "otherSettings": MessageLookupByLibrary.simpleMessage("其他工具"),
     "otherSettingsDesc": MessageLookupByLibrary.simpleMessage("修改其他相关设置"),
     "smartAutoStop": MessageLookupByLibrary.simpleMessage("智能启停"),
     "smartAutoStopDesc": MessageLookupByLibrary.simpleMessage("连接指定内网后停止代理服务"),

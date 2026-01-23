@@ -246,9 +246,11 @@ class AppSidebarContainer extends ConsumerWidget {
                               globalState.appController
                                   .toPage(navigationItems[index].label);
                             },
-                            extended: false,
+                            extended: showLabel,
                             selectedIndex: currentIndex,
-                            labelType: NavigationRailLabelType.all,
+                            labelType: showLabel 
+                                ? NavigationRailLabelType.none 
+                                : NavigationRailLabelType.all,
                           ),
                         ),
                       ),

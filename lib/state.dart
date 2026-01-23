@@ -305,8 +305,8 @@ class GlobalState {
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
     rawConfig['external-ui'] = '';
-    rawConfig['interface-name'] = '';
-    rawConfig['external-ui-url'] = '';
+    rawConfig['interface-name'] = 'bettbox';
+    rawConfig['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/download/v2.6.0/dist-no-fonts.zip';
     rawConfig['tcp-concurrent'] = realPatchConfig.tcpConcurrent;
     rawConfig['unified-delay'] = realPatchConfig.unifiedDelay;
     rawConfig['ipv6'] = realPatchConfig.ipv6;

@@ -18,7 +18,7 @@ class OnlinePanel extends StatelessWidget {
             iconData: Icons.launch,
           ),
           onPressed: () async {
-            final uri = Uri.parse('https://board.zash.run.place/');
+            final uri = Uri.parse('http://127.0.0.1:9090/bettbox/');
             if (await canLaunchUrl(uri)) {
               await launchUrl(uri, mode: LaunchMode.externalApplication);
             }
@@ -39,7 +39,8 @@ class OnlinePanel extends StatelessWidget {
                     children: [
                       Text(
                         appLocalizations.openDashboard,
-                        style: context.textTheme.bodyMedium?.toLight.adjustSize(0),
+                        style:
+                            context.textTheme.bodyMedium?.toLight.adjustSize(0),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

@@ -39,7 +39,7 @@ class _LineChartState extends State<LineChart>
     super.initState();
     points = widget.points;
     prevPoints = points;
-    
+
     // 只在需要动画时创建 AnimationController
     if (_hasAnimation) {
       _controller = AnimationController(
@@ -55,7 +55,7 @@ class _LineChartState extends State<LineChart>
     if (widget.points != points) {
       prevPoints = points;
       points = widget.points;
-      
+
       // 只在有动画时触发
       if (_hasAnimation) {
         _controller?.forward(from: 0);
@@ -92,7 +92,7 @@ class _LineChartState extends State<LineChart>
           ),
         );
       }
-      
+
       // 有动画时使用 AnimatedBuilder
       return AnimatedBuilder(
         animation: _controller!.view,
@@ -212,7 +212,7 @@ class LineChartPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const strokeWidth = 2.0;
     final chartSize = Size(size.width, size.height * 0.7);
-    
+
     // 无动画快速路径：跳过 computeMetrics 和 extractPath
     final Path path;
     if (!hasAnimation || progress >= 1.0) {
