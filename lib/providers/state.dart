@@ -69,12 +69,15 @@ NavigationItemsState navigationItemsState(Ref ref) {
   final hasProxies = ref.watch(currentGroupsStateProvider.select(
     (state) => state.value.isNotEmpty,
   ));
+  final logLevel =
+      ref.watch(patchClashConfigProvider.select((state) => state.logLevel));
   // 只要有配置文件或有代理组，就显示代理页面
   // 这样可以防止 groups 加载中时代理页面消失
   return NavigationItemsState(
     value: navigation.getItems(
       openLogs: openLogs,
       hasProxies: hasProfiles || hasProxies,
+      logLevel: logLevel,
     ),
   );
 }
@@ -99,7 +102,8 @@ NavigationItemsState currentNavigationItemsState(Ref ref) {
 @riverpod
 CoreState coreState(Ref ref) {
   final vpnProps = ref.watch(vpnSettingProvider);
-  final routeMode = ref.watch(networkSettingProvider.select((state) => state.routeMode));
+  final routeMode =
+      ref.watch(networkSettingProvider.select((state) => state.routeMode));
   final currentProfile = ref.watch(currentProfileProvider);
   final onlyStatisticsProxy = ref.watch(appSettingProvider).onlyStatisticsProxy;
   return CoreState(

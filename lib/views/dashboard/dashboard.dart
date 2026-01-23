@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:li_clash/state.dart';
+
 import 'package:defer_pointer/defer_pointer.dart';
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/enum/enum.dart';
@@ -8,7 +10,31 @@ import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'widgets/widgets.dart' as dashboard_widgets;
+final customDashboardTitleProvider =
+    StateNotifierProvider<CustomDashboardTitleNotifier, String?>((ref) {
+  return CustomDashboardTitleNotifier();
+});
+
+class CustomDashboardTitleNotifier extends StateNotifier<String?> {
+  CustomDashboardTitleNotifier() : super(null) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    final prefs = await preferences.sharedPreferencesCompleter.future;
+    state = prefs?.getString(customDashboardTitleKey);
+  }
+
+  Future<void> updateTitle(String? title) async {
+    state = title;
+    final prefs = await preferences.sharedPreferencesCompleter.future;
+    if (title == null) {
+      prefs?.remove(customDashboardTitleKey);
+    } else {
+      prefs?.setString(customDashboardTitleKey, title);
+    }
+  }
+}
 
 typedef _IsEditWidgetBuilder = Widget Function(bool isEdit);
 
@@ -63,15 +89,28 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               )
             : SizedBox();
       }),
-      IconButton(
-        icon: _buildIsEdit((isEdit) {
-          return isEdit
-              ? Icon(Icons.save)
-              : Icon(
-                  Icons.edit,
-                );
-        }),
-        onPressed: _handleUpdateIsEdit,
+      Material(
+        type: MaterialType.transparency,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          onTap: _handleUpdateIsEdit,
+          onLongPress: () {
+            if (!_isEditNotifier.value) {
+              _showEditTitleDialog();
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: _buildIsEdit((isEdit) {
+              return isEdit
+                  ? const Icon(Icons.save)
+                  : const Icon(
+                      Icons.edit,
+                    );
+            }),
+          ),
+        ),
       ),
     ];
   }
@@ -97,6 +136,18 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       },
       context: context,
     );
+  }
+
+  void _showEditTitleDialog() async {
+    final currentTitle = ref.read(customDashboardTitleProvider) ?? '';
+    final title = await globalState.showCommonDialog<String>(
+      child: _DashboardTitleDialog(initialValue: currentTitle),
+    );
+    if (title != null) {
+      ref
+          .read(customDashboardTitleProvider.notifier)
+          .updateTitle(title.isEmpty ? null : title);
+    }
   }
 
   void _handleUpdateIsEdit() {
@@ -152,7 +203,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
           .toList();
     });
     return CommonScaffold(
-      title: appLocalizations.dashboard,
+      title:
+          ref.watch(customDashboardTitleProvider) ?? appLocalizations.dashboard,
       actions: _buildActions(),
       body: Align(
         alignment: Alignment.topCenter,
@@ -316,3 +368,79 @@ class _AddedContainerState extends State<_AddedContainer> {
   }
 }
 
+class _DashboardTitleDialog extends StatefulWidget {
+  final String initialValue;
+
+  const _DashboardTitleDialog({
+    required this.initialValue,
+  });
+
+  @override
+  State<_DashboardTitleDialog> createState() => _DashboardTitleDialogState();
+}
+
+class _DashboardTitleDialogState extends State<_DashboardTitleDialog> {
+  late final TextEditingController _controller;
+  String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _validate(String value) {
+    int len = 0;
+    for (int i = 0; i < value.length; i++) {
+      len += value.codeUnitAt(i) > 127 ? 2 : 1;
+    }
+    setState(() {
+      if (len > 12) {
+        _errorText = "Too long (Max 6 Chinese or 12 English)";
+      } else {
+        _errorText = null;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonDialog(
+      title: "Custom Title",
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(appLocalizations.cancel),
+        ),
+        TextButton(
+          onPressed: _errorText == null
+              ? () {
+                  Navigator.of(context).pop(_controller.text);
+                }
+              : null,
+          child: Text(appLocalizations.confirm),
+        ),
+      ],
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: TextField(
+          controller: _controller,
+          decoration: InputDecoration(
+            hintText: "Enter title",
+            errorText: _errorText,
+            border: const OutlineInputBorder(),
+          ),
+          onChanged: _validate,
+        ),
+      ),
+    );
+  }
+}

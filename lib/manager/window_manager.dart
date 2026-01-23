@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/enum/enum.dart';
@@ -206,17 +209,20 @@ class _WindowHeaderState extends State<WindowHeader> {
   Widget _buildActions() {
     // 只在 Windows 和 Linux 上应用悬停效果
     final shouldUseHoverEffect = system.isWindows || system.isLinux;
-    
+
     return MouseRegion(
-      onEnter: shouldUseHoverEffect ? (_) => isHoveringNotifier.value = true : null,
-      onExit: shouldUseHoverEffect ? (_) {
-        // 延迟设置，避免点击时立即隐藏按钮
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted) {
-            isHoveringNotifier.value = false;
-          }
-        });
-      } : null,
+      onEnter:
+          shouldUseHoverEffect ? (_) => isHoveringNotifier.value = true : null,
+      onExit: shouldUseHoverEffect
+          ? (_) {
+              // 延迟设置，避免点击时立即隐藏按钮
+              Future.delayed(const Duration(milliseconds: 100), () {
+                if (mounted) {
+                  isHoveringNotifier.value = false;
+                }
+              });
+            }
+          : null,
       child: ValueListenableBuilder<bool>(
         valueListenable: isHoveringNotifier,
         builder: (_, isHovering, __) {
@@ -326,18 +332,95 @@ class _WindowHeaderState extends State<WindowHeader> {
   }
 }
 
-class AppIcon extends StatelessWidget {
+final sidebarIconPathProvider =
+    StateNotifierProvider<SidebarIconPathNotifier, String?>((ref) {
+  return SidebarIconPathNotifier();
+});
+
+class SidebarIconPathNotifier extends StateNotifier<String?> {
+  SidebarIconPathNotifier() : super(null) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    final prefs = await preferences.sharedPreferencesCompleter.future;
+    state = prefs?.getString(customSidebarIconKey);
+  }
+
+  Future<void> updatePath(String? path) async {
+    state = path;
+    final prefs = await preferences.sharedPreferencesCompleter.future;
+    if (path == null) {
+      prefs?.remove(customSidebarIconKey);
+    } else {
+      prefs?.setString(customSidebarIconKey, path);
+    }
+  }
+}
+
+class AppIcon extends ConsumerWidget {
   const AppIcon({super.key});
 
+  Future<void> _handlePickImage(BuildContext context, WidgetRef ref) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null && result.files.single.path != null) {
+      final path = result.files.single.path!;
+      final file = File(path);
+      final size = await file.length();
+      if (size > 1024 * 1024) {
+        if (context.mounted) {
+          globalState.showNotifier("Image size exceeds 1MB");
+        }
+        return;
+      }
+      ref.read(sidebarIconPathProvider.notifier).updatePath(path);
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return SizedBox(
-      width: 32,
-      height: 32,
-      child: Image.asset(
-        isDark ? 'assets/images/icon_white.png' : 'assets/images/icon_black.png',
+    final customIconPath = ref.watch(sidebarIconPathProvider);
+
+    Widget icon;
+    if (customIconPath != null && File(customIconPath).existsSync()) {
+      icon = ClipOval(
+        child: Image.file(
+          File(customIconPath),
+          width: 32,
+          height: 32,
+          fit: BoxFit.cover,
+          cacheWidth: 64,
+          cacheHeight: 64,
+          errorBuilder: (_, __, ___) {
+            // Fallback if file load fails
+            return Image.asset(
+              isDark
+                  ? 'assets/images/icon_white.png'
+                  : 'assets/images/icon_black.png',
+              fit: BoxFit.contain,
+            );
+          },
+        ),
+      );
+    } else {
+      icon = Image.asset(
+        isDark
+            ? 'assets/images/icon_white.png'
+            : 'assets/images/icon_black.png',
         fit: BoxFit.contain,
+      );
+    }
+
+    return GestureDetector(
+      onLongPress: () => _handlePickImage(context, ref),
+      child: SizedBox(
+        width: 32,
+        height: 32,
+        child: icon,
       ),
     );
   }

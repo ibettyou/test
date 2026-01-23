@@ -305,8 +305,9 @@ class GlobalState {
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
     rawConfig['external-ui'] = '';
-    rawConfig['interface-name'] = 'bettbox';
-    rawConfig['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/download/v2.6.0/dist-no-fonts.zip';
+    rawConfig['interface-name'] = '';
+    rawConfig['external-ui-url'] =
+        'https://github.com/Zephyruso/zashboard/releases/download/v2.6.0/dist-no-fonts.zip';
     rawConfig['tcp-concurrent'] = realPatchConfig.tcpConcurrent;
     rawConfig['unified-delay'] = realPatchConfig.unifiedDelay;
     rawConfig['ipv6'] = realPatchConfig.ipv6;
@@ -331,7 +332,8 @@ class GlobalState {
     rawConfig['tun']['stack'] = realPatchConfig.tun.stack.name;
     rawConfig['tun']['route-address'] = realPatchConfig.tun.routeAddress;
     rawConfig['tun']['auto-route'] = realPatchConfig.tun.autoRoute;
-    rawConfig['tun']['disable-icmp-forwarding'] = realPatchConfig.tun.disableIcmpForwarding;
+    rawConfig['tun']['disable-icmp-forwarding'] =
+        realPatchConfig.tun.disableIcmpForwarding;
     rawConfig['geodata-loader'] = realPatchConfig.geodataLoader.name;
     if (rawConfig['sniffer']?['sniff'] != null) {
       for (final value in (rawConfig['sniffer']?['sniff'] as Map).values) {
@@ -419,7 +421,7 @@ class GlobalState {
         rules = [...overrideData.runningRule, ...rules];
       }
     }
-    
+
     // 如果启用了"绕过私有路由地址"，自动注入私有网络直连规则
     // 这确保即使流量进入 Clash，也会被直连处理
     if (config.networkProps.routeMode == RouteMode.bypassPrivate) {
@@ -435,7 +437,7 @@ class GlobalState {
       // 将私有网络规则插入到规则列表最前面，确保优先匹配
       rules = [...privateNetworkRules, ...rules];
     }
-    
+
     rawConfig['rule'] = rules;
     return rawConfig;
   }

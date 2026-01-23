@@ -11,6 +11,7 @@ class Navigation {
   List<NavigationItem> getItems({
     bool openLogs = false,
     bool hasProxies = false,
+    LogLevel logLevel = LogLevel.info,
   }) {
     return [
       NavigationItem(
@@ -82,29 +83,40 @@ class Navigation {
         ),
         modes: [NavigationItemMode.more],
       ),
-      NavigationItem(
-        icon: const Icon(Icons.adb),
-        label: PageLabel.logs,
-        builder: (_) => const LogsView(
-          key: GlobalObjectKey(
-            PageLabel.logs,
+      if (logLevel != LogLevel.silent)
+        NavigationItem(
+          icon: const Icon(Icons.adb),
+          label: PageLabel.logs,
+          builder: (_) => const LogsView(
+            key: GlobalObjectKey(
+              PageLabel.logs,
+            ),
           ),
-        ),
-        description: 'logsDesc',
-        modes: openLogs
-            ? [NavigationItemMode.more]
-            : [],
-      ),
-      NavigationItem(
-        icon: Icon(Icons.construction),
-        label: PageLabel.tools,
-        builder: (_) => const ToolsView(
-          key: GlobalObjectKey(
-            PageLabel.tools,
+          description: 'logsDesc',
+          modes: [NavigationItemMode.more, NavigationItemMode.desktop],
+        )
+      else
+        NavigationItem(
+          icon: Icon(Icons.construction),
+          label: PageLabel.tools,
+          builder: (_) => const ToolsView(
+            key: GlobalObjectKey(
+              PageLabel.tools,
+            ),
           ),
+          modes: [NavigationItemMode.desktop],
         ),
-        modes: [NavigationItemMode.desktop, NavigationItemMode.mobile],
-      ),
+      if (logLevel != LogLevel.silent)
+        NavigationItem(
+          icon: Icon(Icons.construction),
+          label: PageLabel.tools,
+          builder: (_) => const ToolsView(
+            key: GlobalObjectKey(
+              PageLabel.tools,
+            ),
+          ),
+          modes: [NavigationItemMode.mobile],
+        ),
     ];
   }
 
