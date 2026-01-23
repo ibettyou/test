@@ -545,7 +545,7 @@ func DefaultRawConfig() *RawConfig {
 			MaxIdleTime:           15000,
 			AuthenticationTimeout: 1000,
 			ALPN:                  []string{"h3"},
-			MaxUdpRelayPacketSize: 1500,
+			MaxUdpRelayPacketSize: 1480,
 		},
 		IPTables: RawIPTables{
 			Enable:           false,

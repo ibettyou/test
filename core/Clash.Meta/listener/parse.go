@@ -112,7 +112,7 @@ func ParseListener(mapping map[string]any) (C.InboundListener, error) {
 			MaxIdleTime:           15000,
 			AuthenticationTimeout: 1000,
 			ALPN:                  []string{"h3"},
-			MaxUdpRelayPacketSize: 1500,
+			MaxUdpRelayPacketSize: 1480,
 			CongestionController:  "bbr",
 		}
 		err = decoder.Decode(mapping, tuicOption)

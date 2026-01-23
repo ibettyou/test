@@ -45,8 +45,8 @@ class ThemeView extends ConsumerWidget {
     final items = [
       _ThemeModeItem(),
       _PrimaryColorItem(),
-      if (brightness == Brightness.dark) _PrueBlackItem(),
       _DazzleModeItem(),
+      if (brightness == Brightness.dark) _PrueBlackItem(),
       if (ref.watch(themeSettingProvider.select((s) => s.enableDazzle)))
         _WallpaperItem(),
       _TextScaleFactorItem(),

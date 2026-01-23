@@ -150,7 +150,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "country": MessageLookupByLibrary.simpleMessage("区域"),
         "crashTest": MessageLookupByLibrary.simpleMessage("崩溃测试"),
         "create": MessageLookupByLibrary.simpleMessage("创建"),
-        "dazzleMode": MessageLookupByLibrary.simpleMessage("炫彩模式"),
+        "dazzleMode": MessageLookupByLibrary.simpleMessage("黑境浮光"),
         "wallpaper": MessageLookupByLibrary.simpleMessage("壁纸"),
         "creationTime": MessageLookupByLibrary.simpleMessage("创建时间"),
         "cut": MessageLookupByLibrary.simpleMessage("剪切"),
