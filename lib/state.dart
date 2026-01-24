@@ -304,7 +304,7 @@ class GlobalState {
       tun: patchConfig.tun.getRealTun(config.networkProps.routeMode),
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
-    rawConfig['external-ui'] = '/ui';
+    rawConfig['external-ui'] = '';
     rawConfig['interface-name'] = '';
     rawConfig['external-ui-url'] =
         'https://github.com/Zephyruso/zashboard/releases/download/v2.6.0/dist-no-fonts.zip';
