@@ -209,7 +209,7 @@ class AppSidebarContainer extends ConsumerWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: system.isMacOS ? 32 : 20,
+                    height: system.isMacOS ? 32 : 24,
                   ),
                   if (!system.isMacOS) ...[
                     AppIcon(),

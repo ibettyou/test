@@ -27,6 +27,7 @@ mixin _$AppSettingProps {
   bool get onlyStatisticsProxy => throw _privateConstructorUsedError;
   bool get autoLaunch => throw _privateConstructorUsedError;
   bool get silentLaunch => throw _privateConstructorUsedError;
+  bool get smartDelayLaunch => throw _privateConstructorUsedError;
   bool get autoRun => throw _privateConstructorUsedError;
   bool get openLogs => throw _privateConstructorUsedError;
   bool get closeConnections => throw _privateConstructorUsedError;
@@ -64,6 +65,7 @@ abstract class $AppSettingPropsCopyWith<$Res> {
       bool onlyStatisticsProxy,
       bool autoLaunch,
       bool silentLaunch,
+      bool smartDelayLaunch,
       bool autoRun,
       bool openLogs,
       bool closeConnections,
@@ -99,6 +101,7 @@ class _$AppSettingPropsCopyWithImpl<$Res, $Val extends AppSettingProps>
     Object? onlyStatisticsProxy = null,
     Object? autoLaunch = null,
     Object? silentLaunch = null,
+    Object? smartDelayLaunch = null,
     Object? autoRun = null,
     Object? openLogs = null,
     Object? closeConnections = null,
@@ -133,6 +136,10 @@ class _$AppSettingPropsCopyWithImpl<$Res, $Val extends AppSettingProps>
       silentLaunch: null == silentLaunch
           ? _value.silentLaunch
           : silentLaunch // ignore: cast_nullable_to_non_nullable
+              as bool,
+      smartDelayLaunch: null == smartDelayLaunch
+          ? _value.smartDelayLaunch
+          : smartDelayLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
       autoRun: null == autoRun
           ? _value.autoRun
@@ -205,6 +212,7 @@ abstract class _$$AppSettingPropsImplCopyWith<$Res>
       bool onlyStatisticsProxy,
       bool autoLaunch,
       bool silentLaunch,
+      bool smartDelayLaunch,
       bool autoRun,
       bool openLogs,
       bool closeConnections,
@@ -238,6 +246,7 @@ class __$$AppSettingPropsImplCopyWithImpl<$Res>
     Object? onlyStatisticsProxy = null,
     Object? autoLaunch = null,
     Object? silentLaunch = null,
+    Object? smartDelayLaunch = null,
     Object? autoRun = null,
     Object? openLogs = null,
     Object? closeConnections = null,
@@ -272,6 +281,10 @@ class __$$AppSettingPropsImplCopyWithImpl<$Res>
       silentLaunch: null == silentLaunch
           ? _value.silentLaunch
           : silentLaunch // ignore: cast_nullable_to_non_nullable
+              as bool,
+      smartDelayLaunch: null == smartDelayLaunch
+          ? _value.smartDelayLaunch
+          : smartDelayLaunch // ignore: cast_nullable_to_non_nullable
               as bool,
       autoRun: null == autoRun
           ? _value.autoRun
@@ -339,6 +352,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
       this.onlyStatisticsProxy = false,
       this.autoLaunch = false,
       this.silentLaunch = false,
+      this.smartDelayLaunch = true,
       this.autoRun = false,
       this.openLogs = false,
       this.closeConnections = true,
@@ -378,6 +392,9 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
   @override
   @JsonKey()
   final bool silentLaunch;
+  @override
+  @JsonKey()
+  final bool smartDelayLaunch;
   @override
   @JsonKey()
   final bool autoRun;
@@ -420,7 +437,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
 
   @override
   String toString() {
-    return 'AppSettingProps(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, enableCrashReport: $enableCrashReport, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden, developerMode: $developerMode, recoveryStrategy: $recoveryStrategy)';
+    return 'AppSettingProps(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, smartDelayLaunch: $smartDelayLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, enableCrashReport: $enableCrashReport, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden, developerMode: $developerMode, recoveryStrategy: $recoveryStrategy)';
   }
 
   @override
@@ -437,6 +454,8 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
                 other.autoLaunch == autoLaunch) &&
             (identical(other.silentLaunch, silentLaunch) ||
                 other.silentLaunch == silentLaunch) &&
+            (identical(other.smartDelayLaunch, smartDelayLaunch) ||
+                other.smartDelayLaunch == smartDelayLaunch) &&
             (identical(other.autoRun, autoRun) || other.autoRun == autoRun) &&
             (identical(other.openLogs, openLogs) ||
                 other.openLogs == openLogs) &&
@@ -464,26 +483,28 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      locale,
-      const DeepCollectionEquality().hash(_dashboardWidgets),
-      onlyStatisticsProxy,
-      autoLaunch,
-      silentLaunch,
-      autoRun,
-      openLogs,
-      closeConnections,
-      testUrl,
-      isAnimateToPage,
-      enableCrashReport,
-      autoCheckUpdate,
-      showLabel,
-      disclaimerAccepted,
-      minimizeOnExit,
-      hidden,
-      developerMode,
-      recoveryStrategy);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        locale,
+        const DeepCollectionEquality().hash(_dashboardWidgets),
+        onlyStatisticsProxy,
+        autoLaunch,
+        silentLaunch,
+        smartDelayLaunch,
+        autoRun,
+        openLogs,
+        closeConnections,
+        testUrl,
+        isAnimateToPage,
+        enableCrashReport,
+        autoCheckUpdate,
+        showLabel,
+        disclaimerAccepted,
+        minimizeOnExit,
+        hidden,
+        developerMode,
+        recoveryStrategy
+      ]);
 
   /// Create a copy of AppSettingProps
   /// with the given fields replaced by the non-null parameter values.
@@ -510,6 +531,7 @@ abstract class _AppSettingProps implements AppSettingProps {
       final bool onlyStatisticsProxy,
       final bool autoLaunch,
       final bool silentLaunch,
+      final bool smartDelayLaunch,
       final bool autoRun,
       final bool openLogs,
       final bool closeConnections,
@@ -538,6 +560,8 @@ abstract class _AppSettingProps implements AppSettingProps {
   bool get autoLaunch;
   @override
   bool get silentLaunch;
+  @override
+  bool get smartDelayLaunch;
   @override
   bool get autoRun;
   @override

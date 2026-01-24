@@ -402,6 +402,26 @@ class AppLocalizations {
     );
   }
 
+  /// `Smart Delay`
+  String get smartDelayLaunch {
+    return Intl.message(
+      'Smart Delay',
+      name: 'smartDelayLaunch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start after network connection`
+  String get smartDelayLaunchDesc {
+    return Intl.message(
+      'Start after network connection',
+      name: 'smartDelayLaunchDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `SilentLaunch`
   String get silentLaunch {
     return Intl.message(

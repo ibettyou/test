@@ -127,6 +127,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "autoLaunchDesc": MessageLookupByLibrary.simpleMessage(
       "Follow the system self startup",
     ),
+    "smartDelayLaunch": MessageLookupByLibrary.simpleMessage("Smart Delay"),
+    "smartDelayLaunchDesc": MessageLookupByLibrary.simpleMessage(
+      "Start after network connection",
+    ),
     "autoRun": MessageLookupByLibrary.simpleMessage("AutoRun"),
     "autoRunDesc": MessageLookupByLibrary.simpleMessage(
       "Auto run when the application is opened",

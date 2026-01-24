@@ -276,7 +276,7 @@ class Windows {
     return res;
   }
 
-  Future<bool> registerTask(String appName) async {
+  Future<bool> registerTask(String appName, {bool requireNetwork = true}) async {
     final taskXml = '''
 <?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
@@ -295,7 +295,7 @@ class Windows {
     <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
     <AllowHardTerminate>false</AllowHardTerminate>
     <StartWhenAvailable>false</StartWhenAvailable>
-    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+    <RunOnlyIfNetworkAvailable>$requireNetwork</RunOnlyIfNetworkAvailable>
     <IdleSettings>
       <StopOnIdleEnd>false</StopOnIdleEnd>
       <RestartOnIdle>false</RestartOnIdle>
@@ -306,7 +306,7 @@ class Windows {
     <RunOnlyIfIdle>false</RunOnlyIfIdle>
     <WakeToRun>false</WakeToRun>
     <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>
-    <Priority>7</Priority>
+    <Priority>8</Priority>
   </Settings>
   <Actions Context="Author">
     <Exec>

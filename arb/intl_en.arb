@@ -54,6 +54,8 @@
   "minimizeOnExitDesc": "Modify the default system exit event",
   "autoLaunch": "Auto launch",
   "autoLaunchDesc": "Follow the system self startup",
+  "smartDelayLaunch": "Smart Delay",
+  "smartDelayLaunchDesc": "Start after network connection",
   "silentLaunch": "SilentLaunch",
   "silentLaunchDesc": "Start in the background",
   "autoRun": "AutoRun",

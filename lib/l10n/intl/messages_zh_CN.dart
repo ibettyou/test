@@ -89,6 +89,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "autoLaunch": MessageLookupByLibrary.simpleMessage("开机启动"),
     "autoLaunchDesc": MessageLookupByLibrary.simpleMessage("跟随系统自启动"),
+    "smartDelayLaunch": MessageLookupByLibrary.simpleMessage("智能延迟"),
+    "smartDelayLaunchDesc": MessageLookupByLibrary.simpleMessage("在网络连接以后启动"),
     "autoRun": MessageLookupByLibrary.simpleMessage("自动连接"),
     "autoRunDesc": MessageLookupByLibrary.simpleMessage("应用打开后自动连接"),
     "autoSetSystemDns": MessageLookupByLibrary.simpleMessage("自动设置系统DNS"),

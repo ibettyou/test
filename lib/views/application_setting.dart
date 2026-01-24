@@ -80,6 +80,31 @@ class AutoLaunchItem extends ConsumerWidget {
   }
 }
 
+class SmartDelayLaunchItem extends ConsumerWidget {
+  const SmartDelayLaunchItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final smartDelayLaunch = ref.watch(
+      appSettingProvider.select((state) => state.smartDelayLaunch),
+    );
+    return ListItem.switchItem(
+      title: Text(appLocalizations.smartDelayLaunch),
+      subtitle: Text(appLocalizations.smartDelayLaunchDesc),
+      delegate: SwitchDelegate(
+        value: smartDelayLaunch,
+        onChanged: (bool value) {
+          ref.read(appSettingProvider.notifier).updateState(
+                (state) => state.copyWith(
+                  smartDelayLaunch: value,
+                ),
+              );
+        },
+      ),
+    );
+  }
+}
+
 class SilentLaunchItem extends ConsumerWidget {
   const SilentLaunchItem({super.key});
 
@@ -265,33 +290,41 @@ class ApplicationSettingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> items = [
-      if (system.isDesktop) ...[
-        AutoLaunchItem(),
-        SilentLaunchItem(),
-      ],
-      AutoRunItem(),
-      if (system.isAndroid) ...[
-        HiddenItem(),
-      ],
-      AnimateTabItem(),
-      OpenLogsItem(),
-      CloseConnectionsItem(),
-      UsageItem(),
-      EnableCrashReportItem(),
-      AutoCheckUpdateItem(),
-    ];
-    return ListView.separated(
-      itemBuilder: (_, index) {
-        final item = items[index];
-        return item;
-      },
-      separatorBuilder: (_, __) {
-        return const Divider(
-          height: 0,
+    return Consumer(
+      builder: (context, ref, _) {
+        final autoLaunch = ref.watch(
+          appSettingProvider.select((state) => state.autoLaunch),
+        );
+        List<Widget> items = [
+          if (system.isDesktop) ...[
+            AutoLaunchItem(),
+            if (system.isWindows && autoLaunch) SmartDelayLaunchItem(),
+            SilentLaunchItem(),
+          ],
+          AutoRunItem(),
+          if (system.isAndroid) ...[
+            HiddenItem(),
+          ],
+          AnimateTabItem(),
+          OpenLogsItem(),
+          CloseConnectionsItem(),
+          UsageItem(),
+          EnableCrashReportItem(),
+          AutoCheckUpdateItem(),
+        ];
+        return ListView.separated(
+          itemBuilder: (_, index) {
+            final item = items[index];
+            return item;
+          },
+          separatorBuilder: (_, __) {
+            return const Divider(
+              height: 0,
+            );
+          },
+          itemCount: items.length,
         );
       },
-      itemCount: items.length,
     );
   }
 }

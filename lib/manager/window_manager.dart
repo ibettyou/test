@@ -38,12 +38,30 @@ class _WindowContainerState extends ConsumerState<WindowManager>
       appSettingProvider.select((state) => state.autoLaunch),
       (prev, next) {
         if (prev != next) {
+          final smartDelayLaunch = ref.read(appSettingProvider).smartDelayLaunch;
           debouncer.call(
             FunctionTag.autoLaunch,
             () {
-              autoLaunch?.updateStatus(next);
+              autoLaunch?.updateStatus(next, requireNetwork: smartDelayLaunch);
             },
           );
+        }
+      },
+    );
+    // 同时监听 smartDelayLaunch 的变化
+    ref.listenManual(
+      appSettingProvider.select((state) => state.smartDelayLaunch),
+      (prev, next) {
+        if (prev != next) {
+          final autoLaunchEnabled = ref.read(appSettingProvider).autoLaunch;
+          if (autoLaunchEnabled) {
+            debouncer.call(
+              FunctionTag.autoLaunch,
+              () {
+                autoLaunch?.updateStatus(true, requireNetwork: next);
+              },
+            );
+          }
         }
       },
     );
@@ -372,7 +390,7 @@ class AppIcon extends ConsumerWidget {
       final size = await file.length();
       if (size > 1024 * 1024) {
         if (context.mounted) {
-          globalState.showNotifier("Image size exceeds 1MB");
+          globalState.showNotifier('Image size exceeds 1MB');
         }
         return;
       }

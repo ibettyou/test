@@ -38,10 +38,10 @@ class AutoLaunch {
     return await launchAtStartup.isEnabled();
   }
 
-  Future<bool> enable() async {
+  Future<bool> enable({bool requireNetwork = true}) async {
     if (system.isWindows) {
       // 使用任务计划实现 Windows 开机自启动（管理员模式）
-      return await windows?.registerTask(appName) ?? false;
+      return await windows?.registerTask(appName, requireNetwork: requireNetwork) ?? false;
     }
     return await launchAtStartup.enable();
   }
@@ -53,7 +53,7 @@ class AutoLaunch {
     return await launchAtStartup.disable();
   }
 
-  Future<void> updateStatus(bool isAutoLaunch) async {
+  Future<void> updateStatus(bool isAutoLaunch, {bool requireNetwork = true}) async {
     if (kDebugMode) {
       return;
     }
@@ -61,7 +61,7 @@ class AutoLaunch {
     
     // 异步执行，避免阻塞 UI
     if (isAutoLaunch == true) {
-      unawaited(enable());
+      unawaited(enable(requireNetwork: requireNetwork));
     } else {
       unawaited(disable());
     }
