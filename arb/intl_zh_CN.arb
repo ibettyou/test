@@ -49,7 +49,7 @@
   "allowLan": "局域网代理",
   "allowLanDesc": "允许通过局域网访问代理",
   "tun": "虚拟网卡",
-  "tunDesc": "仅在管理员模式生效",
+  "tunDesc": "接管当前设备全局流量",
   "minimizeOnExit": "退出时最小化",
   "minimizeOnExitDesc": "修改系统默认退出事件",
   "autoLaunch": "开机启动",

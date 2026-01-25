@@ -436,8 +436,8 @@ class AppIcon extends ConsumerWidget {
     return GestureDetector(
       onLongPress: () => _handlePickImage(context, ref),
       child: SizedBox(
-        width: 32,
-        height: 32,
+        width: 40,
+        height: 40,
         child: icon,
       ),
     );

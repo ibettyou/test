@@ -304,10 +304,9 @@ class GlobalState {
       tun: patchConfig.tun.getRealTun(config.networkProps.routeMode),
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
-    rawConfig['external-ui'] = '';
+    rawConfig['external-ui'] = '/bettbox';
     rawConfig['interface-name'] = '';
-    rawConfig['external-ui-url'] =
-        'https://github.com/Zephyruso/zashboard/releases/download/v2.6.0/dist-no-fonts.zip';
+    rawConfig['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip';
     rawConfig['tcp-concurrent'] = realPatchConfig.tcpConcurrent;
     rawConfig['unified-delay'] = realPatchConfig.unifiedDelay;
     rawConfig['ipv6'] = realPatchConfig.ipv6;
@@ -380,7 +379,7 @@ class GlobalState {
       }
     }
 
-    rawConfig['profile']['store-selected'] = false;
+    rawConfig['profile']['store-selected'] = true;
     rawConfig['geox-url'] = realPatchConfig.geoXUrl.toJson();
     rawConfig['global-ua'] = realPatchConfig.globalUa;
     if (rawConfig['hosts'] == null) {

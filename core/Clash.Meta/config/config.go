@@ -577,7 +577,7 @@ func DefaultRawConfig() *RawConfig {
 			ParsePureIp:     true,
 			OverrideDest:    true,
 		},
-		ExternalUIURL: "https://github.com/Zephyruso/zashboard/releases/download/v2.6.0/dist-no-fonts.zip",
+		ExternalUIURL: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
 		ExternalControllerCors: RawCors{
 			AllowOrigins:        []string{"*"},
 			AllowPrivateNetwork: true,
