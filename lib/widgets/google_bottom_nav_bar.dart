@@ -8,12 +8,14 @@ class GoogleBottomNavBar extends StatelessWidget {
   final List<NavigationItem> navigationItems;
   final int selectedIndex;
   final ValueChanged<int> onTabChange;
+  final bool enableAnimation;
 
   const GoogleBottomNavBar({
     super.key,
     required this.navigationItems,
     required this.selectedIndex,
     required this.onTabChange,
+    this.enableAnimation = true,
   });
 
   IconData _extractIconData(Widget iconWidget) {
@@ -31,24 +33,26 @@ class GoogleBottomNavBar extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             blurRadius: 20,
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withValues(alpha: 0.15),
           )
         ],
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
           child: GNav(
-            rippleColor: context.colorScheme.onSurface.withValues(alpha: 0.1),
-            hoverColor: context.colorScheme.onSurface.withValues(alpha: 0.05),
+            rippleColor: context.colorScheme.onSurface.withValues(alpha: 0.15),
+            hoverColor: context.colorScheme.onSurface.withValues(alpha: 0.1),
             gap: 8,
             activeColor: context.colorScheme.onSecondaryContainer,
             iconSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            duration: const Duration(milliseconds: 400),
+            duration: enableAnimation 
+                ? const Duration(milliseconds: 258) 
+                : Duration.zero,
             tabBackgroundColor: context.colorScheme.secondaryContainer,
             color: context.colorScheme.onSurfaceVariant,
-            curve: Curves.easeOutExpo,
+            curve: enableAnimation ? Curves.easeOutExpo : Curves.linear,
             tabs: navigationItems
                 .map(
                   (e) => GButton(

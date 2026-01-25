@@ -51,9 +51,13 @@ class HomePage extends StatelessWidget {
               return view;
             });
             final currentIndex = state.currentIndex;
+            final isAnimateToPage = ref.watch(
+              appSettingProvider.select((state) => state.isAnimateToPage),
+            );
             final bottomNavigationBar = GoogleBottomNavBar(
               navigationItems: navigationItems,
               selectedIndex: currentIndex,
+              enableAnimation: isAnimateToPage,
               onTabChange: (index) {
                 globalState.appController.toPage(
                   navigationItems[index].label,
