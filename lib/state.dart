@@ -354,10 +354,12 @@ class GlobalState {
           continue;
         }
         if (proxyProvider['url'] != null) {
+          final existingPath = proxyProvider['path'] as String?;
           proxyProvider['path'] = await appPath.getProvidersFilePath(
             profile.id,
             'proxies',
             proxyProvider['url'],
+            customPath: existingPath,
           );
         }
       }
@@ -371,10 +373,12 @@ class GlobalState {
           continue;
         }
         if (ruleProvider['url'] != null) {
+          final existingPath = ruleProvider['path'] as String?;
           ruleProvider['path'] = await appPath.getProvidersFilePath(
             profile.id,
             'rules',
             ruleProvider['url'],
+            customPath: existingPath,
           );
         }
       }

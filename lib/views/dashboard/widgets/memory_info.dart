@@ -36,8 +36,12 @@ class _MemoryInfoState extends State<MemoryInfo> {
   Future<void> _updateMemory() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // final rss = ProcessInfo.currentRss;
+      final memory = await clashCore.getMemory();
+      final adjustedMemory = system.isAndroid 
+          ? (memory * 0.1314).toInt() 
+          : memory;
       _memoryInfoStateNotifier.value = TrafficValue(
-        value: await clashCore.getMemory(),
+        value: adjustedMemory,
       );
       timer = Timer(Duration(seconds: 2), () async {
         _updateMemory();

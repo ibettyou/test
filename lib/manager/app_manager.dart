@@ -307,7 +307,7 @@ class WindowLockButton extends ConsumerWidget {
                 ),
               );
         } catch (e) {
-          commonPrint.log('窗口锁定操作失败: $e');
+          commonPrint.log('Window Lock Failed: $e');
         }
       },
       icon: Icon(

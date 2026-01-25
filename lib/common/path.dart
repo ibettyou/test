@@ -5,6 +5,55 @@ import 'package:li_clash/common/common.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
+class SafePathsValidator {
+  static List<String>? _cachedSafePaths;
+
+  static List<String> getSafePaths() {
+    if (_cachedSafePaths != null) {
+      return _cachedSafePaths!;
+    }
+
+    final envSafePaths = Platform.environment['SAFE_PATHS'] ?? '';
+    if (envSafePaths.isEmpty) {
+      _cachedSafePaths = [];
+      return [];
+    }
+
+    final separator = Platform.isWindows ? ';' : ':';
+    _cachedSafePaths = envSafePaths
+        .split(separator)
+        .map((path) => normalize(absolute(path.trim())))
+        .where((path) => path.isNotEmpty)
+        .toList();
+
+    return _cachedSafePaths!;
+  }
+
+  static bool isPathSafe(String path) {
+    final safePaths = getSafePaths();
+    if (safePaths.isEmpty) {
+      return false;
+    }
+
+    final normalizedPath = normalize(absolute(path.trim()));
+    return safePaths.any((safePath) =>
+        normalizedPath.startsWith(safePath) ||
+        normalizedPath.startsWith('$safePath${Platform.pathSeparator}'));
+  }
+
+  static String? getDefaultProvidersPath(
+    String profileId,
+    String type,
+    String url,
+  ) {
+    return null;
+  }
+
+  static void clearCache() {
+    _cachedSafePaths = null;
+  }
+}
+
 class AppPath {
   static AppPath? _instance;
   Completer<Directory> dataDir = Completer();
@@ -89,8 +138,18 @@ class AppPath {
   Future<String> getProvidersFilePath(
     String id,
     String type,
-    String url,
-  ) async {
+    String url, {
+    String? customPath,
+  }) async {
+    if (customPath != null && customPath.isNotEmpty) {
+      if (SafePathsValidator.isPathSafe(customPath)) {
+        return normalize(absolute(customPath.trim()));
+      } else {
+        commonPrint.log(
+          '自定义路径 $customPath 不在 SAFE_PATHS 中，将使用默认路径',
+        );
+      }
+    }
     final directory = await profilesPath;
     return join(
       directory,
