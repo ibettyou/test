@@ -304,9 +304,9 @@ class GlobalState {
       tun: patchConfig.tun.getRealTun(config.networkProps.routeMode),
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
-    rawConfig['external-ui'] = '/bettbox';
+    rawConfig['external-ui'] = '';
     rawConfig['interface-name'] = '';
-    rawConfig['external-ui-url'] = 'https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip';
+    rawConfig['external-ui-url'] = '';
     rawConfig['tcp-concurrent'] = realPatchConfig.tcpConcurrent;
     rawConfig['unified-delay'] = realPatchConfig.unifiedDelay;
     rawConfig['ipv6'] = realPatchConfig.ipv6;
