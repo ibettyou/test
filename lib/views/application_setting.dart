@@ -205,6 +205,31 @@ class AnimateTabItem extends ConsumerWidget {
   }
 }
 
+class NavBarHapticFeedbackItem extends ConsumerWidget {
+  const NavBarHapticFeedbackItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final enableNavBarHapticFeedback = ref.watch(
+      appSettingProvider.select((state) => state.enableNavBarHapticFeedback),
+    );
+    return ListItem.switchItem(
+      title: Text(appLocalizations.navBarHapticFeedback),
+      subtitle: Text(appLocalizations.navBarHapticFeedbackDesc),
+      delegate: SwitchDelegate(
+        value: enableNavBarHapticFeedback,
+        onChanged: (value) {
+          ref.read(appSettingProvider.notifier).updateState(
+                (state) => state.copyWith(
+                  enableNavBarHapticFeedback: value,
+                ),
+              );
+        },
+      ),
+    );
+  }
+}
+
 class OpenLogsItem extends ConsumerWidget {
   const OpenLogsItem({super.key});
 
@@ -306,6 +331,9 @@ class ApplicationSettingView extends StatelessWidget {
             HiddenItem(),
           ],
           AnimateTabItem(),
+          if (system.isAndroid) ...[
+            NavBarHapticFeedbackItem(),
+          ],
           OpenLogsItem(),
           CloseConnectionsItem(),
           UsageItem(),

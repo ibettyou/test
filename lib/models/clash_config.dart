@@ -13,6 +13,8 @@ const defaultClashConfig = ClashConfig();
 
 const defaultTun = Tun();
 const defaultDns = Dns();
+const defaultNtp = Ntp();
+const defaultSniffer = Sniffer();
 const defaultGeoXUrl = GeoXUrl();
 
 const defaultMixedPort = 7890;
@@ -143,21 +145,33 @@ class RuleProvider with _$RuleProvider {
 @freezed
 class Sniffer with _$Sniffer {
   const factory Sniffer({
-    @Default(false) bool enable,
+    @Default(true) bool enable,
     @Default(false) @JsonKey(name: 'override-destination') bool overrideDest,
     @Default([]) List<String> sniffing,
-    @Default([]) @JsonKey(name: 'force-domain') List<String> forceDomain,
-    @Default([]) @JsonKey(name: 'skip-src-address') List<String> skipSrcAddress,
-    @Default([]) @JsonKey(name: 'skip-dst-address') List<String> skipDstAddress,
-    @Default(['mijia cloud']) @JsonKey(name: 'skip-domain') List<String> skipDomain,
+    @Default(['+.v2ex.com']) @JsonKey(name: 'force-domain') List<String> forceDomain,
+    @Default(['192.168.0.3/32']) @JsonKey(name: 'skip-src-address') List<String> skipSrcAddress,
+    @Default(['geoip:telegram']) @JsonKey(name: 'skip-dst-address') List<String> skipDstAddress,
+    @Default(['Mijia Cloud', '+.push.apple.com']) @JsonKey(name: 'skip-domain') List<String> skipDomain,
     @Default([]) @JsonKey(name: 'port-whitelist') List<String> port,
     @Default(true) @JsonKey(name: 'force-dns-mapping') bool forceDnsMapping,
     @Default(true) @JsonKey(name: 'parse-pure-ip') bool parsePureIp,
-    @Default({}) Map<String, SnifferConfig> sniff,
+    @Default({
+      'HTTP': SnifferConfig(ports: ['80', '8080-8880'], overrideDest: true),
+      'TLS': SnifferConfig(ports: ['443', '8443']),
+      'QUIC': SnifferConfig(ports: ['443', '8443']),
+    }) Map<String, SnifferConfig> sniff,
   }) = _Sniffer;
 
   factory Sniffer.fromJson(Map<String, Object?> json) =>
       _$SnifferFromJson(json);
+
+  factory Sniffer.safeSnifferFromJson(Map<String, Object?> json) {
+    try {
+      return Sniffer.fromJson(json);
+    } catch (_) {
+      return const Sniffer();
+    }
+  }
 }
 
 List<String> _formJsonPorts(List? ports) {
@@ -302,6 +316,27 @@ class Dns with _$Dns {
       return Dns.fromJson(json);
     } catch (_) {
       return const Dns();
+    }
+  }
+}
+
+@freezed
+class Ntp with _$Ntp {
+  const factory Ntp({
+    @Default(true) bool enable,
+    @Default(false) @JsonKey(name: 'write-to-system') bool writeToSystem,
+    @Default('ntp.aliyun.com') String server,
+    @Default(123) int port,
+    @Default(60) int interval,
+  }) = _Ntp;
+
+  factory Ntp.fromJson(Map<String, Object?> json) => _$NtpFromJson(json);
+
+  factory Ntp.safeNtpFromJson(Map<String, Object?> json) {
+    try {
+      return Ntp.fromJson(json);
+    } catch (_) {
+      return const Ntp();
     }
   }
 }
@@ -503,6 +538,8 @@ class ClashConfig with _$ClashConfig {
     @Default(true) @JsonKey(name: 'tcp-concurrent') bool tcpConcurrent,
     @Default(defaultTun) @JsonKey(fromJson: Tun.safeFormJson) Tun tun,
     @Default(defaultDns) @JsonKey(fromJson: Dns.safeDnsFromJson) Dns dns,
+    @Default(defaultNtp) @JsonKey(fromJson: Ntp.safeNtpFromJson) Ntp ntp,
+    @Default(defaultSniffer) @JsonKey(fromJson: Sniffer.safeSnifferFromJson) Sniffer sniffer,
     @Default(defaultGeoXUrl)
     @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
     GeoXUrl geoXUrl,

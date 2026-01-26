@@ -6,6 +6,8 @@ import 'package:li_clash/state.dart';
 import 'package:li_clash/views/config/dns.dart';
 import 'package:li_clash/views/config/general.dart';
 import 'package:li_clash/views/config/network.dart';
+import 'package:li_clash/views/config/ntp.dart';
+import 'package:li_clash/views/config/sniffer.dart';
 import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -107,6 +109,78 @@ class _ConfigViewState extends State<ConfigView> {
             })
           ],
           widget: const DnsListView(),
+          blur: false,
+        ),
+      ),
+      ListItem.open(
+        title: const Text('NTP'),
+        subtitle: Text(appLocalizations.ntpDesc),
+        leading: const Icon(Icons.access_time),
+        delegate: OpenDelegate(
+          title: 'NTP',
+          actions: [
+            Consumer(builder: (_, ref, __) {
+              return IconButton(
+                onPressed: () async {
+                  final res = await globalState.showMessage(
+                    title: appLocalizations.reset,
+                    message: TextSpan(
+                      text: appLocalizations.resetTip,
+                    ),
+                  );
+                  if (res != true) {
+                    return;
+                  }
+                  ref.read(patchClashConfigProvider.notifier).updateState(
+                        (state) => state.copyWith(
+                          ntp: defaultNtp,
+                        ),
+                      );
+                },
+                tooltip: appLocalizations.reset,
+                icon: const Icon(
+                  Icons.replay,
+                ),
+              );
+            })
+          ],
+          widget: const NtpListView(),
+          blur: false,
+        ),
+      ),
+      ListItem.open(
+        title: Text(appLocalizations.sniffer),
+        subtitle: Text(appLocalizations.snifferDesc),
+        leading: const Icon(Icons.radar),
+        delegate: OpenDelegate(
+          title: appLocalizations.sniffer,
+          actions: [
+            Consumer(builder: (_, ref, __) {
+              return IconButton(
+                onPressed: () async {
+                  final res = await globalState.showMessage(
+                    title: appLocalizations.reset,
+                    message: TextSpan(
+                      text: appLocalizations.resetTip,
+                    ),
+                  );
+                  if (res != true) {
+                    return;
+                  }
+                  ref.read(patchClashConfigProvider.notifier).updateState(
+                        (state) => state.copyWith(
+                          sniffer: defaultSniffer,
+                        ),
+                      );
+                },
+                tooltip: appLocalizations.reset,
+                icon: const Icon(
+                  Icons.replay,
+                ),
+              );
+            })
+          ],
+          widget: const SnifferListView(),
           blur: false,
         ),
       )

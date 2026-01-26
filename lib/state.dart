@@ -406,6 +406,24 @@ class GlobalState {
             entry.value.splitByMultipleSeparators;
       }
     }
+    if (rawConfig['ntp'] == null) {
+      rawConfig['ntp'] = {};
+    }
+    final isEnableNtp = rawConfig['ntp']['enable'] == true;
+    final overrideNtp = globalState.config.overrideNtp;
+    if (overrideNtp || !isEnableNtp) {
+      final ntp = realPatchConfig.ntp;
+      rawConfig['ntp'] = ntp.toJson();
+    }
+    if (rawConfig['sniffer'] == null) {
+      rawConfig['sniffer'] = {};
+    }
+    final isEnableSniffer = rawConfig['sniffer']['enable'] == true;
+    final overrideSniffer = globalState.config.overrideSniffer;
+    if (overrideSniffer || !isEnableSniffer) {
+      final sniffer = realPatchConfig.sniffer;
+      rawConfig['sniffer'] = sniffer.toJson();
+    }
     var rules = [];
     if (rawConfig['rules'] != null) {
       rules = rawConfig['rules'];

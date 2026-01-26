@@ -881,20 +881,25 @@ class __$$SnifferImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SnifferImpl implements _Sniffer {
   const _$SnifferImpl(
-      {this.enable = false,
+      {this.enable = true,
       @JsonKey(name: 'override-destination') this.overrideDest = false,
       final List<String> sniffing = const [],
-      @JsonKey(name: 'force-domain') final List<String> forceDomain = const [],
+      @JsonKey(name: 'force-domain')
+      final List<String> forceDomain = const ['+.v2ex.com'],
       @JsonKey(name: 'skip-src-address')
-      final List<String> skipSrcAddress = const [],
+      final List<String> skipSrcAddress = const ['192.168.0.3/32'],
       @JsonKey(name: 'skip-dst-address')
-      final List<String> skipDstAddress = const [],
+      final List<String> skipDstAddress = const ['geoip:telegram'],
       @JsonKey(name: 'skip-domain')
-      final List<String> skipDomain = const ['mijia cloud'],
+      final List<String> skipDomain = const ['Mijia Cloud', '+.push.apple.com'],
       @JsonKey(name: 'port-whitelist') final List<String> port = const [],
       @JsonKey(name: 'force-dns-mapping') this.forceDnsMapping = true,
       @JsonKey(name: 'parse-pure-ip') this.parsePureIp = true,
-      final Map<String, SnifferConfig> sniff = const {}})
+      final Map<String, SnifferConfig> sniff = const {
+        'HTTP': SnifferConfig(ports: ['80', '8080-8880'], overrideDest: true),
+        'TLS': SnifferConfig(ports: ['443', '8443']),
+        'QUIC': SnifferConfig(ports: ['443', '8443'])
+      }})
       : _sniffing = sniffing,
         _forceDomain = forceDomain,
         _skipSrcAddress = skipSrcAddress,
@@ -2598,6 +2603,241 @@ abstract class _Dns implements Dns {
       throw _privateConstructorUsedError;
 }
 
+Ntp _$NtpFromJson(Map<String, dynamic> json) {
+  return _Ntp.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Ntp {
+  bool get enable => throw _privateConstructorUsedError;
+  @JsonKey(name: 'write-to-system')
+  bool get writeToSystem => throw _privateConstructorUsedError;
+  String get server => throw _privateConstructorUsedError;
+  int get port => throw _privateConstructorUsedError;
+  int get interval => throw _privateConstructorUsedError;
+
+  /// Serializes this Ntp to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Ntp
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $NtpCopyWith<Ntp> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $NtpCopyWith<$Res> {
+  factory $NtpCopyWith(Ntp value, $Res Function(Ntp) then) =
+      _$NtpCopyWithImpl<$Res, Ntp>;
+  @useResult
+  $Res call(
+      {bool enable,
+      @JsonKey(name: 'write-to-system') bool writeToSystem,
+      String server,
+      int port,
+      int interval});
+}
+
+/// @nodoc
+class _$NtpCopyWithImpl<$Res, $Val extends Ntp> implements $NtpCopyWith<$Res> {
+  _$NtpCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Ntp
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enable = null,
+    Object? writeToSystem = null,
+    Object? server = null,
+    Object? port = null,
+    Object? interval = null,
+  }) {
+    return _then(_value.copyWith(
+      enable: null == enable
+          ? _value.enable
+          : enable // ignore: cast_nullable_to_non_nullable
+              as bool,
+      writeToSystem: null == writeToSystem
+          ? _value.writeToSystem
+          : writeToSystem // ignore: cast_nullable_to_non_nullable
+              as bool,
+      server: null == server
+          ? _value.server
+          : server // ignore: cast_nullable_to_non_nullable
+              as String,
+      port: null == port
+          ? _value.port
+          : port // ignore: cast_nullable_to_non_nullable
+              as int,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$NtpImplCopyWith<$Res> implements $NtpCopyWith<$Res> {
+  factory _$$NtpImplCopyWith(_$NtpImpl value, $Res Function(_$NtpImpl) then) =
+      __$$NtpImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool enable,
+      @JsonKey(name: 'write-to-system') bool writeToSystem,
+      String server,
+      int port,
+      int interval});
+}
+
+/// @nodoc
+class __$$NtpImplCopyWithImpl<$Res> extends _$NtpCopyWithImpl<$Res, _$NtpImpl>
+    implements _$$NtpImplCopyWith<$Res> {
+  __$$NtpImplCopyWithImpl(_$NtpImpl _value, $Res Function(_$NtpImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Ntp
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? enable = null,
+    Object? writeToSystem = null,
+    Object? server = null,
+    Object? port = null,
+    Object? interval = null,
+  }) {
+    return _then(_$NtpImpl(
+      enable: null == enable
+          ? _value.enable
+          : enable // ignore: cast_nullable_to_non_nullable
+              as bool,
+      writeToSystem: null == writeToSystem
+          ? _value.writeToSystem
+          : writeToSystem // ignore: cast_nullable_to_non_nullable
+              as bool,
+      server: null == server
+          ? _value.server
+          : server // ignore: cast_nullable_to_non_nullable
+              as String,
+      port: null == port
+          ? _value.port
+          : port // ignore: cast_nullable_to_non_nullable
+              as int,
+      interval: null == interval
+          ? _value.interval
+          : interval // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$NtpImpl implements _Ntp {
+  const _$NtpImpl(
+      {this.enable = true,
+      @JsonKey(name: 'write-to-system') this.writeToSystem = false,
+      this.server = 'ntp.aliyun.com',
+      this.port = 123,
+      this.interval = 60});
+
+  factory _$NtpImpl.fromJson(Map<String, dynamic> json) =>
+      _$$NtpImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool enable;
+  @override
+  @JsonKey(name: 'write-to-system')
+  final bool writeToSystem;
+  @override
+  @JsonKey()
+  final String server;
+  @override
+  @JsonKey()
+  final int port;
+  @override
+  @JsonKey()
+  final int interval;
+
+  @override
+  String toString() {
+    return 'Ntp(enable: $enable, writeToSystem: $writeToSystem, server: $server, port: $port, interval: $interval)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NtpImpl &&
+            (identical(other.enable, enable) || other.enable == enable) &&
+            (identical(other.writeToSystem, writeToSystem) ||
+                other.writeToSystem == writeToSystem) &&
+            (identical(other.server, server) || other.server == server) &&
+            (identical(other.port, port) || other.port == port) &&
+            (identical(other.interval, interval) ||
+                other.interval == interval));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, enable, writeToSystem, server, port, interval);
+
+  /// Create a copy of Ntp
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NtpImplCopyWith<_$NtpImpl> get copyWith =>
+      __$$NtpImplCopyWithImpl<_$NtpImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$NtpImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Ntp implements Ntp {
+  const factory _Ntp(
+      {final bool enable,
+      @JsonKey(name: 'write-to-system') final bool writeToSystem,
+      final String server,
+      final int port,
+      final int interval}) = _$NtpImpl;
+
+  factory _Ntp.fromJson(Map<String, dynamic> json) = _$NtpImpl.fromJson;
+
+  @override
+  bool get enable;
+  @override
+  @JsonKey(name: 'write-to-system')
+  bool get writeToSystem;
+  @override
+  String get server;
+  @override
+  int get port;
+  @override
+  int get interval;
+
+  /// Create a copy of Ntp
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$NtpImplCopyWith<_$NtpImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 GeoXUrl _$GeoXUrlFromJson(Map<String, dynamic> json) {
   return _GeoXUrl.fromJson(json);
 }
@@ -3676,6 +3916,10 @@ mixin _$ClashConfig {
   Tun get tun => throw _privateConstructorUsedError;
   @JsonKey(fromJson: Dns.safeDnsFromJson)
   Dns get dns => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: Ntp.safeNtpFromJson)
+  Ntp get ntp => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
+  Sniffer get sniffer => throw _privateConstructorUsedError;
   @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
   GeoXUrl get geoXUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'geodata-loader')
@@ -3724,6 +3968,8 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'tcp-concurrent') bool tcpConcurrent,
       @JsonKey(fromJson: Tun.safeFormJson) Tun tun,
       @JsonKey(fromJson: Dns.safeDnsFromJson) Dns dns,
+      @JsonKey(fromJson: Ntp.safeNtpFromJson) Ntp ntp,
+      @JsonKey(fromJson: Sniffer.safeSnifferFromJson) Sniffer sniffer,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       GeoXUrl geoXUrl,
       @JsonKey(name: 'geodata-loader') GeodataLoader geodataLoader,
@@ -3736,6 +3982,8 @@ abstract class $ClashConfigCopyWith<$Res> {
 
   $TunCopyWith<$Res> get tun;
   $DnsCopyWith<$Res> get dns;
+  $NtpCopyWith<$Res> get ntp;
+  $SnifferCopyWith<$Res> get sniffer;
   $GeoXUrlCopyWith<$Res> get geoXUrl;
 }
 
@@ -3769,6 +4017,8 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? tcpConcurrent = null,
     Object? tun = null,
     Object? dns = null,
+    Object? ntp = null,
+    Object? sniffer = null,
     Object? geoXUrl = null,
     Object? geodataLoader = null,
     Object? proxyGroups = null,
@@ -3838,6 +4088,14 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
               as Dns,
+      ntp: null == ntp
+          ? _value.ntp
+          : ntp // ignore: cast_nullable_to_non_nullable
+              as Ntp,
+      sniffer: null == sniffer
+          ? _value.sniffer
+          : sniffer // ignore: cast_nullable_to_non_nullable
+              as Sniffer,
       geoXUrl: null == geoXUrl
           ? _value.geoXUrl
           : geoXUrl // ignore: cast_nullable_to_non_nullable
@@ -3893,6 +4151,26 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $NtpCopyWith<$Res> get ntp {
+    return $NtpCopyWith<$Res>(_value.ntp, (value) {
+      return _then(_value.copyWith(ntp: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ClashConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SnifferCopyWith<$Res> get sniffer {
+    return $SnifferCopyWith<$Res>(_value.sniffer, (value) {
+      return _then(_value.copyWith(sniffer: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ClashConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $GeoXUrlCopyWith<$Res> get geoXUrl {
     return $GeoXUrlCopyWith<$Res>(_value.geoXUrl, (value) {
       return _then(_value.copyWith(geoXUrl: value) as $Val);
@@ -3926,6 +4204,8 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'tcp-concurrent') bool tcpConcurrent,
       @JsonKey(fromJson: Tun.safeFormJson) Tun tun,
       @JsonKey(fromJson: Dns.safeDnsFromJson) Dns dns,
+      @JsonKey(fromJson: Ntp.safeNtpFromJson) Ntp ntp,
+      @JsonKey(fromJson: Sniffer.safeSnifferFromJson) Sniffer sniffer,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       GeoXUrl geoXUrl,
       @JsonKey(name: 'geodata-loader') GeodataLoader geodataLoader,
@@ -3940,6 +4220,10 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
   $TunCopyWith<$Res> get tun;
   @override
   $DnsCopyWith<$Res> get dns;
+  @override
+  $NtpCopyWith<$Res> get ntp;
+  @override
+  $SnifferCopyWith<$Res> get sniffer;
   @override
   $GeoXUrlCopyWith<$Res> get geoXUrl;
 }
@@ -3972,6 +4256,8 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? tcpConcurrent = null,
     Object? tun = null,
     Object? dns = null,
+    Object? ntp = null,
+    Object? sniffer = null,
     Object? geoXUrl = null,
     Object? geodataLoader = null,
     Object? proxyGroups = null,
@@ -4041,6 +4327,14 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.dns
           : dns // ignore: cast_nullable_to_non_nullable
               as Dns,
+      ntp: null == ntp
+          ? _value.ntp
+          : ntp // ignore: cast_nullable_to_non_nullable
+              as Ntp,
+      sniffer: null == sniffer
+          ? _value.sniffer
+          : sniffer // ignore: cast_nullable_to_non_nullable
+              as Sniffer,
       geoXUrl: null == geoXUrl
           ? _value.geoXUrl
           : geoXUrl // ignore: cast_nullable_to_non_nullable
@@ -4095,6 +4389,9 @@ class _$ClashConfigImpl implements _ClashConfig {
       @JsonKey(name: 'tcp-concurrent') this.tcpConcurrent = true,
       @JsonKey(fromJson: Tun.safeFormJson) this.tun = defaultTun,
       @JsonKey(fromJson: Dns.safeDnsFromJson) this.dns = defaultDns,
+      @JsonKey(fromJson: Ntp.safeNtpFromJson) this.ntp = defaultNtp,
+      @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
+      this.sniffer = defaultSniffer,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       this.geoXUrl = defaultGeoXUrl,
       @JsonKey(name: 'geodata-loader')
@@ -4159,6 +4456,12 @@ class _$ClashConfigImpl implements _ClashConfig {
   @JsonKey(fromJson: Dns.safeDnsFromJson)
   final Dns dns;
   @override
+  @JsonKey(fromJson: Ntp.safeNtpFromJson)
+  final Ntp ntp;
+  @override
+  @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
+  final Sniffer sniffer;
+  @override
   @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
   final GeoXUrl geoXUrl;
   @override
@@ -4199,7 +4502,7 @@ class _$ClashConfigImpl implements _ClashConfig {
 
   @override
   String toString() {
-    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, hosts: $hosts)';
+    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, hosts: $hosts)';
   }
 
   @override
@@ -4232,6 +4535,8 @@ class _$ClashConfigImpl implements _ClashConfig {
                 other.tcpConcurrent == tcpConcurrent) &&
             (identical(other.tun, tun) || other.tun == tun) &&
             (identical(other.dns, dns) || other.dns == dns) &&
+            (identical(other.ntp, ntp) || other.ntp == ntp) &&
+            (identical(other.sniffer, sniffer) || other.sniffer == sniffer) &&
             (identical(other.geoXUrl, geoXUrl) || other.geoXUrl == geoXUrl) &&
             (identical(other.geodataLoader, geodataLoader) ||
                 other.geodataLoader == geodataLoader) &&
@@ -4264,6 +4569,8 @@ class _$ClashConfigImpl implements _ClashConfig {
         tcpConcurrent,
         tun,
         dns,
+        ntp,
+        sniffer,
         geoXUrl,
         geodataLoader,
         const DeepCollectionEquality().hash(_proxyGroups),
@@ -4308,6 +4615,8 @@ abstract class _ClashConfig implements ClashConfig {
       @JsonKey(name: 'tcp-concurrent') final bool tcpConcurrent,
       @JsonKey(fromJson: Tun.safeFormJson) final Tun tun,
       @JsonKey(fromJson: Dns.safeDnsFromJson) final Dns dns,
+      @JsonKey(fromJson: Ntp.safeNtpFromJson) final Ntp ntp,
+      @JsonKey(fromJson: Sniffer.safeSnifferFromJson) final Sniffer sniffer,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       final GeoXUrl geoXUrl,
       @JsonKey(name: 'geodata-loader') final GeodataLoader geodataLoader,
@@ -4364,6 +4673,12 @@ abstract class _ClashConfig implements ClashConfig {
   @override
   @JsonKey(fromJson: Dns.safeDnsFromJson)
   Dns get dns;
+  @override
+  @JsonKey(fromJson: Ntp.safeNtpFromJson)
+  Ntp get ntp;
+  @override
+  @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
+  Sniffer get sniffer;
   @override
   @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
   GeoXUrl get geoXUrl;

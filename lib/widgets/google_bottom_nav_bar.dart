@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:li_clash/common/common.dart';
 import 'package:li_clash/models/common.dart';
+import 'package:li_clash/providers/config.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GoogleBottomNavBar extends StatelessWidget {
+class GoogleBottomNavBar extends ConsumerWidget {
   final List<NavigationItem> navigationItems;
   final int selectedIndex;
   final ValueChanged<int> onTabChange;
@@ -24,7 +27,11 @@ class GoogleBottomNavBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final enableHapticFeedback = ref.watch(
+      appSettingProvider.select((state) => state.enableNavBarHapticFeedback),
+    );
+
     return Container(
       decoration: BoxDecoration(
         color: context.colorScheme.surfaceContainer,
@@ -45,10 +52,10 @@ class GoogleBottomNavBar extends StatelessWidget {
             activeColor: context.colorScheme.onSecondaryContainer,
             iconSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            duration: const Duration(milliseconds: 260),
+            duration: const Duration(milliseconds: 250),
             tabBackgroundColor: context.colorScheme.secondaryContainer,
             color: context.colorScheme.onSurfaceVariant,
-            curve: Curves.easeOutExpo,
+            curve: Curves.easeInOut,
             tabs: navigationItems
                 .map(
                   (e) => GButton(
@@ -58,7 +65,12 @@ class GoogleBottomNavBar extends StatelessWidget {
                 )
                 .toList(),
             selectedIndex: selectedIndex,
-            onTabChange: onTabChange,
+            onTabChange: (index) {
+              if (system.isAndroid && enableHapticFeedback) {
+                HapticFeedback.lightImpact();
+              }
+              onTabChange(index);
+            },
           ),
         ),
       ),

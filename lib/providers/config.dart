@@ -209,6 +209,36 @@ class OverrideDns extends _$OverrideDns with AutoDisposeNotifierMixin {
 }
 
 @riverpod
+class OverrideNtp extends _$OverrideNtp with AutoDisposeNotifierMixin {
+  @override
+  bool build() {
+    return globalState.config.overrideNtp;
+  }
+
+  @override
+  onUpdate(value) {
+    globalState.config = globalState.config.copyWith(
+      overrideNtp: value,
+    );
+  }
+}
+
+@riverpod
+class OverrideSniffer extends _$OverrideSniffer with AutoDisposeNotifierMixin {
+  @override
+  bool build() {
+    return globalState.config.overrideSniffer;
+  }
+
+  @override
+  onUpdate(value) {
+    globalState.config = globalState.config.copyWith(
+      overrideSniffer: value,
+    );
+  }
+}
+
+@riverpod
 class HotKeyActions extends _$HotKeyActions with AutoDisposeNotifierMixin {
   @override
   List<HotKeyAction> build() {

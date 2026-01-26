@@ -145,6 +145,37 @@ final overrideDnsProvider =
 );
 
 typedef _$OverrideDns = AutoDisposeNotifier<bool>;
+String _$overrideNtpHash() => r'da4620088529c14a7ceeeaffb1c528aa4202ea46';
+
+/// See also [OverrideNtp].
+@ProviderFor(OverrideNtp)
+final overrideNtpProvider =
+    AutoDisposeNotifierProvider<OverrideNtp, bool>.internal(
+  OverrideNtp.new,
+  name: r'overrideNtpProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$overrideNtpHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$OverrideNtp = AutoDisposeNotifier<bool>;
+String _$overrideSnifferHash() => r'c52e23041ec9b85e394bea22442d66a1c2c5e1bb';
+
+/// See also [OverrideSniffer].
+@ProviderFor(OverrideSniffer)
+final overrideSnifferProvider =
+    AutoDisposeNotifierProvider<OverrideSniffer, bool>.internal(
+  OverrideSniffer.new,
+  name: r'overrideSnifferProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$overrideSnifferHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$OverrideSniffer = AutoDisposeNotifier<bool>;
 String _$hotKeyActionsHash() => r'1d308d61b74accebbb11b1771a55975760503691';
 
 /// See also [HotKeyActions].

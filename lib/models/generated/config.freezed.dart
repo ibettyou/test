@@ -33,6 +33,7 @@ mixin _$AppSettingProps {
   bool get closeConnections => throw _privateConstructorUsedError;
   String get testUrl => throw _privateConstructorUsedError;
   bool get isAnimateToPage => throw _privateConstructorUsedError;
+  bool get enableNavBarHapticFeedback => throw _privateConstructorUsedError;
   bool get enableCrashReport => throw _privateConstructorUsedError;
   bool get autoCheckUpdate => throw _privateConstructorUsedError;
   bool get showLabel => throw _privateConstructorUsedError;
@@ -71,6 +72,7 @@ abstract class $AppSettingPropsCopyWith<$Res> {
       bool closeConnections,
       String testUrl,
       bool isAnimateToPage,
+      bool enableNavBarHapticFeedback,
       bool enableCrashReport,
       bool autoCheckUpdate,
       bool showLabel,
@@ -107,6 +109,7 @@ class _$AppSettingPropsCopyWithImpl<$Res, $Val extends AppSettingProps>
     Object? closeConnections = null,
     Object? testUrl = null,
     Object? isAnimateToPage = null,
+    Object? enableNavBarHapticFeedback = null,
     Object? enableCrashReport = null,
     Object? autoCheckUpdate = null,
     Object? showLabel = null,
@@ -160,6 +163,10 @@ class _$AppSettingPropsCopyWithImpl<$Res, $Val extends AppSettingProps>
       isAnimateToPage: null == isAnimateToPage
           ? _value.isAnimateToPage
           : isAnimateToPage // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableNavBarHapticFeedback: null == enableNavBarHapticFeedback
+          ? _value.enableNavBarHapticFeedback
+          : enableNavBarHapticFeedback // ignore: cast_nullable_to_non_nullable
               as bool,
       enableCrashReport: null == enableCrashReport
           ? _value.enableCrashReport
@@ -218,6 +225,7 @@ abstract class _$$AppSettingPropsImplCopyWith<$Res>
       bool closeConnections,
       String testUrl,
       bool isAnimateToPage,
+      bool enableNavBarHapticFeedback,
       bool enableCrashReport,
       bool autoCheckUpdate,
       bool showLabel,
@@ -252,6 +260,7 @@ class __$$AppSettingPropsImplCopyWithImpl<$Res>
     Object? closeConnections = null,
     Object? testUrl = null,
     Object? isAnimateToPage = null,
+    Object? enableNavBarHapticFeedback = null,
     Object? enableCrashReport = null,
     Object? autoCheckUpdate = null,
     Object? showLabel = null,
@@ -306,6 +315,10 @@ class __$$AppSettingPropsImplCopyWithImpl<$Res>
           ? _value.isAnimateToPage
           : isAnimateToPage // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableNavBarHapticFeedback: null == enableNavBarHapticFeedback
+          ? _value.enableNavBarHapticFeedback
+          : enableNavBarHapticFeedback // ignore: cast_nullable_to_non_nullable
+              as bool,
       enableCrashReport: null == enableCrashReport
           ? _value.enableCrashReport
           : enableCrashReport // ignore: cast_nullable_to_non_nullable
@@ -358,6 +371,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
       this.closeConnections = true,
       this.testUrl = defaultTestUrl,
       this.isAnimateToPage = true,
+      this.enableNavBarHapticFeedback = true,
       this.enableCrashReport = false,
       this.autoCheckUpdate = true,
       this.showLabel = false,
@@ -412,6 +426,9 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
   final bool isAnimateToPage;
   @override
   @JsonKey()
+  final bool enableNavBarHapticFeedback;
+  @override
+  @JsonKey()
   final bool enableCrashReport;
   @override
   @JsonKey()
@@ -437,7 +454,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
 
   @override
   String toString() {
-    return 'AppSettingProps(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, smartDelayLaunch: $smartDelayLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, enableCrashReport: $enableCrashReport, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden, developerMode: $developerMode, recoveryStrategy: $recoveryStrategy)';
+    return 'AppSettingProps(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, smartDelayLaunch: $smartDelayLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, enableNavBarHapticFeedback: $enableNavBarHapticFeedback, enableCrashReport: $enableCrashReport, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden, developerMode: $developerMode, recoveryStrategy: $recoveryStrategy)';
   }
 
   @override
@@ -464,6 +481,10 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
             (identical(other.testUrl, testUrl) || other.testUrl == testUrl) &&
             (identical(other.isAnimateToPage, isAnimateToPage) ||
                 other.isAnimateToPage == isAnimateToPage) &&
+            (identical(other.enableNavBarHapticFeedback,
+                    enableNavBarHapticFeedback) ||
+                other.enableNavBarHapticFeedback ==
+                    enableNavBarHapticFeedback) &&
             (identical(other.enableCrashReport, enableCrashReport) ||
                 other.enableCrashReport == enableCrashReport) &&
             (identical(other.autoCheckUpdate, autoCheckUpdate) ||
@@ -496,6 +517,7 @@ class _$AppSettingPropsImpl implements _AppSettingProps {
         closeConnections,
         testUrl,
         isAnimateToPage,
+        enableNavBarHapticFeedback,
         enableCrashReport,
         autoCheckUpdate,
         showLabel,
@@ -537,6 +559,7 @@ abstract class _AppSettingProps implements AppSettingProps {
       final bool closeConnections,
       final String testUrl,
       final bool isAnimateToPage,
+      final bool enableNavBarHapticFeedback,
       final bool enableCrashReport,
       final bool autoCheckUpdate,
       final bool showLabel,
@@ -572,6 +595,8 @@ abstract class _AppSettingProps implements AppSettingProps {
   String get testUrl;
   @override
   bool get isAnimateToPage;
+  @override
+  bool get enableNavBarHapticFeedback;
   @override
   bool get enableCrashReport;
   @override
@@ -2637,6 +2662,8 @@ mixin _$Config {
   List<HotKeyAction> get hotKeyActions => throw _privateConstructorUsedError;
   String? get currentProfileId => throw _privateConstructorUsedError;
   bool get overrideDns => throw _privateConstructorUsedError;
+  bool get overrideNtp => throw _privateConstructorUsedError;
+  bool get overrideSniffer => throw _privateConstructorUsedError;
   DAV? get dav => throw _privateConstructorUsedError;
   NetworkProps get networkProps => throw _privateConstructorUsedError;
   VpnProps get vpnProps => throw _privateConstructorUsedError;
@@ -2668,6 +2695,8 @@ abstract class $ConfigCopyWith<$Res> {
       List<HotKeyAction> hotKeyActions,
       String? currentProfileId,
       bool overrideDns,
+      bool overrideNtp,
+      bool overrideSniffer,
       DAV? dav,
       NetworkProps networkProps,
       VpnProps vpnProps,
@@ -2708,6 +2737,8 @@ class _$ConfigCopyWithImpl<$Res, $Val extends Config>
     Object? hotKeyActions = null,
     Object? currentProfileId = freezed,
     Object? overrideDns = null,
+    Object? overrideNtp = null,
+    Object? overrideSniffer = null,
     Object? dav = freezed,
     Object? networkProps = null,
     Object? vpnProps = null,
@@ -2737,6 +2768,14 @@ class _$ConfigCopyWithImpl<$Res, $Val extends Config>
       overrideDns: null == overrideDns
           ? _value.overrideDns
           : overrideDns // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideNtp: null == overrideNtp
+          ? _value.overrideNtp
+          : overrideNtp // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideSniffer: null == overrideSniffer
+          ? _value.overrideSniffer
+          : overrideSniffer // ignore: cast_nullable_to_non_nullable
               as bool,
       dav: freezed == dav
           ? _value.dav
@@ -2882,6 +2921,8 @@ abstract class _$$ConfigImplCopyWith<$Res> implements $ConfigCopyWith<$Res> {
       List<HotKeyAction> hotKeyActions,
       String? currentProfileId,
       bool overrideDns,
+      bool overrideNtp,
+      bool overrideSniffer,
       DAV? dav,
       NetworkProps networkProps,
       VpnProps vpnProps,
@@ -2929,6 +2970,8 @@ class __$$ConfigImplCopyWithImpl<$Res>
     Object? hotKeyActions = null,
     Object? currentProfileId = freezed,
     Object? overrideDns = null,
+    Object? overrideNtp = null,
+    Object? overrideSniffer = null,
     Object? dav = freezed,
     Object? networkProps = null,
     Object? vpnProps = null,
@@ -2958,6 +3001,14 @@ class __$$ConfigImplCopyWithImpl<$Res>
       overrideDns: null == overrideDns
           ? _value.overrideDns
           : overrideDns // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideNtp: null == overrideNtp
+          ? _value.overrideNtp
+          : overrideNtp // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideSniffer: null == overrideSniffer
+          ? _value.overrideSniffer
+          : overrideSniffer // ignore: cast_nullable_to_non_nullable
               as bool,
       dav: freezed == dav
           ? _value.dav
@@ -3005,6 +3056,8 @@ class _$ConfigImpl implements _Config {
       final List<HotKeyAction> hotKeyActions = const [],
       this.currentProfileId,
       this.overrideDns = false,
+      this.overrideNtp = false,
+      this.overrideSniffer = false,
       this.dav,
       this.networkProps = defaultNetworkProps,
       this.vpnProps = defaultVpnProps,
@@ -3046,6 +3099,12 @@ class _$ConfigImpl implements _Config {
   @JsonKey()
   final bool overrideDns;
   @override
+  @JsonKey()
+  final bool overrideNtp;
+  @override
+  @JsonKey()
+  final bool overrideSniffer;
+  @override
   final DAV? dav;
   @override
   @JsonKey()
@@ -3071,7 +3130,7 @@ class _$ConfigImpl implements _Config {
 
   @override
   String toString() {
-    return 'Config(appSetting: $appSetting, profiles: $profiles, hotKeyActions: $hotKeyActions, currentProfileId: $currentProfileId, overrideDns: $overrideDns, dav: $dav, networkProps: $networkProps, vpnProps: $vpnProps, themeProps: $themeProps, proxiesStyle: $proxiesStyle, windowProps: $windowProps, patchClashConfig: $patchClashConfig, scriptProps: $scriptProps)';
+    return 'Config(appSetting: $appSetting, profiles: $profiles, hotKeyActions: $hotKeyActions, currentProfileId: $currentProfileId, overrideDns: $overrideDns, overrideNtp: $overrideNtp, overrideSniffer: $overrideSniffer, dav: $dav, networkProps: $networkProps, vpnProps: $vpnProps, themeProps: $themeProps, proxiesStyle: $proxiesStyle, windowProps: $windowProps, patchClashConfig: $patchClashConfig, scriptProps: $scriptProps)';
   }
 
   @override
@@ -3088,6 +3147,10 @@ class _$ConfigImpl implements _Config {
                 other.currentProfileId == currentProfileId) &&
             (identical(other.overrideDns, overrideDns) ||
                 other.overrideDns == overrideDns) &&
+            (identical(other.overrideNtp, overrideNtp) ||
+                other.overrideNtp == overrideNtp) &&
+            (identical(other.overrideSniffer, overrideSniffer) ||
+                other.overrideSniffer == overrideSniffer) &&
             (identical(other.dav, dav) || other.dav == dav) &&
             (identical(other.networkProps, networkProps) ||
                 other.networkProps == networkProps) &&
@@ -3114,6 +3177,8 @@ class _$ConfigImpl implements _Config {
       const DeepCollectionEquality().hash(_hotKeyActions),
       currentProfileId,
       overrideDns,
+      overrideNtp,
+      overrideSniffer,
       dav,
       networkProps,
       vpnProps,
@@ -3147,6 +3212,8 @@ abstract class _Config implements Config {
       final List<HotKeyAction> hotKeyActions,
       final String? currentProfileId,
       final bool overrideDns,
+      final bool overrideNtp,
+      final bool overrideSniffer,
       final DAV? dav,
       final NetworkProps networkProps,
       final VpnProps vpnProps,
@@ -3170,6 +3237,10 @@ abstract class _Config implements Config {
   String? get currentProfileId;
   @override
   bool get overrideDns;
+  @override
+  bool get overrideNtp;
+  @override
+  bool get overrideSniffer;
   @override
   DAV? get dav;
   @override

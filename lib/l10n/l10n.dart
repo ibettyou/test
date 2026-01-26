@@ -2117,6 +2117,241 @@ class AppLocalizations {
     );
   }
 
+  /// `NTP`
+  String get ntp {
+    return Intl.message('NTP', name: 'ntp', desc: '', args: []);
+  }
+
+  /// `Use built-in NTP time synchronization service`
+  String get ntpDesc {
+    return Intl.message(
+      'Use built-in NTP time synchronization service',
+      name: 'ntpDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Override NTP`
+  String get overrideNtp {
+    return Intl.message(
+      'Override NTP',
+      name: 'overrideNtp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turning it on will override the NTP options in the profile`
+  String get overrideNtpDesc {
+    return Intl.message(
+      'Turning it on will override the NTP options in the profile',
+      name: 'overrideNtpDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get ntpStatus {
+    return Intl.message('Status', name: 'ntpStatus', desc: '', args: []);
+  }
+
+  /// `Enable NTP time synchronization service`
+  String get ntpStatusDesc {
+    return Intl.message(
+      'Enable NTP time synchronization service',
+      name: 'ntpStatusDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Write to system`
+  String get writeToSystem {
+    return Intl.message(
+      'Write to system',
+      name: 'writeToSystem',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Requires administrator privileges`
+  String get writeToSystemDesc {
+    return Intl.message(
+      'Requires administrator privileges',
+      name: 'writeToSystemDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Server`
+  String get ntpServer {
+    return Intl.message('Server', name: 'ntpServer', desc: '', args: []);
+  }
+
+  /// `Port`
+  String get ntpPort {
+    return Intl.message('Port', name: 'ntpPort', desc: '', args: []);
+  }
+
+  /// `Update interval`
+  String get ntpInterval {
+    return Intl.message(
+      'Update interval',
+      name: 'ntpInterval',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sniffer`
+  String get sniffer {
+    return Intl.message('Sniffer', name: 'sniffer', desc: '', args: []);
+  }
+
+  /// `Modify domain sniffing configuration`
+  String get snifferDesc {
+    return Intl.message(
+      'Modify domain sniffing configuration',
+      name: 'snifferDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Override Sniffer`
+  String get overrideSniffer {
+    return Intl.message('Override Sniffer', name: 'overrideSniffer', desc: '', args: []);
+  }
+
+  /// `Override Sniffer options in configuration when enabled`
+  String get overrideSnifferDesc {
+    return Intl.message(
+      'Override Sniffer options in configuration when enabled',
+      name: 'overrideSnifferDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get snifferStatus {
+    return Intl.message('Status', name: 'snifferStatus', desc: '', args: []);
+  }
+
+  /// `Enable domain sniffing service`
+  String get snifferStatusDesc {
+    return Intl.message(
+      'Enable domain sniffing service',
+      name: 'snifferStatusDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `force-dns-mapping`
+  String get forceDnsMapping {
+    return Intl.message('force-dns-mapping', name: 'forceDnsMapping', desc: '', args: []);
+  }
+
+  /// `Sniff real IP mapping`
+  String get forceDnsMappingDesc {
+    return Intl.message(
+      'Sniff real IP mapping',
+      name: 'forceDnsMappingDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `parse-pure-ip`
+  String get parsePureIp {
+    return Intl.message('parse-pure-ip', name: 'parsePureIp', desc: '', args: []);
+  }
+
+  /// `Sniff unmapped IP addresses`
+  String get parsePureIpDesc {
+    return Intl.message(
+      'Sniff unmapped IP addresses',
+      name: 'parsePureIpDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `override-destination`
+  String get overrideDestination {
+    return Intl.message('override-destination', name: 'overrideDestination', desc: '', args: []);
+  }
+
+  /// `Override connection destination`
+  String get overrideDestinationDesc {
+    return Intl.message(
+      'Override connection destination',
+      name: 'overrideDestinationDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `HTTP Port Sniffing`
+  String get httpPortSniffer {
+    return Intl.message('HTTP Port Sniffing', name: 'httpPortSniffer', desc: '', args: []);
+  }
+
+  /// `TLS Port Sniffing`
+  String get tlsPortSniffer {
+    return Intl.message('TLS Port Sniffing', name: 'tlsPortSniffer', desc: '', args: []);
+  }
+
+  /// `QUIC Port Sniffing`
+  String get quicPortSniffer {
+    return Intl.message('QUIC Port Sniffing', name: 'quicPortSniffer', desc: '', args: []);
+  }
+
+  /// `Force Domain Sniffing`
+  String get forceDomain {
+    return Intl.message('Force Domain Sniffing', name: 'forceDomain', desc: '', args: []);
+  }
+
+  /// `Skip Domain Sniffing`
+  String get skipDomain {
+    return Intl.message('Skip Domain Sniffing', name: 'skipDomain', desc: '', args: []);
+  }
+
+  /// `Skip Source Address Sniffing`
+  String get skipSrcAddress {
+    return Intl.message('Skip Source Address Sniffing', name: 'skipSrcAddress', desc: '', args: []);
+  }
+
+  /// `Skip Destination Address Sniffing`
+  String get skipDstAddress {
+    return Intl.message('Skip Destination Address Sniffing', name: 'skipDstAddress', desc: '', args: []);
+  }
+
+  /// `Ports`
+  String get snifferPorts {
+    return Intl.message('Ports', name: 'snifferPorts', desc: '', args: []);
+  }
+
+  /// `e.g.: 80, 8080-8880`
+  String get snifferPortsHint {
+    return Intl.message('e.g.: 80, 8080-8880', name: 'snifferPortsHint', desc: '', args: []);
+  }
+
+  /// `One domain per line`
+  String get snifferDomainHint {
+    return Intl.message('One domain per line', name: 'snifferDomainHint', desc: '', args: []);
+  }
+
+  /// `One address per line`
+  String get snifferAddressHint {
+    return Intl.message('One address per line', name: 'snifferAddressHint', desc: '', args: []);
+  }
+
   /// `Status`
   String get status {
     return Intl.message('Status', name: 'status', desc: '', args: []);
@@ -2967,6 +3202,26 @@ class AppLocalizations {
     return Intl.message(
       'Effective only in mobile view',
       name: 'tabAnimationDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Haptic feedback`
+  String get navBarHapticFeedback {
+    return Intl.message(
+      'Haptic feedback',
+      name: 'navBarHapticFeedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vibration feedback when switching bottom navigation bar`
+  String get navBarHapticFeedbackDesc {
+    return Intl.message(
+      'Vibration feedback when switching bottom navigation bar',
+      name: 'navBarHapticFeedbackDesc',
       desc: '',
       args: [],
     );

@@ -65,7 +65,7 @@ Map<String, dynamic> _$$RuleProviderImplToJson(_$RuleProviderImpl instance) =>
 
 _$SnifferImpl _$$SnifferImplFromJson(Map<String, dynamic> json) =>
     _$SnifferImpl(
-      enable: json['enable'] as bool? ?? false,
+      enable: json['enable'] as bool? ?? true,
       overrideDest: json['override-destination'] as bool? ?? false,
       sniffing: (json['sniffing'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -74,19 +74,19 @@ _$SnifferImpl _$$SnifferImplFromJson(Map<String, dynamic> json) =>
       forceDomain: (json['force-domain'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
+          const ['+.v2ex.com'],
       skipSrcAddress: (json['skip-src-address'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
+          const ['192.168.0.3/32'],
       skipDstAddress: (json['skip-dst-address'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
+          const ['geoip:telegram'],
       skipDomain: (json['skip-domain'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['mijia cloud'],
+          const ['Mijia Cloud', '+.push.apple.com'],
       port: (json['port-whitelist'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -97,7 +97,12 @@ _$SnifferImpl _$$SnifferImplFromJson(Map<String, dynamic> json) =>
             (k, e) =>
                 MapEntry(k, SnifferConfig.fromJson(e as Map<String, dynamic>)),
           ) ??
-          const {},
+          const {
+            'HTTP':
+                SnifferConfig(ports: ['80', '8080-8880'], overrideDest: true),
+            'TLS': SnifferConfig(ports: ['443', '8443']),
+            'QUIC': SnifferConfig(ports: ['443', '8443'])
+          },
     );
 
 Map<String, dynamic> _$$SnifferImplToJson(_$SnifferImpl instance) =>
@@ -284,6 +289,22 @@ const _$DnsModeEnumMap = {
   DnsMode.hosts: 'hosts',
 };
 
+_$NtpImpl _$$NtpImplFromJson(Map<String, dynamic> json) => _$NtpImpl(
+      enable: json['enable'] as bool? ?? true,
+      writeToSystem: json['write-to-system'] as bool? ?? false,
+      server: json['server'] as String? ?? 'ntp.aliyun.com',
+      port: (json['port'] as num?)?.toInt() ?? 123,
+      interval: (json['interval'] as num?)?.toInt() ?? 60,
+    );
+
+Map<String, dynamic> _$$NtpImplToJson(_$NtpImpl instance) => <String, dynamic>{
+      'enable': instance.enable,
+      'write-to-system': instance.writeToSystem,
+      'server': instance.server,
+      'port': instance.port,
+      'interval': instance.interval,
+    };
+
 _$GeoXUrlImpl _$$GeoXUrlImplFromJson(Map<String, dynamic> json) =>
     _$GeoXUrlImpl(
       mmdb: json['mmdb'] as String? ??
@@ -376,6 +397,13 @@ _$ClashConfigImpl _$$ClashConfigImplFromJson(Map<String, dynamic> json) =>
       dns: json['dns'] == null
           ? defaultDns
           : Dns.safeDnsFromJson(json['dns'] as Map<String, Object?>),
+      ntp: json['ntp'] == null
+          ? defaultNtp
+          : Ntp.safeNtpFromJson(json['ntp'] as Map<String, Object?>),
+      sniffer: json['sniffer'] == null
+          ? defaultSniffer
+          : Sniffer.safeSnifferFromJson(
+              json['sniffer'] as Map<String, Object?>),
       geoXUrl: json['geox-url'] == null
           ? defaultGeoXUrl
           : GeoXUrl.safeFormJson(json['geox-url'] as Map<String, Object?>?),
@@ -416,6 +444,8 @@ Map<String, dynamic> _$$ClashConfigImplToJson(_$ClashConfigImpl instance) =>
       'tcp-concurrent': instance.tcpConcurrent,
       'tun': instance.tun,
       'dns': instance.dns,
+      'ntp': instance.ntp,
+      'sniffer': instance.sniffer,
       'geox-url': instance.geoXUrl,
       'geodata-loader': _$GeodataLoaderEnumMap[instance.geodataLoader]!,
       'proxy-groups': instance.proxyGroups,

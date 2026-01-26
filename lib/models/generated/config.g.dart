@@ -22,6 +22,8 @@ _$AppSettingPropsImpl _$$AppSettingPropsImplFromJson(
       closeConnections: json['closeConnections'] as bool? ?? true,
       testUrl: json['testUrl'] as String? ?? defaultTestUrl,
       isAnimateToPage: json['isAnimateToPage'] as bool? ?? true,
+      enableNavBarHapticFeedback:
+          json['enableNavBarHapticFeedback'] as bool? ?? true,
       enableCrashReport: json['enableCrashReport'] as bool? ?? false,
       autoCheckUpdate: json['autoCheckUpdate'] as bool? ?? true,
       showLabel: json['showLabel'] as bool? ?? false,
@@ -50,6 +52,7 @@ Map<String, dynamic> _$$AppSettingPropsImplToJson(
       'closeConnections': instance.closeConnections,
       'testUrl': instance.testUrl,
       'isAnimateToPage': instance.isAnimateToPage,
+      'enableNavBarHapticFeedback': instance.enableNavBarHapticFeedback,
       'enableCrashReport': instance.enableCrashReport,
       'autoCheckUpdate': instance.autoCheckUpdate,
       'showLabel': instance.showLabel,
@@ -347,6 +350,8 @@ _$ConfigImpl _$$ConfigImplFromJson(Map<String, dynamic> json) => _$ConfigImpl(
           const [],
       currentProfileId: json['currentProfileId'] as String?,
       overrideDns: json['overrideDns'] as bool? ?? false,
+      overrideNtp: json['overrideNtp'] as bool? ?? false,
+      overrideSniffer: json['overrideSniffer'] as bool? ?? false,
       dav: json['dav'] == null
           ? null
           : DAV.fromJson(json['dav'] as Map<String, dynamic>),
@@ -382,6 +387,8 @@ Map<String, dynamic> _$$ConfigImplToJson(_$ConfigImpl instance) =>
       'hotKeyActions': instance.hotKeyActions,
       'currentProfileId': instance.currentProfileId,
       'overrideDns': instance.overrideDns,
+      'overrideNtp': instance.overrideNtp,
+      'overrideSniffer': instance.overrideSniffer,
       'dav': instance.dav,
       'networkProps': instance.networkProps,
       'vpnProps': instance.vpnProps,
