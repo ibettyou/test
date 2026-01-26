@@ -289,7 +289,6 @@ class FakeIpTtlItem extends ConsumerWidget {
       delegate: InputDelegate(
         title: appLocalizations.fakeipTtl,
         value: fakeIpTtl.toString(),
-        keyboardType: TextInputType.number,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return appLocalizations.emptyTip(appLocalizations.fakeipTtl);
