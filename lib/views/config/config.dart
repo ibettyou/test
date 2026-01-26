@@ -8,6 +8,8 @@ import 'package:li_clash/views/config/general.dart';
 import 'package:li_clash/views/config/network.dart';
 import 'package:li_clash/views/config/ntp.dart';
 import 'package:li_clash/views/config/sniffer.dart';
+import 'package:li_clash/views/config/tunnel.dart';
+import 'package:li_clash/views/config/experimental.dart';
 import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -149,6 +151,35 @@ class _ConfigViewState extends State<ConfigView> {
         ),
       ),
       ListItem.open(
+        title: const Text('Hosts'),
+        subtitle: Text(appLocalizations.hostsDesc),
+        leading: const Icon(Icons.view_list_outlined),
+        delegate: OpenDelegate(
+          blur: false,
+          title: 'Hosts',
+          widget: Consumer(
+            builder: (_, ref, __) {
+              final hosts = ref.watch(
+                patchClashConfigProvider.select((state) => state.hosts),
+              );
+              return MapInputPage(
+                title: 'Hosts',
+                map: hosts,
+                titleBuilder: (item) => Text(item.key),
+                subtitleBuilder: (item) => Text(item.value),
+                onChange: (value) {
+                  ref.read(patchClashConfigProvider.notifier).updateState(
+                        (state) => state.copyWith(
+                          hosts: value,
+                        ),
+                      );
+                },
+              );
+            },
+          ),
+        ),
+      ),
+      ListItem.open(
         title: Text(appLocalizations.sniffer),
         subtitle: Text(appLocalizations.snifferDesc),
         leading: const Icon(Icons.radar),
@@ -181,6 +212,78 @@ class _ConfigViewState extends State<ConfigView> {
             })
           ],
           widget: const SnifferListView(),
+          blur: false,
+        ),
+      ),
+      ListItem.open(
+        title: Text(appLocalizations.tunnel),
+        subtitle: Text(appLocalizations.tunnelDesc),
+        leading: const Icon(Icons.swap_horiz),
+        delegate: OpenDelegate(
+          title: appLocalizations.tunnel,
+          actions: [
+            Consumer(builder: (_, ref, __) {
+              return IconButton(
+                onPressed: () async {
+                  final res = await globalState.showMessage(
+                    title: appLocalizations.reset,
+                    message: TextSpan(
+                      text: appLocalizations.resetTip,
+                    ),
+                  );
+                  if (res != true) {
+                    return;
+                  }
+                  ref.read(patchClashConfigProvider.notifier).updateState(
+                        (state) => state.copyWith(
+                          tunnels: defaultTunnel,
+                        ),
+                      );
+                },
+                tooltip: appLocalizations.reset,
+                icon: const Icon(
+                  Icons.replay,
+                ),
+              );
+            })
+          ],
+          widget: const TunnelListView(),
+          blur: false,
+        ),
+      ),
+      ListItem.open(
+        title: Text(appLocalizations.experimental),
+        subtitle: Text(appLocalizations.experimentalDesc),
+        leading: const Icon(Icons.science),
+        delegate: OpenDelegate(
+          title: appLocalizations.experimental,
+          actions: [
+            Consumer(builder: (_, ref, __) {
+              return IconButton(
+                onPressed: () async {
+                  final res = await globalState.showMessage(
+                    title: appLocalizations.reset,
+                    message: TextSpan(
+                      text: appLocalizations.resetTip,
+                    ),
+                  );
+                  if (res != true) {
+                    return;
+                  }
+                  ref.read(patchClashConfigProvider.notifier).updateState(
+                        (state) => state.copyWith(
+                          experimental: defaultExperimental,
+                        ),
+                      );
+                },
+                tooltip: appLocalizations.reset,
+                icon: const Icon(
+                  Icons.replay,
+                ),
+              );
+            })
+          ],
+          widget: const ExperimentalListView(),
           blur: false,
         ),
       )

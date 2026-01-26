@@ -177,37 +177,6 @@ class AutoSetSystemDnsItem extends ConsumerWidget {
   }
 }
 
-class TunStackItem extends ConsumerWidget {
-  const TunStackItem({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final stack =
-        ref.watch(patchClashConfigProvider.select((state) => state.tun.stack));
-
-    return ListItem.options(
-      title: Text(appLocalizations.stackMode),
-      subtitle: Text(stack.name),
-      delegate: OptionsDelegate<TunStack>(
-        value: stack,
-        options: TunStack.values,
-        textBuilder: (value) => value.name,
-        onChanged: (value) {
-          if (value == null) {
-            return;
-          }
-          ref.read(patchClashConfigProvider.notifier).updateState(
-                (state) => state.copyWith.tun(
-                  stack: value,
-                ),
-              );
-        },
-        title: appLocalizations.stackMode,
-      ),
-    );
-  }
-}
-
 class IcmpForwardingItem extends ConsumerWidget {
   const IcmpForwardingItem({super.key});
 
@@ -261,6 +230,109 @@ class IcmpForwardingItem extends ConsumerWidget {
             // VPN/TUN 未运行，只需要更新配置（下次启动时生效）
             await globalState.appController.updateClashConfig();
           }
+        },
+      ),
+    );
+  }
+}
+
+class DnsHijackItem extends ConsumerWidget {
+  const DnsHijackItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dnsHijack = ref.watch(
+      patchClashConfigProvider.select(
+        (state) => state.tun.dnsHijack.isNotEmpty,
+      ),
+    );
+
+    return ListItem.switchItem(
+      title: Text(appLocalizations.dnsHijack),
+      subtitle: Text(appLocalizations.dnsHijackDesc),
+      delegate: SwitchDelegate(
+        value: dnsHijack,
+        onChanged: (value) async {
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith.tun(
+                  dnsHijack: value ? ['any:53', 'tcp://any:53'] : [],
+                ),
+              );
+        },
+      ),
+    );
+  }
+}
+
+class TunStackItem extends ConsumerWidget {
+  const TunStackItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final stack =
+        ref.watch(patchClashConfigProvider.select((state) => state.tun.stack));
+
+    return ListItem.options(
+      title: Text(appLocalizations.stackMode),
+      subtitle: Text(stack.name),
+      delegate: OptionsDelegate<TunStack>(
+        value: stack,
+        options: TunStack.values,
+        textBuilder: (value) => value.name,
+        onChanged: (value) {
+          if (value == null) {
+            return;
+          }
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith.tun(
+                  stack: value,
+                ),
+              );
+        },
+        title: appLocalizations.stackMode,
+      ),
+    );
+  }
+}
+
+class MtuItem extends ConsumerWidget {
+  const MtuItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final mtu =
+        ref.watch(patchClashConfigProvider.select((state) => state.tun.mtu));
+
+    return ListItem.input(
+      title: const Text('MTU'),
+      subtitle: Text('$mtu'),
+      delegate: InputDelegate(
+        title: 'MTU',
+        value: '$mtu',
+        resetValue: '1480',
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return appLocalizations.emptyTip('MTU');
+          }
+          final intValue = int.tryParse(value);
+          if (intValue == null) {
+            return appLocalizations.numberTip('MTU');
+          }
+          if (intValue < 1280 || intValue > 9000) {
+            return 'MTU must be between 1280 and 9000';
+          }
+          return null;
+        },
+        onChanged: (String? value) {
+          if (value == null) {
+            return;
+          }
+          final intValue = int.parse(value);
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith.tun(
+                  mtu: intValue,
+                ),
+              );
         },
       ),
     );
@@ -428,7 +500,9 @@ final networkItems = [
       if (system.isDesktop) const TUNItem(),
       if (system.isMacOS) const AutoSetSystemDnsItem(),
       const IcmpForwardingItem(),
+      const DnsHijackItem(),
       const TunStackItem(),
+      const MtuItem(),
       if (!system.isDesktop) ...[
         const RouteModeItem(),
         const RouteAddressItem(),

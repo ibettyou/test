@@ -176,6 +176,39 @@ final overrideSnifferProvider =
 );
 
 typedef _$OverrideSniffer = AutoDisposeNotifier<bool>;
+String _$overrideTunnelHash() => r'bef45c0504f3c2b831025b8b1ecca7bf0214f67a';
+
+/// See also [OverrideTunnel].
+@ProviderFor(OverrideTunnel)
+final overrideTunnelProvider =
+    AutoDisposeNotifierProvider<OverrideTunnel, bool>.internal(
+  OverrideTunnel.new,
+  name: r'overrideTunnelProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$overrideTunnelHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$OverrideTunnel = AutoDisposeNotifier<bool>;
+String _$overrideExperimentalHash() =>
+    r'92073890c35d9993a7a038128a5945dff8cc6097';
+
+/// See also [OverrideExperimental].
+@ProviderFor(OverrideExperimental)
+final overrideExperimentalProvider =
+    AutoDisposeNotifierProvider<OverrideExperimental, bool>.internal(
+  OverrideExperimental.new,
+  name: r'overrideExperimentalProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$overrideExperimentalHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$OverrideExperimental = AutoDisposeNotifier<bool>;
 String _$hotKeyActionsHash() => r'1d308d61b74accebbb11b1771a55975760503691';
 
 /// See also [HotKeyActions].

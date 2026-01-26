@@ -1103,6 +1103,255 @@ abstract class _Sniffer implements Sniffer {
       throw _privateConstructorUsedError;
 }
 
+TunnelEntry _$TunnelEntryFromJson(Map<String, dynamic> json) {
+  return _TunnelEntry.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TunnelEntry {
+  String get id => throw _privateConstructorUsedError;
+  List<String>? get network => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
+  String? get target => throw _privateConstructorUsedError;
+  String? get proxyName => throw _privateConstructorUsedError;
+
+  /// Serializes this TunnelEntry to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TunnelEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TunnelEntryCopyWith<TunnelEntry> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TunnelEntryCopyWith<$Res> {
+  factory $TunnelEntryCopyWith(
+          TunnelEntry value, $Res Function(TunnelEntry) then) =
+      _$TunnelEntryCopyWithImpl<$Res, TunnelEntry>;
+  @useResult
+  $Res call(
+      {String id,
+      List<String>? network,
+      String? address,
+      String? target,
+      String? proxyName});
+}
+
+/// @nodoc
+class _$TunnelEntryCopyWithImpl<$Res, $Val extends TunnelEntry>
+    implements $TunnelEntryCopyWith<$Res> {
+  _$TunnelEntryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TunnelEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? network = freezed,
+    Object? address = freezed,
+    Object? target = freezed,
+    Object? proxyName = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      network: freezed == network
+          ? _value.network
+          : network // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      target: freezed == target
+          ? _value.target
+          : target // ignore: cast_nullable_to_non_nullable
+              as String?,
+      proxyName: freezed == proxyName
+          ? _value.proxyName
+          : proxyName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TunnelEntryImplCopyWith<$Res>
+    implements $TunnelEntryCopyWith<$Res> {
+  factory _$$TunnelEntryImplCopyWith(
+          _$TunnelEntryImpl value, $Res Function(_$TunnelEntryImpl) then) =
+      __$$TunnelEntryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      List<String>? network,
+      String? address,
+      String? target,
+      String? proxyName});
+}
+
+/// @nodoc
+class __$$TunnelEntryImplCopyWithImpl<$Res>
+    extends _$TunnelEntryCopyWithImpl<$Res, _$TunnelEntryImpl>
+    implements _$$TunnelEntryImplCopyWith<$Res> {
+  __$$TunnelEntryImplCopyWithImpl(
+      _$TunnelEntryImpl _value, $Res Function(_$TunnelEntryImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TunnelEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? network = freezed,
+    Object? address = freezed,
+    Object? target = freezed,
+    Object? proxyName = freezed,
+  }) {
+    return _then(_$TunnelEntryImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      network: freezed == network
+          ? _value._network
+          : network // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      target: freezed == target
+          ? _value.target
+          : target // ignore: cast_nullable_to_non_nullable
+              as String?,
+      proxyName: freezed == proxyName
+          ? _value.proxyName
+          : proxyName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TunnelEntryImpl implements _TunnelEntry {
+  const _$TunnelEntryImpl(
+      {required this.id,
+      final List<String>? network,
+      this.address,
+      this.target,
+      this.proxyName})
+      : _network = network;
+
+  factory _$TunnelEntryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TunnelEntryImplFromJson(json);
+
+  @override
+  final String id;
+  final List<String>? _network;
+  @override
+  List<String>? get network {
+    final value = _network;
+    if (value == null) return null;
+    if (_network is EqualUnmodifiableListView) return _network;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? address;
+  @override
+  final String? target;
+  @override
+  final String? proxyName;
+
+  @override
+  String toString() {
+    return 'TunnelEntry(id: $id, network: $network, address: $address, target: $target, proxyName: $proxyName)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TunnelEntryImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other._network, _network) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.target, target) || other.target == target) &&
+            (identical(other.proxyName, proxyName) ||
+                other.proxyName == proxyName));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      const DeepCollectionEquality().hash(_network),
+      address,
+      target,
+      proxyName);
+
+  /// Create a copy of TunnelEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TunnelEntryImplCopyWith<_$TunnelEntryImpl> get copyWith =>
+      __$$TunnelEntryImplCopyWithImpl<_$TunnelEntryImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TunnelEntryImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TunnelEntry implements TunnelEntry {
+  const factory _TunnelEntry(
+      {required final String id,
+      final List<String>? network,
+      final String? address,
+      final String? target,
+      final String? proxyName}) = _$TunnelEntryImpl;
+
+  factory _TunnelEntry.fromJson(Map<String, dynamic> json) =
+      _$TunnelEntryImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  List<String>? get network;
+  @override
+  String? get address;
+  @override
+  String? get target;
+  @override
+  String? get proxyName;
+
+  /// Create a copy of TunnelEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TunnelEntryImplCopyWith<_$TunnelEntryImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 SnifferConfig _$SnifferConfigFromJson(Map<String, dynamic> json) {
   return _SnifferConfig.fromJson(json);
 }
@@ -1309,6 +1558,7 @@ mixin _$Tun {
   List<String> get routeAddress => throw _privateConstructorUsedError;
   @JsonKey(name: 'disable-icmp-forwarding')
   bool get disableIcmpForwarding => throw _privateConstructorUsedError;
+  int get mtu => throw _privateConstructorUsedError;
 
   /// Serializes this Tun to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1331,7 +1581,8 @@ abstract class $TunCopyWith<$Res> {
       TunStack stack,
       @JsonKey(name: 'dns-hijack') List<String> dnsHijack,
       @JsonKey(name: 'route-address') List<String> routeAddress,
-      @JsonKey(name: 'disable-icmp-forwarding') bool disableIcmpForwarding});
+      @JsonKey(name: 'disable-icmp-forwarding') bool disableIcmpForwarding,
+      int mtu});
 }
 
 /// @nodoc
@@ -1355,6 +1606,7 @@ class _$TunCopyWithImpl<$Res, $Val extends Tun> implements $TunCopyWith<$Res> {
     Object? dnsHijack = null,
     Object? routeAddress = null,
     Object? disableIcmpForwarding = null,
+    Object? mtu = null,
   }) {
     return _then(_value.copyWith(
       enable: null == enable
@@ -1385,6 +1637,10 @@ class _$TunCopyWithImpl<$Res, $Val extends Tun> implements $TunCopyWith<$Res> {
           ? _value.disableIcmpForwarding
           : disableIcmpForwarding // ignore: cast_nullable_to_non_nullable
               as bool,
+      mtu: null == mtu
+          ? _value.mtu
+          : mtu // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -1402,7 +1658,8 @@ abstract class _$$TunImplCopyWith<$Res> implements $TunCopyWith<$Res> {
       TunStack stack,
       @JsonKey(name: 'dns-hijack') List<String> dnsHijack,
       @JsonKey(name: 'route-address') List<String> routeAddress,
-      @JsonKey(name: 'disable-icmp-forwarding') bool disableIcmpForwarding});
+      @JsonKey(name: 'disable-icmp-forwarding') bool disableIcmpForwarding,
+      int mtu});
 }
 
 /// @nodoc
@@ -1423,6 +1680,7 @@ class __$$TunImplCopyWithImpl<$Res> extends _$TunCopyWithImpl<$Res, _$TunImpl>
     Object? dnsHijack = null,
     Object? routeAddress = null,
     Object? disableIcmpForwarding = null,
+    Object? mtu = null,
   }) {
     return _then(_$TunImpl(
       enable: null == enable
@@ -1453,6 +1711,10 @@ class __$$TunImplCopyWithImpl<$Res> extends _$TunCopyWithImpl<$Res, _$TunImpl>
           ? _value.disableIcmpForwarding
           : disableIcmpForwarding // ignore: cast_nullable_to_non_nullable
               as bool,
+      mtu: null == mtu
+          ? _value.mtu
+          : mtu // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -1470,7 +1732,8 @@ class _$TunImpl implements _Tun {
       @JsonKey(name: 'route-address')
       final List<String> routeAddress = const [],
       @JsonKey(name: 'disable-icmp-forwarding')
-      this.disableIcmpForwarding = true})
+      this.disableIcmpForwarding = true,
+      this.mtu = 1480})
       : _dnsHijack = dnsHijack,
         _routeAddress = routeAddress;
 
@@ -1510,10 +1773,13 @@ class _$TunImpl implements _Tun {
   @override
   @JsonKey(name: 'disable-icmp-forwarding')
   final bool disableIcmpForwarding;
+  @override
+  @JsonKey()
+  final int mtu;
 
   @override
   String toString() {
-    return 'Tun(enable: $enable, device: $device, autoRoute: $autoRoute, stack: $stack, dnsHijack: $dnsHijack, routeAddress: $routeAddress, disableIcmpForwarding: $disableIcmpForwarding)';
+    return 'Tun(enable: $enable, device: $device, autoRoute: $autoRoute, stack: $stack, dnsHijack: $dnsHijack, routeAddress: $routeAddress, disableIcmpForwarding: $disableIcmpForwarding, mtu: $mtu)';
   }
 
   @override
@@ -1531,7 +1797,8 @@ class _$TunImpl implements _Tun {
             const DeepCollectionEquality()
                 .equals(other._routeAddress, _routeAddress) &&
             (identical(other.disableIcmpForwarding, disableIcmpForwarding) ||
-                other.disableIcmpForwarding == disableIcmpForwarding));
+                other.disableIcmpForwarding == disableIcmpForwarding) &&
+            (identical(other.mtu, mtu) || other.mtu == mtu));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1544,7 +1811,8 @@ class _$TunImpl implements _Tun {
       stack,
       const DeepCollectionEquality().hash(_dnsHijack),
       const DeepCollectionEquality().hash(_routeAddress),
-      disableIcmpForwarding);
+      disableIcmpForwarding,
+      mtu);
 
   /// Create a copy of Tun
   /// with the given fields replaced by the non-null parameter values.
@@ -1571,7 +1839,8 @@ abstract class _Tun implements Tun {
       @JsonKey(name: 'dns-hijack') final List<String> dnsHijack,
       @JsonKey(name: 'route-address') final List<String> routeAddress,
       @JsonKey(name: 'disable-icmp-forwarding')
-      final bool disableIcmpForwarding}) = _$TunImpl;
+      final bool disableIcmpForwarding,
+      final int mtu}) = _$TunImpl;
 
   factory _Tun.fromJson(Map<String, dynamic> json) = _$TunImpl.fromJson;
 
@@ -1593,6 +1862,8 @@ abstract class _Tun implements Tun {
   @override
   @JsonKey(name: 'disable-icmp-forwarding')
   bool get disableIcmpForwarding;
+  @override
+  int get mtu;
 
   /// Create a copy of Tun
   /// with the given fields replaced by the non-null parameter values.
@@ -2838,6 +3109,213 @@ abstract class _Ntp implements Ntp {
       throw _privateConstructorUsedError;
 }
 
+Experimental _$ExperimentalFromJson(Map<String, dynamic> json) {
+  return _Experimental.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Experimental {
+  @JsonKey(name: 'quic-go-disable-gso')
+  bool get quicGoDisableGso => throw _privateConstructorUsedError;
+  @JsonKey(name: 'quic-go-disable-ecn')
+  bool get quicGoDisableEcn => throw _privateConstructorUsedError;
+  @JsonKey(name: 'dialer-ip4p-convert')
+  bool get dialerIp4pConvert => throw _privateConstructorUsedError;
+
+  /// Serializes this Experimental to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Experimental
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ExperimentalCopyWith<Experimental> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ExperimentalCopyWith<$Res> {
+  factory $ExperimentalCopyWith(
+          Experimental value, $Res Function(Experimental) then) =
+      _$ExperimentalCopyWithImpl<$Res, Experimental>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'quic-go-disable-gso') bool quicGoDisableGso,
+      @JsonKey(name: 'quic-go-disable-ecn') bool quicGoDisableEcn,
+      @JsonKey(name: 'dialer-ip4p-convert') bool dialerIp4pConvert});
+}
+
+/// @nodoc
+class _$ExperimentalCopyWithImpl<$Res, $Val extends Experimental>
+    implements $ExperimentalCopyWith<$Res> {
+  _$ExperimentalCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Experimental
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? quicGoDisableGso = null,
+    Object? quicGoDisableEcn = null,
+    Object? dialerIp4pConvert = null,
+  }) {
+    return _then(_value.copyWith(
+      quicGoDisableGso: null == quicGoDisableGso
+          ? _value.quicGoDisableGso
+          : quicGoDisableGso // ignore: cast_nullable_to_non_nullable
+              as bool,
+      quicGoDisableEcn: null == quicGoDisableEcn
+          ? _value.quicGoDisableEcn
+          : quicGoDisableEcn // ignore: cast_nullable_to_non_nullable
+              as bool,
+      dialerIp4pConvert: null == dialerIp4pConvert
+          ? _value.dialerIp4pConvert
+          : dialerIp4pConvert // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ExperimentalImplCopyWith<$Res>
+    implements $ExperimentalCopyWith<$Res> {
+  factory _$$ExperimentalImplCopyWith(
+          _$ExperimentalImpl value, $Res Function(_$ExperimentalImpl) then) =
+      __$$ExperimentalImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'quic-go-disable-gso') bool quicGoDisableGso,
+      @JsonKey(name: 'quic-go-disable-ecn') bool quicGoDisableEcn,
+      @JsonKey(name: 'dialer-ip4p-convert') bool dialerIp4pConvert});
+}
+
+/// @nodoc
+class __$$ExperimentalImplCopyWithImpl<$Res>
+    extends _$ExperimentalCopyWithImpl<$Res, _$ExperimentalImpl>
+    implements _$$ExperimentalImplCopyWith<$Res> {
+  __$$ExperimentalImplCopyWithImpl(
+      _$ExperimentalImpl _value, $Res Function(_$ExperimentalImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Experimental
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? quicGoDisableGso = null,
+    Object? quicGoDisableEcn = null,
+    Object? dialerIp4pConvert = null,
+  }) {
+    return _then(_$ExperimentalImpl(
+      quicGoDisableGso: null == quicGoDisableGso
+          ? _value.quicGoDisableGso
+          : quicGoDisableGso // ignore: cast_nullable_to_non_nullable
+              as bool,
+      quicGoDisableEcn: null == quicGoDisableEcn
+          ? _value.quicGoDisableEcn
+          : quicGoDisableEcn // ignore: cast_nullable_to_non_nullable
+              as bool,
+      dialerIp4pConvert: null == dialerIp4pConvert
+          ? _value.dialerIp4pConvert
+          : dialerIp4pConvert // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ExperimentalImpl implements _Experimental {
+  const _$ExperimentalImpl(
+      {@JsonKey(name: 'quic-go-disable-gso') this.quicGoDisableGso = false,
+      @JsonKey(name: 'quic-go-disable-ecn') this.quicGoDisableEcn = false,
+      @JsonKey(name: 'dialer-ip4p-convert') this.dialerIp4pConvert = false});
+
+  factory _$ExperimentalImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ExperimentalImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'quic-go-disable-gso')
+  final bool quicGoDisableGso;
+  @override
+  @JsonKey(name: 'quic-go-disable-ecn')
+  final bool quicGoDisableEcn;
+  @override
+  @JsonKey(name: 'dialer-ip4p-convert')
+  final bool dialerIp4pConvert;
+
+  @override
+  String toString() {
+    return 'Experimental(quicGoDisableGso: $quicGoDisableGso, quicGoDisableEcn: $quicGoDisableEcn, dialerIp4pConvert: $dialerIp4pConvert)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ExperimentalImpl &&
+            (identical(other.quicGoDisableGso, quicGoDisableGso) ||
+                other.quicGoDisableGso == quicGoDisableGso) &&
+            (identical(other.quicGoDisableEcn, quicGoDisableEcn) ||
+                other.quicGoDisableEcn == quicGoDisableEcn) &&
+            (identical(other.dialerIp4pConvert, dialerIp4pConvert) ||
+                other.dialerIp4pConvert == dialerIp4pConvert));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, quicGoDisableGso, quicGoDisableEcn, dialerIp4pConvert);
+
+  /// Create a copy of Experimental
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ExperimentalImplCopyWith<_$ExperimentalImpl> get copyWith =>
+      __$$ExperimentalImplCopyWithImpl<_$ExperimentalImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ExperimentalImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Experimental implements Experimental {
+  const factory _Experimental(
+          {@JsonKey(name: 'quic-go-disable-gso') final bool quicGoDisableGso,
+          @JsonKey(name: 'quic-go-disable-ecn') final bool quicGoDisableEcn,
+          @JsonKey(name: 'dialer-ip4p-convert') final bool dialerIp4pConvert}) =
+      _$ExperimentalImpl;
+
+  factory _Experimental.fromJson(Map<String, dynamic> json) =
+      _$ExperimentalImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'quic-go-disable-gso')
+  bool get quicGoDisableGso;
+  @override
+  @JsonKey(name: 'quic-go-disable-ecn')
+  bool get quicGoDisableEcn;
+  @override
+  @JsonKey(name: 'dialer-ip4p-convert')
+  bool get dialerIp4pConvert;
+
+  /// Create a copy of Experimental
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ExperimentalImplCopyWith<_$ExperimentalImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 GeoXUrl _$GeoXUrlFromJson(Map<String, dynamic> json) {
   return _GeoXUrl.fromJson(json);
 }
@@ -3920,6 +4398,9 @@ mixin _$ClashConfig {
   Ntp get ntp => throw _privateConstructorUsedError;
   @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
   Sniffer get sniffer => throw _privateConstructorUsedError;
+  List<TunnelEntry> get tunnels => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: Experimental.safeExperimentalFromJson)
+  Experimental get experimental => throw _privateConstructorUsedError;
   @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
   GeoXUrl get geoXUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'geodata-loader')
@@ -3972,6 +4453,9 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(fromJson: Dns.safeDnsFromJson) Dns dns,
       @JsonKey(fromJson: Ntp.safeNtpFromJson) Ntp ntp,
       @JsonKey(fromJson: Sniffer.safeSnifferFromJson) Sniffer sniffer,
+      List<TunnelEntry> tunnels,
+      @JsonKey(fromJson: Experimental.safeExperimentalFromJson)
+      Experimental experimental,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       GeoXUrl geoXUrl,
       @JsonKey(name: 'geodata-loader') GeodataLoader geodataLoader,
@@ -3987,6 +4471,7 @@ abstract class $ClashConfigCopyWith<$Res> {
   $DnsCopyWith<$Res> get dns;
   $NtpCopyWith<$Res> get ntp;
   $SnifferCopyWith<$Res> get sniffer;
+  $ExperimentalCopyWith<$Res> get experimental;
   $GeoXUrlCopyWith<$Res> get geoXUrl;
 }
 
@@ -4022,6 +4507,8 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? dns = null,
     Object? ntp = null,
     Object? sniffer = null,
+    Object? tunnels = null,
+    Object? experimental = null,
     Object? geoXUrl = null,
     Object? geodataLoader = null,
     Object? proxyGroups = null,
@@ -4100,6 +4587,14 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.sniffer
           : sniffer // ignore: cast_nullable_to_non_nullable
               as Sniffer,
+      tunnels: null == tunnels
+          ? _value.tunnels
+          : tunnels // ignore: cast_nullable_to_non_nullable
+              as List<TunnelEntry>,
+      experimental: null == experimental
+          ? _value.experimental
+          : experimental // ignore: cast_nullable_to_non_nullable
+              as Experimental,
       geoXUrl: null == geoXUrl
           ? _value.geoXUrl
           : geoXUrl // ignore: cast_nullable_to_non_nullable
@@ -4179,6 +4674,16 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $ExperimentalCopyWith<$Res> get experimental {
+    return $ExperimentalCopyWith<$Res>(_value.experimental, (value) {
+      return _then(_value.copyWith(experimental: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ClashConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $GeoXUrlCopyWith<$Res> get geoXUrl {
     return $GeoXUrlCopyWith<$Res>(_value.geoXUrl, (value) {
       return _then(_value.copyWith(geoXUrl: value) as $Val);
@@ -4214,6 +4719,9 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(fromJson: Dns.safeDnsFromJson) Dns dns,
       @JsonKey(fromJson: Ntp.safeNtpFromJson) Ntp ntp,
       @JsonKey(fromJson: Sniffer.safeSnifferFromJson) Sniffer sniffer,
+      List<TunnelEntry> tunnels,
+      @JsonKey(fromJson: Experimental.safeExperimentalFromJson)
+      Experimental experimental,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       GeoXUrl geoXUrl,
       @JsonKey(name: 'geodata-loader') GeodataLoader geodataLoader,
@@ -4233,6 +4741,8 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
   $NtpCopyWith<$Res> get ntp;
   @override
   $SnifferCopyWith<$Res> get sniffer;
+  @override
+  $ExperimentalCopyWith<$Res> get experimental;
   @override
   $GeoXUrlCopyWith<$Res> get geoXUrl;
 }
@@ -4267,6 +4777,8 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? dns = null,
     Object? ntp = null,
     Object? sniffer = null,
+    Object? tunnels = null,
+    Object? experimental = null,
     Object? geoXUrl = null,
     Object? geodataLoader = null,
     Object? proxyGroups = null,
@@ -4345,6 +4857,14 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.sniffer
           : sniffer // ignore: cast_nullable_to_non_nullable
               as Sniffer,
+      tunnels: null == tunnels
+          ? _value._tunnels
+          : tunnels // ignore: cast_nullable_to_non_nullable
+              as List<TunnelEntry>,
+      experimental: null == experimental
+          ? _value.experimental
+          : experimental // ignore: cast_nullable_to_non_nullable
+              as Experimental,
       geoXUrl: null == geoXUrl
           ? _value.geoXUrl
           : geoXUrl // ignore: cast_nullable_to_non_nullable
@@ -4406,6 +4926,9 @@ class _$ClashConfigImpl implements _ClashConfig {
       @JsonKey(fromJson: Ntp.safeNtpFromJson) this.ntp = defaultNtp,
       @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
       this.sniffer = defaultSniffer,
+      final List<TunnelEntry> tunnels = defaultTunnel,
+      @JsonKey(fromJson: Experimental.safeExperimentalFromJson)
+      this.experimental = defaultExperimental,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       this.geoXUrl = defaultGeoXUrl,
       @JsonKey(name: 'geodata-loader')
@@ -4418,7 +4941,8 @@ class _$ClashConfigImpl implements _ClashConfig {
       this.externalController = ExternalControllerStatus.close,
       @JsonKey(name: 'external-ui-url') this.externalUiUrl = '',
       final Map<String, String> hosts = const {}})
-      : _proxyGroups = proxyGroups,
+      : _tunnels = tunnels,
+        _proxyGroups = proxyGroups,
         _rule = rule,
         _hosts = hosts;
 
@@ -4476,6 +5000,18 @@ class _$ClashConfigImpl implements _ClashConfig {
   @override
   @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
   final Sniffer sniffer;
+  final List<TunnelEntry> _tunnels;
+  @override
+  @JsonKey()
+  List<TunnelEntry> get tunnels {
+    if (_tunnels is EqualUnmodifiableListView) return _tunnels;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tunnels);
+  }
+
+  @override
+  @JsonKey(fromJson: Experimental.safeExperimentalFromJson)
+  final Experimental experimental;
   @override
   @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
   final GeoXUrl geoXUrl;
@@ -4520,7 +5056,7 @@ class _$ClashConfigImpl implements _ClashConfig {
 
   @override
   String toString() {
-    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, externalUiUrl: $externalUiUrl, hosts: $hosts)';
+    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, tunnels: $tunnels, experimental: $experimental, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, externalUiUrl: $externalUiUrl, hosts: $hosts)';
   }
 
   @override
@@ -4555,6 +5091,9 @@ class _$ClashConfigImpl implements _ClashConfig {
             (identical(other.dns, dns) || other.dns == dns) &&
             (identical(other.ntp, ntp) || other.ntp == ntp) &&
             (identical(other.sniffer, sniffer) || other.sniffer == sniffer) &&
+            const DeepCollectionEquality().equals(other._tunnels, _tunnels) &&
+            (identical(other.experimental, experimental) ||
+                other.experimental == experimental) &&
             (identical(other.geoXUrl, geoXUrl) || other.geoXUrl == geoXUrl) &&
             (identical(other.geodataLoader, geodataLoader) ||
                 other.geodataLoader == geodataLoader) &&
@@ -4591,6 +5130,8 @@ class _$ClashConfigImpl implements _ClashConfig {
         dns,
         ntp,
         sniffer,
+        const DeepCollectionEquality().hash(_tunnels),
+        experimental,
         geoXUrl,
         geodataLoader,
         const DeepCollectionEquality().hash(_proxyGroups),
@@ -4638,6 +5179,9 @@ abstract class _ClashConfig implements ClashConfig {
       @JsonKey(fromJson: Dns.safeDnsFromJson) final Dns dns,
       @JsonKey(fromJson: Ntp.safeNtpFromJson) final Ntp ntp,
       @JsonKey(fromJson: Sniffer.safeSnifferFromJson) final Sniffer sniffer,
+      final List<TunnelEntry> tunnels,
+      @JsonKey(fromJson: Experimental.safeExperimentalFromJson)
+      final Experimental experimental,
       @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
       final GeoXUrl geoXUrl,
       @JsonKey(name: 'geodata-loader') final GeodataLoader geodataLoader,
@@ -4701,6 +5245,11 @@ abstract class _ClashConfig implements ClashConfig {
   @override
   @JsonKey(fromJson: Sniffer.safeSnifferFromJson)
   Sniffer get sniffer;
+  @override
+  List<TunnelEntry> get tunnels;
+  @override
+  @JsonKey(fromJson: Experimental.safeExperimentalFromJson)
+  Experimental get experimental;
   @override
   @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
   GeoXUrl get geoXUrl;

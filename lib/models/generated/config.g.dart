@@ -352,6 +352,8 @@ _$ConfigImpl _$$ConfigImplFromJson(Map<String, dynamic> json) => _$ConfigImpl(
       overrideDns: json['overrideDns'] as bool? ?? false,
       overrideNtp: json['overrideNtp'] as bool? ?? false,
       overrideSniffer: json['overrideSniffer'] as bool? ?? false,
+      overrideTunnel: json['overrideTunnel'] as bool? ?? false,
+      overrideExperimental: json['overrideExperimental'] as bool? ?? false,
       dav: json['dav'] == null
           ? null
           : DAV.fromJson(json['dav'] as Map<String, dynamic>),
@@ -389,6 +391,8 @@ Map<String, dynamic> _$$ConfigImplToJson(_$ConfigImpl instance) =>
       'overrideDns': instance.overrideDns,
       'overrideNtp': instance.overrideNtp,
       'overrideSniffer': instance.overrideSniffer,
+      'overrideTunnel': instance.overrideTunnel,
+      'overrideExperimental': instance.overrideExperimental,
       'dav': instance.dav,
       'networkProps': instance.networkProps,
       'vpnProps': instance.vpnProps,

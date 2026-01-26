@@ -2664,6 +2664,8 @@ mixin _$Config {
   bool get overrideDns => throw _privateConstructorUsedError;
   bool get overrideNtp => throw _privateConstructorUsedError;
   bool get overrideSniffer => throw _privateConstructorUsedError;
+  bool get overrideTunnel => throw _privateConstructorUsedError;
+  bool get overrideExperimental => throw _privateConstructorUsedError;
   DAV? get dav => throw _privateConstructorUsedError;
   NetworkProps get networkProps => throw _privateConstructorUsedError;
   VpnProps get vpnProps => throw _privateConstructorUsedError;
@@ -2697,6 +2699,8 @@ abstract class $ConfigCopyWith<$Res> {
       bool overrideDns,
       bool overrideNtp,
       bool overrideSniffer,
+      bool overrideTunnel,
+      bool overrideExperimental,
       DAV? dav,
       NetworkProps networkProps,
       VpnProps vpnProps,
@@ -2739,6 +2743,8 @@ class _$ConfigCopyWithImpl<$Res, $Val extends Config>
     Object? overrideDns = null,
     Object? overrideNtp = null,
     Object? overrideSniffer = null,
+    Object? overrideTunnel = null,
+    Object? overrideExperimental = null,
     Object? dav = freezed,
     Object? networkProps = null,
     Object? vpnProps = null,
@@ -2776,6 +2782,14 @@ class _$ConfigCopyWithImpl<$Res, $Val extends Config>
       overrideSniffer: null == overrideSniffer
           ? _value.overrideSniffer
           : overrideSniffer // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideTunnel: null == overrideTunnel
+          ? _value.overrideTunnel
+          : overrideTunnel // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideExperimental: null == overrideExperimental
+          ? _value.overrideExperimental
+          : overrideExperimental // ignore: cast_nullable_to_non_nullable
               as bool,
       dav: freezed == dav
           ? _value.dav
@@ -2923,6 +2937,8 @@ abstract class _$$ConfigImplCopyWith<$Res> implements $ConfigCopyWith<$Res> {
       bool overrideDns,
       bool overrideNtp,
       bool overrideSniffer,
+      bool overrideTunnel,
+      bool overrideExperimental,
       DAV? dav,
       NetworkProps networkProps,
       VpnProps vpnProps,
@@ -2972,6 +2988,8 @@ class __$$ConfigImplCopyWithImpl<$Res>
     Object? overrideDns = null,
     Object? overrideNtp = null,
     Object? overrideSniffer = null,
+    Object? overrideTunnel = null,
+    Object? overrideExperimental = null,
     Object? dav = freezed,
     Object? networkProps = null,
     Object? vpnProps = null,
@@ -3009,6 +3027,14 @@ class __$$ConfigImplCopyWithImpl<$Res>
       overrideSniffer: null == overrideSniffer
           ? _value.overrideSniffer
           : overrideSniffer // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideTunnel: null == overrideTunnel
+          ? _value.overrideTunnel
+          : overrideTunnel // ignore: cast_nullable_to_non_nullable
+              as bool,
+      overrideExperimental: null == overrideExperimental
+          ? _value.overrideExperimental
+          : overrideExperimental // ignore: cast_nullable_to_non_nullable
               as bool,
       dav: freezed == dav
           ? _value.dav
@@ -3058,6 +3084,8 @@ class _$ConfigImpl implements _Config {
       this.overrideDns = false,
       this.overrideNtp = false,
       this.overrideSniffer = false,
+      this.overrideTunnel = false,
+      this.overrideExperimental = false,
       this.dav,
       this.networkProps = defaultNetworkProps,
       this.vpnProps = defaultVpnProps,
@@ -3105,6 +3133,12 @@ class _$ConfigImpl implements _Config {
   @JsonKey()
   final bool overrideSniffer;
   @override
+  @JsonKey()
+  final bool overrideTunnel;
+  @override
+  @JsonKey()
+  final bool overrideExperimental;
+  @override
   final DAV? dav;
   @override
   @JsonKey()
@@ -3130,7 +3164,7 @@ class _$ConfigImpl implements _Config {
 
   @override
   String toString() {
-    return 'Config(appSetting: $appSetting, profiles: $profiles, hotKeyActions: $hotKeyActions, currentProfileId: $currentProfileId, overrideDns: $overrideDns, overrideNtp: $overrideNtp, overrideSniffer: $overrideSniffer, dav: $dav, networkProps: $networkProps, vpnProps: $vpnProps, themeProps: $themeProps, proxiesStyle: $proxiesStyle, windowProps: $windowProps, patchClashConfig: $patchClashConfig, scriptProps: $scriptProps)';
+    return 'Config(appSetting: $appSetting, profiles: $profiles, hotKeyActions: $hotKeyActions, currentProfileId: $currentProfileId, overrideDns: $overrideDns, overrideNtp: $overrideNtp, overrideSniffer: $overrideSniffer, overrideTunnel: $overrideTunnel, overrideExperimental: $overrideExperimental, dav: $dav, networkProps: $networkProps, vpnProps: $vpnProps, themeProps: $themeProps, proxiesStyle: $proxiesStyle, windowProps: $windowProps, patchClashConfig: $patchClashConfig, scriptProps: $scriptProps)';
   }
 
   @override
@@ -3151,6 +3185,10 @@ class _$ConfigImpl implements _Config {
                 other.overrideNtp == overrideNtp) &&
             (identical(other.overrideSniffer, overrideSniffer) ||
                 other.overrideSniffer == overrideSniffer) &&
+            (identical(other.overrideTunnel, overrideTunnel) ||
+                other.overrideTunnel == overrideTunnel) &&
+            (identical(other.overrideExperimental, overrideExperimental) ||
+                other.overrideExperimental == overrideExperimental) &&
             (identical(other.dav, dav) || other.dav == dav) &&
             (identical(other.networkProps, networkProps) ||
                 other.networkProps == networkProps) &&
@@ -3179,6 +3217,8 @@ class _$ConfigImpl implements _Config {
       overrideDns,
       overrideNtp,
       overrideSniffer,
+      overrideTunnel,
+      overrideExperimental,
       dav,
       networkProps,
       vpnProps,
@@ -3214,6 +3254,8 @@ abstract class _Config implements Config {
       final bool overrideDns,
       final bool overrideNtp,
       final bool overrideSniffer,
+      final bool overrideTunnel,
+      final bool overrideExperimental,
       final DAV? dav,
       final NetworkProps networkProps,
       final VpnProps vpnProps,
@@ -3241,6 +3283,10 @@ abstract class _Config implements Config {
   bool get overrideNtp;
   @override
   bool get overrideSniffer;
+  @override
+  bool get overrideTunnel;
+  @override
+  bool get overrideExperimental;
   @override
   DAV? get dav;
   @override

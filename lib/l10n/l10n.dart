@@ -2352,6 +2352,136 @@ class AppLocalizations {
     return Intl.message('One address per line', name: 'snifferAddressHint', desc: '', args: []);
   }
 
+  /// `TUNNEL`
+  String get tunnel {
+    return Intl.message('Tunnel', name: 'tunnel', desc: '', args: []);
+  }
+
+  /// `Use traffic forwarding tunnel`
+  String get tunnelDesc {
+    return Intl.message('Use traffic forwarding tunnel', name: 'tunnelDesc', desc: '', args: []);
+  }
+
+  /// `Override Tunnel`
+  String get overrideTunnel {
+    return Intl.message('Override Tunnel', name: 'overrideTunnel', desc: '', args: []);
+  }
+
+  /// `Override Tunnel options in configuration when enabled`
+  String get overrideTunnelDesc {
+    return Intl.message('Override Tunnel options in configuration when enabled', name: 'overrideTunnelDesc', desc: '', args: []);
+  }
+
+  /// `Forwarding List`
+  String get tunnelList {
+    return Intl.message('Forwarding List', name: 'tunnelList', desc: '', args: []);
+  }
+
+  /// `Add Forwarding`
+  String get addTunnel {
+    return Intl.message('Add Forwarding', name: 'addTunnel', desc: '', args: []);
+  }
+
+  /// `Edit Forwarding`
+  String get editTunnel {
+    return Intl.message('Edit Forwarding', name: 'editTunnel', desc: '', args: []);
+  }
+
+  /// `Delete Forwarding`
+  String get deleteTunnel {
+    return Intl.message('Delete Forwarding', name: 'deleteTunnel', desc: '', args: []);
+  }
+
+  /// `Network Protocol`
+  String get tunnelNetwork {
+    return Intl.message('Network Protocol', name: 'tunnelNetwork', desc: '', args: []);
+  }
+
+  /// `e.g.: tcp, udp`
+  String get tunnelNetworkHint {
+    return Intl.message('e.g.: tcp, udp', name: 'tunnelNetworkHint', desc: '', args: []);
+  }
+
+  /// `Listen Address`
+  String get tunnelAddress {
+    return Intl.message('Listen Address', name: 'tunnelAddress', desc: '', args: []);
+  }
+
+  /// `e.g.: 127.0.0.1:6553`
+  String get tunnelAddressHint {
+    return Intl.message('e.g.: 127.0.0.1:6553', name: 'tunnelAddressHint', desc: '', args: []);
+  }
+
+  /// `Target Address`
+  String get tunnelTarget {
+    return Intl.message('Target Address', name: 'tunnelTarget', desc: '', args: []);
+  }
+
+  /// `e.g.: 114.114.114.114:53`
+  String get tunnelTargetHint {
+    return Intl.message('e.g.: 114.114.114.114:53', name: 'tunnelTargetHint', desc: '', args: []);
+  }
+
+  /// `Proxy Name`
+  String get tunnelProxy {
+    return Intl.message('Proxy Name', name: 'tunnelProxy', desc: '', args: []);
+  }
+
+  /// `e.g.: proxy (optional)`
+  String get tunnelProxyHint {
+    return Intl.message('e.g.: proxy (optional)', name: 'tunnelProxyHint', desc: '', args: []);
+  }
+
+  /// `Experimental`
+  String get experimental {
+    return Intl.message('Experimental', name: 'experimental', desc: '', args: []);
+  }
+
+  /// `Use experimental configuration with caution`
+  String get experimentalDesc {
+    return Intl.message('Use experimental configuration with caution', name: 'experimentalDesc', desc: '', args: []);
+  }
+
+  /// `Override Experimental`
+  String get overrideExperimental {
+    return Intl.message('Override Experimental', name: 'overrideExperimental', desc: '', args: []);
+  }
+
+  /// `Override experimental configuration options when enabled`
+  String get overrideExperimentalDesc {
+    return Intl.message('Override experimental configuration options when enabled', name: 'overrideExperimentalDesc', desc: '', args: []);
+  }
+
+  /// `Disable Generic Segmentation Offload`
+  String get quicGoDisableGso {
+    return Intl.message('Disable Generic Segmentation Offload', name: 'quicGoDisableGso', desc: '', args: []);
+  }
+
+  /// `Disable QUIC generic segmentation offload feature`
+  String get quicGoDisableGsoDesc {
+    return Intl.message('Disable QUIC generic segmentation offload feature', name: 'quicGoDisableGsoDesc', desc: '', args: []);
+  }
+
+  /// `Disable Explicit Congestion Notification`
+  String get quicGoDisableEcn {
+    return Intl.message('Disable Explicit Congestion Notification', name: 'quicGoDisableEcn', desc: '', args: []);
+  }
+
+  /// `Disable QUIC explicit congestion notification feature`
+  String get quicGoDisableEcnDesc {
+    return Intl.message('Disable QUIC explicit congestion notification feature', name: 'quicGoDisableEcnDesc', desc: '', args: []);
+  }
+
+  /// `Enable IP4P Address Conversion`
+  String get dialerIp4pConvert {
+    return Intl.message('Enable IP4P Address Conversion', name: 'dialerIp4pConvert', desc: '', args: []);
+  }
+
+  /// `Enable dialer IP4P address conversion feature`
+  String get dialerIp4pConvertDesc {
+    return Intl.message('Enable dialer IP4P address conversion feature', name: 'dialerIp4pConvertDesc', desc: '', args: []);
+  }
+
   /// `Status`
   String get status {
     return Intl.message('Status', name: 'status', desc: '', args: []);
@@ -2785,6 +2915,16 @@ class AppLocalizations {
   /// `Enable ICMPing Support`
   String get icmpForwardingDesc {
     return Intl.message('Enable ICMPing Support', name: 'icmpForwardingDesc', desc: '', args: []);
+  }
+
+  /// `DNS Hijack`
+  String get dnsHijack {
+    return Intl.message('DNS Hijack', name: 'dnsHijack', desc: '', args: []);
+  }
+
+  /// `Redirect DNS queries to internal DNS module`
+  String get dnsHijackDesc {
+    return Intl.message('Redirect DNS queries to internal DNS module', name: 'dnsHijackDesc', desc: '', args: []);
   }
 
   /// `Network`

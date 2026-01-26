@@ -120,6 +120,25 @@ Map<String, dynamic> _$$SnifferImplToJson(_$SnifferImpl instance) =>
       'sniff': instance.sniff,
     };
 
+_$TunnelEntryImpl _$$TunnelEntryImplFromJson(Map<String, dynamic> json) =>
+    _$TunnelEntryImpl(
+      id: json['id'] as String,
+      network:
+          (json['network'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      address: json['address'] as String?,
+      target: json['target'] as String?,
+      proxyName: json['proxyName'] as String?,
+    );
+
+Map<String, dynamic> _$$TunnelEntryImplToJson(_$TunnelEntryImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'network': instance.network,
+      'address': instance.address,
+      'target': instance.target,
+      'proxyName': instance.proxyName,
+    };
+
 _$SnifferConfigImpl _$$SnifferConfigImplFromJson(Map<String, dynamic> json) =>
     _$SnifferConfigImpl(
       ports: json['ports'] == null
@@ -149,6 +168,7 @@ _$TunImpl _$$TunImplFromJson(Map<String, dynamic> json) => _$TunImpl(
               .toList() ??
           const [],
       disableIcmpForwarding: json['disable-icmp-forwarding'] as bool? ?? true,
+      mtu: (json['mtu'] as num?)?.toInt() ?? 1480,
     );
 
 Map<String, dynamic> _$$TunImplToJson(_$TunImpl instance) => <String, dynamic>{
@@ -159,6 +179,7 @@ Map<String, dynamic> _$$TunImplToJson(_$TunImpl instance) => <String, dynamic>{
       'dns-hijack': instance.dnsHijack,
       'route-address': instance.routeAddress,
       'disable-icmp-forwarding': instance.disableIcmpForwarding,
+      'mtu': instance.mtu,
     };
 
 const _$TunStackEnumMap = {
@@ -305,6 +326,20 @@ Map<String, dynamic> _$$NtpImplToJson(_$NtpImpl instance) => <String, dynamic>{
       'interval': instance.interval,
     };
 
+_$ExperimentalImpl _$$ExperimentalImplFromJson(Map<String, dynamic> json) =>
+    _$ExperimentalImpl(
+      quicGoDisableGso: json['quic-go-disable-gso'] as bool? ?? false,
+      quicGoDisableEcn: json['quic-go-disable-ecn'] as bool? ?? false,
+      dialerIp4pConvert: json['dialer-ip4p-convert'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$$ExperimentalImplToJson(_$ExperimentalImpl instance) =>
+    <String, dynamic>{
+      'quic-go-disable-gso': instance.quicGoDisableGso,
+      'quic-go-disable-ecn': instance.quicGoDisableEcn,
+      'dialer-ip4p-convert': instance.dialerIp4pConvert,
+    };
+
 _$GeoXUrlImpl _$$GeoXUrlImplFromJson(Map<String, dynamic> json) =>
     _$GeoXUrlImpl(
       mmdb: json['mmdb'] as String? ??
@@ -404,6 +439,14 @@ _$ClashConfigImpl _$$ClashConfigImplFromJson(Map<String, dynamic> json) =>
           ? defaultSniffer
           : Sniffer.safeSnifferFromJson(
               json['sniffer'] as Map<String, Object?>),
+      tunnels: (json['tunnels'] as List<dynamic>?)
+              ?.map((e) => TunnelEntry.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          defaultTunnel,
+      experimental: json['experimental'] == null
+          ? defaultExperimental
+          : Experimental.safeExperimentalFromJson(
+              json['experimental'] as Map<String, Object?>),
       geoXUrl: json['geox-url'] == null
           ? defaultGeoXUrl
           : GeoXUrl.safeFormJson(json['geox-url'] as Map<String, Object?>?),
@@ -447,6 +490,8 @@ Map<String, dynamic> _$$ClashConfigImplToJson(_$ClashConfigImpl instance) =>
       'dns': instance.dns,
       'ntp': instance.ntp,
       'sniffer': instance.sniffer,
+      'tunnels': instance.tunnels,
+      'experimental': instance.experimental,
       'geox-url': instance.geoXUrl,
       'geodata-loader': _$GeodataLoaderEnumMap[instance.geodataLoader]!,
       'proxy-groups': instance.proxyGroups,

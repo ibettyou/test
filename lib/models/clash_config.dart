@@ -15,6 +15,8 @@ const defaultTun = Tun();
 const defaultDns = Dns();
 const defaultNtp = Ntp();
 const defaultSniffer = Sniffer();
+const defaultTunnel = <TunnelEntry>[];
+const defaultExperimental = Experimental();
 const defaultGeoXUrl = GeoXUrl();
 
 const defaultMixedPort = 7890;
@@ -179,6 +181,72 @@ List<String> _formJsonPorts(List? ports) {
 }
 
 @freezed
+class TunnelEntry with _$TunnelEntry {
+  const factory TunnelEntry({
+    required String id,
+    List<String>? network,
+    String? address,
+    String? target,
+    String? proxyName,
+  }) = _TunnelEntry;
+
+  factory TunnelEntry.fromJson(Map<String, Object?> json) =>
+      _$TunnelEntryFromJson(json);
+
+  factory TunnelEntry.fromString(String value) {
+    final id = utils.uuidV4;
+    // Parse simple format: tcp/udp,127.0.0.1:6553,114.114.114.114:53,proxy
+    final parts = value.split(',').map((e) => e.trim()).toList();
+    if (parts.length >= 3) {
+      return TunnelEntry(
+        id: id,
+        network: parts[0].split('/').map((e) => e.trim()).toList(),
+        address: parts[1],
+        target: parts[2],
+        proxyName: parts.length > 3 ? parts[3] : null,
+      );
+    }
+    return TunnelEntry(id: id);
+  }
+}
+
+extension TunnelEntryExt on TunnelEntry {
+  String get displayValue {
+    final parts = <String>[];
+    if (network != null && network!.isNotEmpty) {
+      parts.add(network!.join('/'));
+    }
+    if (address != null && address!.isNotEmpty) {
+      parts.add(address!);
+    }
+    if (target != null && target!.isNotEmpty) {
+      parts.add(target!);
+    }
+    if (proxyName != null && proxyName!.isNotEmpty) {
+      parts.add(proxyName!);
+    }
+    return parts.join(', ');
+  }
+
+  Map<String, dynamic> toClashJson() {
+    final map = <String, dynamic>{};
+    if (network != null && network!.isNotEmpty) {
+      map['network'] = network;
+    }
+    if (address != null && address!.isNotEmpty) {
+      map['address'] = address;
+    }
+    if (target != null && target!.isNotEmpty) {
+      map['target'] = target;
+    }
+    if (proxyName != null && proxyName!.isNotEmpty) {
+      map['proxy'] = proxyName;
+    }
+    return map;
+  }
+}
+
+@freezed
 class SnifferConfig with _$SnifferConfig {
   const factory SnifferConfig({
     @Default([]) @JsonKey(fromJson: _formJsonPorts) List<String> ports,
@@ -199,6 +267,7 @@ class Tun with _$Tun {
     @JsonKey(name: 'dns-hijack') @Default(['any:53', 'tcp://any:53']) List<String> dnsHijack,
     @JsonKey(name: 'route-address') @Default([]) List<String> routeAddress,
     @JsonKey(name: 'disable-icmp-forwarding') @Default(true) bool disableIcmpForwarding,
+    @Default(1480) int mtu,
   }) = _Tun;
 
   factory Tun.fromJson(Map<String, Object?> json) => _$TunFromJson(json);
@@ -337,6 +406,26 @@ class Ntp with _$Ntp {
       return Ntp.fromJson(json);
     } catch (_) {
       return const Ntp();
+    }
+  }
+}
+
+@freezed
+class Experimental with _$Experimental {
+  const factory Experimental({
+    @Default(false) @JsonKey(name: 'quic-go-disable-gso') bool quicGoDisableGso,
+    @Default(false) @JsonKey(name: 'quic-go-disable-ecn') bool quicGoDisableEcn,
+    @Default(false) @JsonKey(name: 'dialer-ip4p-convert') bool dialerIp4pConvert,
+  }) = _Experimental;
+
+  factory Experimental.fromJson(Map<String, Object?> json) =>
+      _$ExperimentalFromJson(json);
+
+  factory Experimental.safeExperimentalFromJson(Map<String, Object?> json) {
+    try {
+      return Experimental.fromJson(json);
+    } catch (_) {
+      return const Experimental();
     }
   }
 }
@@ -540,6 +629,8 @@ class ClashConfig with _$ClashConfig {
     @Default(defaultDns) @JsonKey(fromJson: Dns.safeDnsFromJson) Dns dns,
     @Default(defaultNtp) @JsonKey(fromJson: Ntp.safeNtpFromJson) Ntp ntp,
     @Default(defaultSniffer) @JsonKey(fromJson: Sniffer.safeSnifferFromJson) Sniffer sniffer,
+    @Default(defaultTunnel) List<TunnelEntry> tunnels,
+    @Default(defaultExperimental) @JsonKey(fromJson: Experimental.safeExperimentalFromJson) Experimental experimental,
     @Default(defaultGeoXUrl)
     @JsonKey(name: 'geox-url', fromJson: GeoXUrl.safeFormJson)
     GeoXUrl geoXUrl,

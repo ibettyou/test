@@ -333,6 +333,7 @@ class GlobalState {
     rawConfig['tun']['auto-route'] = realPatchConfig.tun.autoRoute;
     rawConfig['tun']['disable-icmp-forwarding'] =
         realPatchConfig.tun.disableIcmpForwarding;
+    rawConfig['tun']['mtu'] = realPatchConfig.tun.mtu;
     rawConfig['geodata-loader'] = realPatchConfig.geodataLoader.name;
     if (rawConfig['sniffer']?['sniff'] != null) {
       for (final value in (rawConfig['sniffer']?['sniff'] as Map).values) {
@@ -423,6 +424,24 @@ class GlobalState {
     if (overrideSniffer || !isEnableSniffer) {
       final sniffer = realPatchConfig.sniffer;
       rawConfig['sniffer'] = sniffer.toJson();
+    }
+    final overrideTunnel = globalState.config.overrideTunnel;
+    if (overrideTunnel) {
+      final tunnels = realPatchConfig.tunnels;
+      if (tunnels.isNotEmpty) {
+        rawConfig['tunnels'] = tunnels.map((t) => t.toClashJson()).toList();
+      } else {
+        rawConfig.remove('tunnels');
+      }
+    }
+    if (rawConfig['experimental'] == null) {
+      rawConfig['experimental'] = {};
+    }
+    final isEnableExperimental = rawConfig['experimental'] is Map && (rawConfig['experimental'] as Map).isNotEmpty;
+    final overrideExperimental = globalState.config.overrideExperimental;
+    if (overrideExperimental || !isEnableExperimental) {
+      final experimental = realPatchConfig.experimental;
+      rawConfig['experimental'] = experimental.toJson();
     }
     var rules = [];
     if (rawConfig['rules'] != null) {

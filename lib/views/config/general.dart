@@ -203,42 +203,6 @@ class PortItem extends ConsumerWidget {
   }
 }
 
-class HostsItem extends StatelessWidget {
-  const HostsItem({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListItem.open(
-      leading: const Icon(Icons.view_list_outlined),
-      title: const Text('Hosts'),
-      subtitle: Text(appLocalizations.hostsDesc),
-      delegate: OpenDelegate(
-        blur: false,
-        title: 'Hosts',
-        widget: Consumer(
-          builder: (_, ref, __) {
-            final hosts = ref
-                .watch(patchClashConfigProvider.select((state) => state.hosts));
-            return MapInputPage(
-              title: 'Hosts',
-              map: hosts,
-              titleBuilder: (item) => Text(item.key),
-              subtitleBuilder: (item) => Text(item.value),
-              onChange: (value) {
-                ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith(
-                        hosts: value,
-                      ),
-                    );
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
 class Ipv6Item extends ConsumerWidget {
   const Ipv6Item({super.key});
 
@@ -427,7 +391,6 @@ final generalItems = <Widget>[
   if (system.isDesktop) KeepAliveIntervalItem(),
   TestUrlItem(),
   PortItem(),
-  HostsItem(),
   Ipv6Item(),
   AllowLanItem(),
   UnifiedDelayItem(),

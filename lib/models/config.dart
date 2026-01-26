@@ -264,6 +264,8 @@ class Config with _$Config {
     @Default(false) bool overrideDns,
     @Default(false) bool overrideNtp,
     @Default(false) bool overrideSniffer,
+    @Default(false) bool overrideTunnel,
+    @Default(false) bool overrideExperimental,
     DAV? dav,
     @Default(defaultNetworkProps) NetworkProps networkProps,
     @Default(defaultVpnProps) VpnProps vpnProps,

@@ -239,6 +239,36 @@ class OverrideSniffer extends _$OverrideSniffer with AutoDisposeNotifierMixin {
 }
 
 @riverpod
+class OverrideTunnel extends _$OverrideTunnel with AutoDisposeNotifierMixin {
+  @override
+  bool build() {
+    return globalState.config.overrideTunnel;
+  }
+
+  @override
+  onUpdate(value) {
+    globalState.config = globalState.config.copyWith(
+      overrideTunnel: value,
+    );
+  }
+}
+
+@riverpod
+class OverrideExperimental extends _$OverrideExperimental with AutoDisposeNotifierMixin {
+  @override
+  bool build() {
+    return globalState.config.overrideExperimental;
+  }
+
+  @override
+  onUpdate(value) {
+    globalState.config = globalState.config.copyWith(
+      overrideExperimental: value,
+    );
+  }
+}
+
+@riverpod
 class HotKeyActions extends _$HotKeyActions with AutoDisposeNotifierMixin {
   @override
   List<HotKeyAction> build() {
