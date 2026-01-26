@@ -552,6 +552,7 @@ class ClashConfig with _$ClashConfig {
     @Default(ExternalControllerStatus.close)
     @JsonKey(name: 'external-controller')
     ExternalControllerStatus externalController,
+    @Default('') @JsonKey(name: 'external-ui-url') String externalUiUrl,
     @Default({}) HostsMap hosts,
   }) = _ClashConfig;
 

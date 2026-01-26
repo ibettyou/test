@@ -3932,6 +3932,8 @@ mixin _$ClashConfig {
   @JsonKey(name: 'external-controller')
   ExternalControllerStatus get externalController =>
       throw _privateConstructorUsedError;
+  @JsonKey(name: 'external-ui-url')
+  String get externalUiUrl => throw _privateConstructorUsedError;
   Map<String, String> get hosts => throw _privateConstructorUsedError;
 
   /// Serializes this ClashConfig to a JSON map.
@@ -3978,6 +3980,7 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
+      @JsonKey(name: 'external-ui-url') String externalUiUrl,
       Map<String, String> hosts});
 
   $TunCopyWith<$Res> get tun;
@@ -4025,6 +4028,7 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
+    Object? externalUiUrl = null,
     Object? hosts = null,
   }) {
     return _then(_value.copyWith(
@@ -4120,6 +4124,10 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
+      externalUiUrl: null == externalUiUrl
+          ? _value.externalUiUrl
+          : externalUiUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       hosts: null == hosts
           ? _value.hosts
           : hosts // ignore: cast_nullable_to_non_nullable
@@ -4214,6 +4222,7 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
+      @JsonKey(name: 'external-ui-url') String externalUiUrl,
       Map<String, String> hosts});
 
   @override
@@ -4264,6 +4273,7 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
+    Object? externalUiUrl = null,
     Object? hosts = null,
   }) {
     return _then(_$ClashConfigImpl(
@@ -4359,6 +4369,10 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
+      externalUiUrl: null == externalUiUrl
+          ? _value.externalUiUrl
+          : externalUiUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       hosts: null == hosts
           ? _value._hosts
           : hosts // ignore: cast_nullable_to_non_nullable
@@ -4402,6 +4416,7 @@ class _$ClashConfigImpl implements _ClashConfig {
       @JsonKey(name: 'global-ua') this.globalUa,
       @JsonKey(name: 'external-controller')
       this.externalController = ExternalControllerStatus.close,
+      @JsonKey(name: 'external-ui-url') this.externalUiUrl = '',
       final Map<String, String> hosts = const {}})
       : _proxyGroups = proxyGroups,
         _rule = rule,
@@ -4491,6 +4506,9 @@ class _$ClashConfigImpl implements _ClashConfig {
   @override
   @JsonKey(name: 'external-controller')
   final ExternalControllerStatus externalController;
+  @override
+  @JsonKey(name: 'external-ui-url')
+  final String externalUiUrl;
   final Map<String, String> _hosts;
   @override
   @JsonKey()
@@ -4502,7 +4520,7 @@ class _$ClashConfigImpl implements _ClashConfig {
 
   @override
   String toString() {
-    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, hosts: $hosts)';
+    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, externalUiUrl: $externalUiUrl, hosts: $hosts)';
   }
 
   @override
@@ -4547,6 +4565,8 @@ class _$ClashConfigImpl implements _ClashConfig {
                 other.globalUa == globalUa) &&
             (identical(other.externalController, externalController) ||
                 other.externalController == externalController) &&
+            (identical(other.externalUiUrl, externalUiUrl) ||
+                other.externalUiUrl == externalUiUrl) &&
             const DeepCollectionEquality().equals(other._hosts, _hosts));
   }
 
@@ -4577,6 +4597,7 @@ class _$ClashConfigImpl implements _ClashConfig {
         const DeepCollectionEquality().hash(_rule),
         globalUa,
         externalController,
+        externalUiUrl,
         const DeepCollectionEquality().hash(_hosts)
       ]);
 
@@ -4625,6 +4646,7 @@ abstract class _ClashConfig implements ClashConfig {
       @JsonKey(name: 'global-ua') final String? globalUa,
       @JsonKey(name: 'external-controller')
       final ExternalControllerStatus externalController,
+      @JsonKey(name: 'external-ui-url') final String externalUiUrl,
       final Map<String, String> hosts}) = _$ClashConfigImpl;
 
   factory _ClashConfig.fromJson(Map<String, dynamic> json) =
@@ -4696,6 +4718,9 @@ abstract class _ClashConfig implements ClashConfig {
   @override
   @JsonKey(name: 'external-controller')
   ExternalControllerStatus get externalController;
+  @override
+  @JsonKey(name: 'external-ui-url')
+  String get externalUiUrl;
   @override
   Map<String, String> get hosts;
 

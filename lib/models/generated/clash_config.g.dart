@@ -421,6 +421,7 @@ _$ClashConfigImpl _$$ClashConfigImplFromJson(Map<String, dynamic> json) =>
       externalController: $enumDecodeNullable(
               _$ExternalControllerStatusEnumMap, json['external-controller']) ??
           ExternalControllerStatus.close,
+      externalUiUrl: json['external-ui-url'] as String? ?? '',
       hosts: (json['hosts'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry(k, e as String),
           ) ??
@@ -453,6 +454,7 @@ Map<String, dynamic> _$$ClashConfigImplToJson(_$ClashConfigImpl instance) =>
       'global-ua': instance.globalUa,
       'external-controller':
           _$ExternalControllerStatusEnumMap[instance.externalController]!,
+      'external-ui-url': instance.externalUiUrl,
       'hosts': instance.hosts,
     };
 

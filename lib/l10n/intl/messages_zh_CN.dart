@@ -344,7 +344,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "overrideDns": MessageLookupByLibrary.simpleMessage("覆写DNS"),
     "overrideDnsDesc": MessageLookupByLibrary.simpleMessage("开启后将覆盖配置中的DNS选项"),
     "ntp": MessageLookupByLibrary.simpleMessage("NTP"),
-    "ntpDesc": MessageLookupByLibrary.simpleMessage("使用内置的NTP对时服务"),
+    "ntpDesc": MessageLookupByLibrary.simpleMessage("使用NTP对时服务"),
     "overrideNtp": MessageLookupByLibrary.simpleMessage("覆写NTP"),
     "overrideNtpDesc": MessageLookupByLibrary.simpleMessage("开启后将覆盖配置中的NTP选项"),
     "ntpStatus": MessageLookupByLibrary.simpleMessage("状态"),
