@@ -239,6 +239,7 @@ class Dns with _$Dns {
     @Default(true) bool enable,
     @Default('0.0.0.0:10053') String listen,
     @Default(false) @JsonKey(name: 'prefer-h3') bool preferH3,
+    @Default(CacheAlgorithm.arc) @JsonKey(name: 'cache-algorithm') CacheAlgorithm cacheAlgorithm,
     @Default(true) @JsonKey(name: 'use-hosts') bool useHosts,
     @Default(true) @JsonKey(name: 'use-system-hosts') bool useSystemHosts,
     @Default(false) @JsonKey(name: 'respect-rules') bool respectRules,
@@ -252,6 +253,9 @@ class Dns with _$Dns {
     @Default('198.18.0.1/15')
     @JsonKey(name: 'fake-ip-range')
     String fakeIpRange,
+    @Default('fc00::/18')
+    @JsonKey(name: 'fake-ip-range-v6')
+    String fakeIpRangeV6,
     @Default([
       '*',
       'geosite:private',
@@ -259,6 +263,9 @@ class Dns with _$Dns {
     ])
     @JsonKey(name: 'fake-ip-filter')
     List<String> fakeIpFilter,
+    @Default(1)
+    @JsonKey(name: 'fake-ip-ttl')
+    int fakeIpTtl,
     @Default({
       '+.internal.crop.com': '10.0.0.1',
       'geosite:private': 'system',
@@ -277,6 +284,12 @@ class Dns with _$Dns {
     ])
     @JsonKey(name: 'proxy-server-nameserver')
     List<String> proxyServerNameserver,
+    @Default([])
+    @JsonKey(name: 'direct-nameserver')
+    List<String> directNameserver,
+    @Default(false)
+    @JsonKey(name: 'direct-nameserver-follow-policy')
+    bool directNameserverFollowPolicy,
     @Default(FallbackFilter())
     @JsonKey(name: 'fallback-filter')
     FallbackFilter fallbackFilter,

@@ -207,6 +207,39 @@ class FakeIpRangeItem extends ConsumerWidget {
   }
 }
 
+class FakeIpRangeV6Item extends ConsumerWidget {
+  const FakeIpRangeV6Item({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final fakeIpRangeV6 = ref.watch(
+      patchClashConfigProvider.select((state) => state.dns.fakeIpRangeV6),
+    );
+    return ListItem.input(
+      title: Text(appLocalizations.fakeipRangeV6),
+      subtitle: Text(fakeIpRangeV6),
+      delegate: InputDelegate(
+        title: appLocalizations.fakeipRangeV6,
+        value: fakeIpRangeV6,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return appLocalizations.emptyTip(appLocalizations.fakeipRangeV6);
+          }
+          return null;
+        },
+        onChanged: (String? value) {
+          if (value == null) {
+            return;
+          }
+          ref
+              .read(patchClashConfigProvider.notifier)
+              .updateState((state) => state.copyWith.dns(fakeIpRangeV6: value));
+        },
+      ),
+    );
+  }
+}
+
 class FakeIpFilterItem extends StatelessWidget {
   const FakeIpFilterItem({super.key});
 
@@ -237,6 +270,48 @@ class FakeIpFilterItem extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class FakeIpTtlItem extends ConsumerWidget {
+  const FakeIpTtlItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final fakeIpTtl = ref.watch(
+      patchClashConfigProvider.select((state) => state.dns.fakeIpTtl),
+    );
+    return ListItem.input(
+      title: Text(appLocalizations.fakeipTtl),
+      subtitle: Text(fakeIpTtl.toString()),
+      delegate: InputDelegate(
+        title: appLocalizations.fakeipTtl,
+        value: fakeIpTtl.toString(),
+        keyboardType: TextInputType.number,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return appLocalizations.emptyTip(appLocalizations.fakeipTtl);
+          }
+          final intValue = int.tryParse(value);
+          if (intValue == null) {
+            return appLocalizations.numberTip(appLocalizations.fakeipTtl);
+          }
+          return null;
+        },
+        onChanged: (String? value) {
+          if (value == null) {
+            return;
+          }
+          final intValue = int.tryParse(value);
+          if (intValue == null) {
+            return;
+          }
+          ref
+              .read(patchClashConfigProvider.notifier)
+              .updateState((state) => state.copyWith.dns(fakeIpTtl: intValue));
+        },
       ),
     );
   }
@@ -304,6 +379,35 @@ class NameserverItem extends StatelessWidget {
             },
           );
         }),
+      ),
+    );
+  }
+}
+
+class CacheAlgorithmItem extends ConsumerWidget {
+  const CacheAlgorithmItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final cacheAlgorithm = ref.watch(
+      patchClashConfigProvider.select((state) => state.dns.cacheAlgorithm),
+    );
+    return ListItem<CacheAlgorithm>.options(
+      title: Text(appLocalizations.cacheAlgorithm),
+      subtitle: Text(cacheAlgorithm.name),
+      delegate: OptionsDelegate(
+        title: appLocalizations.cacheAlgorithm,
+        options: CacheAlgorithm.values,
+        onChanged: (value) {
+          if (value == null) {
+            return;
+          }
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith.dns(cacheAlgorithm: value),
+              );
+        },
+        textBuilder: (algorithm) => algorithm.name,
+        value: cacheAlgorithm,
       ),
     );
   }
@@ -421,6 +525,76 @@ class ProxyServerNameserverItem extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class DirectNameserverItem extends StatelessWidget {
+  const DirectNameserverItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListItem.open(
+      title: Text(appLocalizations.directNameserver),
+      subtitle: Text(appLocalizations.directNameserverDesc),
+      delegate: OpenDelegate(
+        blur: false,
+        title: appLocalizations.directNameserver,
+        widget: Consumer(
+          builder: (_, ref, __) {
+            final directNameserver = ref.watch(
+              patchClashConfigProvider
+                  .select((state) => state.dns.directNameserver),
+            );
+            return ListInputPage(
+              title: appLocalizations.directNameserver,
+              items: directNameserver,
+              titleBuilder: (item) => Text(item),
+              onChange: (items) {
+                ref.read(patchClashConfigProvider.notifier).updateState(
+                      (state) => state.copyWith.dns(
+                        directNameserver: List.from(items),
+                      ),
+                    );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class DirectNameserverFollowPolicyItem extends ConsumerWidget {
+  const DirectNameserverFollowPolicyItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final directNameserver = ref.watch(
+      patchClashConfigProvider.select((state) => state.dns.directNameserver),
+    );
+    final directNameserverFollowPolicy = ref.watch(
+      patchClashConfigProvider
+          .select((state) => state.dns.directNameserverFollowPolicy),
+    );
+
+    // 仅当用户设置了直连域名服务器后才显示
+    if (directNameserver.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return ListItem.switchItem(
+      title: Text(appLocalizations.directNameserverFollowPolicy),
+      delegate: SwitchDelegate(
+        value: directNameserverFollowPolicy,
+        onChanged: (bool value) async {
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith.dns(
+                  directNameserverFollowPolicy: value,
+                ),
+              );
+        },
       ),
     );
   }
@@ -630,6 +804,7 @@ class DnsOptions extends StatelessWidget {
         items: [
           const StatusItem(),
           const ListenItem(),
+          const CacheAlgorithmItem(),
           const UseHostsItem(),
           const UseSystemHostsItem(),
           const IPv6Item(),
@@ -637,12 +812,16 @@ class DnsOptions extends StatelessWidget {
           const PreferH3Item(),
           const DnsModeItem(),
           const FakeIpRangeItem(),
+          const FakeIpRangeV6Item(),
           const FakeIpFilterItem(),
+          const FakeIpTtlItem(),
           const DefaultNameserverItem(),
           const NameserverPolicyItem(),
           const NameserverItem(),
           const FallbackItem(),
           const ProxyServerNameserverItem(),
+          const DirectNameserverItem(),
+          const DirectNameserverFollowPolicyItem(),
         ],
       ),
     );

@@ -296,6 +296,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "fakeipFilter": MessageLookupByLibrary.simpleMessage("Fakeip filter"),
     "fakeipRange": MessageLookupByLibrary.simpleMessage("Fakeip range"),
+    "fakeipRangeV6": MessageLookupByLibrary.simpleMessage("Fakeip range v6"),
+    "fakeipTtl": MessageLookupByLibrary.simpleMessage("Fakeip TTL"),
     "fallback": MessageLookupByLibrary.simpleMessage("Fallback"),
     "fallbackDesc": MessageLookupByLibrary.simpleMessage(
       "Generally use offshore DNS",
@@ -555,6 +557,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "preferH3Desc": MessageLookupByLibrary.simpleMessage(
       "Prioritize the use of DOH\'s http/3",
     ),
+    "cacheAlgorithm": MessageLookupByLibrary.simpleMessage("Cache algorithm"),
     "pressKeyboard": MessageLookupByLibrary.simpleMessage(
       "Please press the keyboard.",
     ),
@@ -595,6 +598,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "proxyNameserver": MessageLookupByLibrary.simpleMessage("Proxy nameserver"),
     "proxyNameserverDesc": MessageLookupByLibrary.simpleMessage(
       "Domain for resolving proxy nodes",
+    ),
+    "directNameserver": MessageLookupByLibrary.simpleMessage("Direct nameserver"),
+    "directNameserverDesc": MessageLookupByLibrary.simpleMessage(
+      "For resolving DIRECT outbound domains",
+    ),
+    "directNameserverFollowPolicy": MessageLookupByLibrary.simpleMessage(
+      "Direct DNS follow policy",
     ),
     "proxyPort": MessageLookupByLibrary.simpleMessage("ProxyPort"),
     "proxyPortDesc": MessageLookupByLibrary.simpleMessage(

@@ -180,6 +180,11 @@ enum DnsMode {
   hosts
 }
 
+enum CacheAlgorithm {
+  arc,
+  lru,
+}
+
 enum ExternalControllerStatus {
   @JsonValue('')
   close(''),

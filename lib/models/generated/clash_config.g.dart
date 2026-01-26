@@ -194,6 +194,9 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
       enable: json['enable'] as bool? ?? true,
       listen: json['listen'] as String? ?? '0.0.0.0:10053',
       preferH3: json['prefer-h3'] as bool? ?? false,
+      cacheAlgorithm: $enumDecodeNullable(
+              _$CacheAlgorithmEnumMap, json['cache-algorithm']) ??
+          CacheAlgorithm.arc,
       useHosts: json['use-hosts'] as bool? ?? true,
       useSystemHosts: json['use-system-hosts'] as bool? ?? true,
       respectRules: json['respect-rules'] as bool? ?? false,
@@ -206,10 +209,12 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
           $enumDecodeNullable(_$DnsModeEnumMap, json['enhanced-mode']) ??
               DnsMode.fakeIp,
       fakeIpRange: json['fake-ip-range'] as String? ?? '198.18.0.1/15',
+      fakeIpRangeV6: json['fake-ip-range-v6'] as String? ?? 'fc00::/18',
       fakeIpFilter: (json['fake-ip-filter'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const ['*', 'geosite:private', 'geosite:geolocation-cn'],
+      fakeIpTtl: (json['fake-ip-ttl'] as num?)?.toInt() ?? 1,
       nameserverPolicy:
           (json['nameserver-policy'] as Map<String, dynamic>?)?.map(
                 (k, e) => MapEntry(k, e as String),
@@ -231,6 +236,12 @@ _$DnsImpl _$$DnsImplFromJson(Map<String, dynamic> json) => _$DnsImpl(
               ?.map((e) => e as String)
               .toList() ??
           const ['https://doh.pub/dns-query'],
+      directNameserver: (json['direct-nameserver'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      directNameserverFollowPolicy:
+          json['direct-nameserver-follow-policy'] as bool? ?? false,
       fallbackFilter: json['fallback-filter'] == null
           ? const FallbackFilter()
           : FallbackFilter.fromJson(
@@ -241,6 +252,7 @@ Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
       'enable': instance.enable,
       'listen': instance.listen,
       'prefer-h3': instance.preferH3,
+      'cache-algorithm': _$CacheAlgorithmEnumMap[instance.cacheAlgorithm]!,
       'use-hosts': instance.useHosts,
       'use-system-hosts': instance.useSystemHosts,
       'respect-rules': instance.respectRules,
@@ -248,13 +260,22 @@ Map<String, dynamic> _$$DnsImplToJson(_$DnsImpl instance) => <String, dynamic>{
       'default-nameserver': instance.defaultNameserver,
       'enhanced-mode': _$DnsModeEnumMap[instance.enhancedMode]!,
       'fake-ip-range': instance.fakeIpRange,
+      'fake-ip-range-v6': instance.fakeIpRangeV6,
       'fake-ip-filter': instance.fakeIpFilter,
+      'fake-ip-ttl': instance.fakeIpTtl,
       'nameserver-policy': instance.nameserverPolicy,
       'nameserver': instance.nameserver,
       'fallback': instance.fallback,
       'proxy-server-nameserver': instance.proxyServerNameserver,
+      'direct-nameserver': instance.directNameserver,
+      'direct-nameserver-follow-policy': instance.directNameserverFollowPolicy,
       'fallback-filter': instance.fallbackFilter,
     };
+
+const _$CacheAlgorithmEnumMap = {
+  CacheAlgorithm.arc: 'arc',
+  CacheAlgorithm.lru: 'lru',
+};
 
 const _$DnsModeEnumMap = {
   DnsMode.normal: 'normal',

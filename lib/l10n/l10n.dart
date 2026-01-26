@@ -2142,6 +2142,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Cache algorithm`
+  String get cacheAlgorithm {
+    return Intl.message(
+      'Cache algorithm',
+      name: 'cacheAlgorithm',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Respect rules`
   String get respectRules {
     return Intl.message(
@@ -2177,11 +2187,31 @@ class AppLocalizations {
     );
   }
 
+  /// `Fakeip range v6`
+  String get fakeipRangeV6 {
+    return Intl.message(
+      'Fakeip range v6',
+      name: 'fakeipRangeV6',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Fakeip filter`
   String get fakeipFilter {
     return Intl.message(
       'Fakeip filter',
       name: 'fakeipFilter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fakeip TTL`
+  String get fakeipTtl {
+    return Intl.message(
+      'Fakeip TTL',
+      name: 'fakeipTtl',
       desc: '',
       args: [],
     );
@@ -2272,6 +2302,36 @@ class AppLocalizations {
     return Intl.message(
       'Domain for resolving proxy nodes',
       name: 'proxyNameserverDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Direct nameserver`
+  String get directNameserver {
+    return Intl.message(
+      'Direct nameserver',
+      name: 'directNameserver',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For resolving DIRECT outbound domains`
+  String get directNameserverDesc {
+    return Intl.message(
+      'For resolving DIRECT outbound domains',
+      name: 'directNameserverDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Direct DNS follow policy`
+  String get directNameserverFollowPolicy {
+    return Intl.message(
+      'Direct DNS follow policy',
+      name: 'directNameserverFollowPolicy',
       desc: '',
       args: [],
     );

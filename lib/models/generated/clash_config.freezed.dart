@@ -1875,6 +1875,8 @@ mixin _$Dns {
   String get listen => throw _privateConstructorUsedError;
   @JsonKey(name: 'prefer-h3')
   bool get preferH3 => throw _privateConstructorUsedError;
+  @JsonKey(name: 'cache-algorithm')
+  CacheAlgorithm get cacheAlgorithm => throw _privateConstructorUsedError;
   @JsonKey(name: 'use-hosts')
   bool get useHosts => throw _privateConstructorUsedError;
   @JsonKey(name: 'use-system-hosts')
@@ -1888,8 +1890,12 @@ mixin _$Dns {
   DnsMode get enhancedMode => throw _privateConstructorUsedError;
   @JsonKey(name: 'fake-ip-range')
   String get fakeIpRange => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fake-ip-range-v6')
+  String get fakeIpRangeV6 => throw _privateConstructorUsedError;
   @JsonKey(name: 'fake-ip-filter')
   List<String> get fakeIpFilter => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fake-ip-ttl')
+  int get fakeIpTtl => throw _privateConstructorUsedError;
   @JsonKey(name: 'nameserver-policy')
   Map<String, String> get nameserverPolicy =>
       throw _privateConstructorUsedError;
@@ -1897,6 +1903,10 @@ mixin _$Dns {
   List<String> get fallback => throw _privateConstructorUsedError;
   @JsonKey(name: 'proxy-server-nameserver')
   List<String> get proxyServerNameserver => throw _privateConstructorUsedError;
+  @JsonKey(name: 'direct-nameserver')
+  List<String> get directNameserver => throw _privateConstructorUsedError;
+  @JsonKey(name: 'direct-nameserver-follow-policy')
+  bool get directNameserverFollowPolicy => throw _privateConstructorUsedError;
   @JsonKey(name: 'fallback-filter')
   FallbackFilter get fallbackFilter => throw _privateConstructorUsedError;
 
@@ -1918,6 +1928,7 @@ abstract class $DnsCopyWith<$Res> {
       {bool enable,
       String listen,
       @JsonKey(name: 'prefer-h3') bool preferH3,
+      @JsonKey(name: 'cache-algorithm') CacheAlgorithm cacheAlgorithm,
       @JsonKey(name: 'use-hosts') bool useHosts,
       @JsonKey(name: 'use-system-hosts') bool useSystemHosts,
       @JsonKey(name: 'respect-rules') bool respectRules,
@@ -1925,12 +1936,17 @@ abstract class $DnsCopyWith<$Res> {
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
       @JsonKey(name: 'enhanced-mode') DnsMode enhancedMode,
       @JsonKey(name: 'fake-ip-range') String fakeIpRange,
+      @JsonKey(name: 'fake-ip-range-v6') String fakeIpRangeV6,
       @JsonKey(name: 'fake-ip-filter') List<String> fakeIpFilter,
+      @JsonKey(name: 'fake-ip-ttl') int fakeIpTtl,
       @JsonKey(name: 'nameserver-policy') Map<String, String> nameserverPolicy,
       List<String> nameserver,
       List<String> fallback,
       @JsonKey(name: 'proxy-server-nameserver')
       List<String> proxyServerNameserver,
+      @JsonKey(name: 'direct-nameserver') List<String> directNameserver,
+      @JsonKey(name: 'direct-nameserver-follow-policy')
+      bool directNameserverFollowPolicy,
       @JsonKey(name: 'fallback-filter') FallbackFilter fallbackFilter});
 
   $FallbackFilterCopyWith<$Res> get fallbackFilter;
@@ -1953,6 +1969,7 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
     Object? enable = null,
     Object? listen = null,
     Object? preferH3 = null,
+    Object? cacheAlgorithm = null,
     Object? useHosts = null,
     Object? useSystemHosts = null,
     Object? respectRules = null,
@@ -1960,11 +1977,15 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
     Object? defaultNameserver = null,
     Object? enhancedMode = null,
     Object? fakeIpRange = null,
+    Object? fakeIpRangeV6 = null,
     Object? fakeIpFilter = null,
+    Object? fakeIpTtl = null,
     Object? nameserverPolicy = null,
     Object? nameserver = null,
     Object? fallback = null,
     Object? proxyServerNameserver = null,
+    Object? directNameserver = null,
+    Object? directNameserverFollowPolicy = null,
     Object? fallbackFilter = null,
   }) {
     return _then(_value.copyWith(
@@ -1980,6 +2001,10 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
           ? _value.preferH3
           : preferH3 // ignore: cast_nullable_to_non_nullable
               as bool,
+      cacheAlgorithm: null == cacheAlgorithm
+          ? _value.cacheAlgorithm
+          : cacheAlgorithm // ignore: cast_nullable_to_non_nullable
+              as CacheAlgorithm,
       useHosts: null == useHosts
           ? _value.useHosts
           : useHosts // ignore: cast_nullable_to_non_nullable
@@ -2008,10 +2033,18 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
           ? _value.fakeIpRange
           : fakeIpRange // ignore: cast_nullable_to_non_nullable
               as String,
+      fakeIpRangeV6: null == fakeIpRangeV6
+          ? _value.fakeIpRangeV6
+          : fakeIpRangeV6 // ignore: cast_nullable_to_non_nullable
+              as String,
       fakeIpFilter: null == fakeIpFilter
           ? _value.fakeIpFilter
           : fakeIpFilter // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      fakeIpTtl: null == fakeIpTtl
+          ? _value.fakeIpTtl
+          : fakeIpTtl // ignore: cast_nullable_to_non_nullable
+              as int,
       nameserverPolicy: null == nameserverPolicy
           ? _value.nameserverPolicy
           : nameserverPolicy // ignore: cast_nullable_to_non_nullable
@@ -2028,6 +2061,14 @@ class _$DnsCopyWithImpl<$Res, $Val extends Dns> implements $DnsCopyWith<$Res> {
           ? _value.proxyServerNameserver
           : proxyServerNameserver // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      directNameserver: null == directNameserver
+          ? _value.directNameserver
+          : directNameserver // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      directNameserverFollowPolicy: null == directNameserverFollowPolicy
+          ? _value.directNameserverFollowPolicy
+          : directNameserverFollowPolicy // ignore: cast_nullable_to_non_nullable
+              as bool,
       fallbackFilter: null == fallbackFilter
           ? _value.fallbackFilter
           : fallbackFilter // ignore: cast_nullable_to_non_nullable
@@ -2056,6 +2097,7 @@ abstract class _$$DnsImplCopyWith<$Res> implements $DnsCopyWith<$Res> {
       {bool enable,
       String listen,
       @JsonKey(name: 'prefer-h3') bool preferH3,
+      @JsonKey(name: 'cache-algorithm') CacheAlgorithm cacheAlgorithm,
       @JsonKey(name: 'use-hosts') bool useHosts,
       @JsonKey(name: 'use-system-hosts') bool useSystemHosts,
       @JsonKey(name: 'respect-rules') bool respectRules,
@@ -2063,12 +2105,17 @@ abstract class _$$DnsImplCopyWith<$Res> implements $DnsCopyWith<$Res> {
       @JsonKey(name: 'default-nameserver') List<String> defaultNameserver,
       @JsonKey(name: 'enhanced-mode') DnsMode enhancedMode,
       @JsonKey(name: 'fake-ip-range') String fakeIpRange,
+      @JsonKey(name: 'fake-ip-range-v6') String fakeIpRangeV6,
       @JsonKey(name: 'fake-ip-filter') List<String> fakeIpFilter,
+      @JsonKey(name: 'fake-ip-ttl') int fakeIpTtl,
       @JsonKey(name: 'nameserver-policy') Map<String, String> nameserverPolicy,
       List<String> nameserver,
       List<String> fallback,
       @JsonKey(name: 'proxy-server-nameserver')
       List<String> proxyServerNameserver,
+      @JsonKey(name: 'direct-nameserver') List<String> directNameserver,
+      @JsonKey(name: 'direct-nameserver-follow-policy')
+      bool directNameserverFollowPolicy,
       @JsonKey(name: 'fallback-filter') FallbackFilter fallbackFilter});
 
   @override
@@ -2089,6 +2136,7 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
     Object? enable = null,
     Object? listen = null,
     Object? preferH3 = null,
+    Object? cacheAlgorithm = null,
     Object? useHosts = null,
     Object? useSystemHosts = null,
     Object? respectRules = null,
@@ -2096,11 +2144,15 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
     Object? defaultNameserver = null,
     Object? enhancedMode = null,
     Object? fakeIpRange = null,
+    Object? fakeIpRangeV6 = null,
     Object? fakeIpFilter = null,
+    Object? fakeIpTtl = null,
     Object? nameserverPolicy = null,
     Object? nameserver = null,
     Object? fallback = null,
     Object? proxyServerNameserver = null,
+    Object? directNameserver = null,
+    Object? directNameserverFollowPolicy = null,
     Object? fallbackFilter = null,
   }) {
     return _then(_$DnsImpl(
@@ -2116,6 +2168,10 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value.preferH3
           : preferH3 // ignore: cast_nullable_to_non_nullable
               as bool,
+      cacheAlgorithm: null == cacheAlgorithm
+          ? _value.cacheAlgorithm
+          : cacheAlgorithm // ignore: cast_nullable_to_non_nullable
+              as CacheAlgorithm,
       useHosts: null == useHosts
           ? _value.useHosts
           : useHosts // ignore: cast_nullable_to_non_nullable
@@ -2144,10 +2200,18 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value.fakeIpRange
           : fakeIpRange // ignore: cast_nullable_to_non_nullable
               as String,
+      fakeIpRangeV6: null == fakeIpRangeV6
+          ? _value.fakeIpRangeV6
+          : fakeIpRangeV6 // ignore: cast_nullable_to_non_nullable
+              as String,
       fakeIpFilter: null == fakeIpFilter
           ? _value._fakeIpFilter
           : fakeIpFilter // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      fakeIpTtl: null == fakeIpTtl
+          ? _value.fakeIpTtl
+          : fakeIpTtl // ignore: cast_nullable_to_non_nullable
+              as int,
       nameserverPolicy: null == nameserverPolicy
           ? _value._nameserverPolicy
           : nameserverPolicy // ignore: cast_nullable_to_non_nullable
@@ -2164,6 +2228,14 @@ class __$$DnsImplCopyWithImpl<$Res> extends _$DnsCopyWithImpl<$Res, _$DnsImpl>
           ? _value._proxyServerNameserver
           : proxyServerNameserver // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      directNameserver: null == directNameserver
+          ? _value._directNameserver
+          : directNameserver // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      directNameserverFollowPolicy: null == directNameserverFollowPolicy
+          ? _value.directNameserverFollowPolicy
+          : directNameserverFollowPolicy // ignore: cast_nullable_to_non_nullable
+              as bool,
       fallbackFilter: null == fallbackFilter
           ? _value.fallbackFilter
           : fallbackFilter // ignore: cast_nullable_to_non_nullable
@@ -2179,6 +2251,8 @@ class _$DnsImpl implements _Dns {
       {this.enable = true,
       this.listen = '0.0.0.0:10053',
       @JsonKey(name: 'prefer-h3') this.preferH3 = false,
+      @JsonKey(name: 'cache-algorithm')
+      this.cacheAlgorithm = CacheAlgorithm.arc,
       @JsonKey(name: 'use-hosts') this.useHosts = true,
       @JsonKey(name: 'use-system-hosts') this.useSystemHosts = true,
       @JsonKey(name: 'respect-rules') this.respectRules = false,
@@ -2187,11 +2261,13 @@ class _$DnsImpl implements _Dns {
       final List<String> defaultNameserver = const ['114.114.114.114'],
       @JsonKey(name: 'enhanced-mode') this.enhancedMode = DnsMode.fakeIp,
       @JsonKey(name: 'fake-ip-range') this.fakeIpRange = '198.18.0.1/15',
+      @JsonKey(name: 'fake-ip-range-v6') this.fakeIpRangeV6 = 'fc00::/18',
       @JsonKey(name: 'fake-ip-filter') final List<String> fakeIpFilter = const [
         '*',
         'geosite:private',
         'geosite:geolocation-cn'
       ],
+      @JsonKey(name: 'fake-ip-ttl') this.fakeIpTtl = 1,
       @JsonKey(name: 'nameserver-policy')
       final Map<String, String> nameserverPolicy = const {
         '+.internal.crop.com': '10.0.0.1',
@@ -2204,6 +2280,10 @@ class _$DnsImpl implements _Dns {
       final List<String> proxyServerNameserver = const [
         'https://doh.pub/dns-query'
       ],
+      @JsonKey(name: 'direct-nameserver')
+      final List<String> directNameserver = const [],
+      @JsonKey(name: 'direct-nameserver-follow-policy')
+      this.directNameserverFollowPolicy = false,
       @JsonKey(name: 'fallback-filter')
       this.fallbackFilter = const FallbackFilter()})
       : _defaultNameserver = defaultNameserver,
@@ -2211,7 +2291,8 @@ class _$DnsImpl implements _Dns {
         _nameserverPolicy = nameserverPolicy,
         _nameserver = nameserver,
         _fallback = fallback,
-        _proxyServerNameserver = proxyServerNameserver;
+        _proxyServerNameserver = proxyServerNameserver,
+        _directNameserver = directNameserver;
 
   factory _$DnsImpl.fromJson(Map<String, dynamic> json) =>
       _$$DnsImplFromJson(json);
@@ -2225,6 +2306,9 @@ class _$DnsImpl implements _Dns {
   @override
   @JsonKey(name: 'prefer-h3')
   final bool preferH3;
+  @override
+  @JsonKey(name: 'cache-algorithm')
+  final CacheAlgorithm cacheAlgorithm;
   @override
   @JsonKey(name: 'use-hosts')
   final bool useHosts;
@@ -2253,6 +2337,9 @@ class _$DnsImpl implements _Dns {
   @override
   @JsonKey(name: 'fake-ip-range')
   final String fakeIpRange;
+  @override
+  @JsonKey(name: 'fake-ip-range-v6')
+  final String fakeIpRangeV6;
   final List<String> _fakeIpFilter;
   @override
   @JsonKey(name: 'fake-ip-filter')
@@ -2262,6 +2349,9 @@ class _$DnsImpl implements _Dns {
     return EqualUnmodifiableListView(_fakeIpFilter);
   }
 
+  @override
+  @JsonKey(name: 'fake-ip-ttl')
+  final int fakeIpTtl;
   final Map<String, String> _nameserverPolicy;
   @override
   @JsonKey(name: 'nameserver-policy')
@@ -2299,13 +2389,26 @@ class _$DnsImpl implements _Dns {
     return EqualUnmodifiableListView(_proxyServerNameserver);
   }
 
+  final List<String> _directNameserver;
+  @override
+  @JsonKey(name: 'direct-nameserver')
+  List<String> get directNameserver {
+    if (_directNameserver is EqualUnmodifiableListView)
+      return _directNameserver;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_directNameserver);
+  }
+
+  @override
+  @JsonKey(name: 'direct-nameserver-follow-policy')
+  final bool directNameserverFollowPolicy;
   @override
   @JsonKey(name: 'fallback-filter')
   final FallbackFilter fallbackFilter;
 
   @override
   String toString() {
-    return 'Dns(enable: $enable, listen: $listen, preferH3: $preferH3, useHosts: $useHosts, useSystemHosts: $useSystemHosts, respectRules: $respectRules, ipv6: $ipv6, defaultNameserver: $defaultNameserver, enhancedMode: $enhancedMode, fakeIpRange: $fakeIpRange, fakeIpFilter: $fakeIpFilter, nameserverPolicy: $nameserverPolicy, nameserver: $nameserver, fallback: $fallback, proxyServerNameserver: $proxyServerNameserver, fallbackFilter: $fallbackFilter)';
+    return 'Dns(enable: $enable, listen: $listen, preferH3: $preferH3, cacheAlgorithm: $cacheAlgorithm, useHosts: $useHosts, useSystemHosts: $useSystemHosts, respectRules: $respectRules, ipv6: $ipv6, defaultNameserver: $defaultNameserver, enhancedMode: $enhancedMode, fakeIpRange: $fakeIpRange, fakeIpRangeV6: $fakeIpRangeV6, fakeIpFilter: $fakeIpFilter, fakeIpTtl: $fakeIpTtl, nameserverPolicy: $nameserverPolicy, nameserver: $nameserver, fallback: $fallback, proxyServerNameserver: $proxyServerNameserver, directNameserver: $directNameserver, directNameserverFollowPolicy: $directNameserverFollowPolicy, fallbackFilter: $fallbackFilter)';
   }
 
   @override
@@ -2317,6 +2420,8 @@ class _$DnsImpl implements _Dns {
             (identical(other.listen, listen) || other.listen == listen) &&
             (identical(other.preferH3, preferH3) ||
                 other.preferH3 == preferH3) &&
+            (identical(other.cacheAlgorithm, cacheAlgorithm) ||
+                other.cacheAlgorithm == cacheAlgorithm) &&
             (identical(other.useHosts, useHosts) ||
                 other.useHosts == useHosts) &&
             (identical(other.useSystemHosts, useSystemHosts) ||
@@ -2330,8 +2435,12 @@ class _$DnsImpl implements _Dns {
                 other.enhancedMode == enhancedMode) &&
             (identical(other.fakeIpRange, fakeIpRange) ||
                 other.fakeIpRange == fakeIpRange) &&
+            (identical(other.fakeIpRangeV6, fakeIpRangeV6) ||
+                other.fakeIpRangeV6 == fakeIpRangeV6) &&
             const DeepCollectionEquality()
                 .equals(other._fakeIpFilter, _fakeIpFilter) &&
+            (identical(other.fakeIpTtl, fakeIpTtl) ||
+                other.fakeIpTtl == fakeIpTtl) &&
             const DeepCollectionEquality()
                 .equals(other._nameserverPolicy, _nameserverPolicy) &&
             const DeepCollectionEquality()
@@ -2339,30 +2448,42 @@ class _$DnsImpl implements _Dns {
             const DeepCollectionEquality().equals(other._fallback, _fallback) &&
             const DeepCollectionEquality()
                 .equals(other._proxyServerNameserver, _proxyServerNameserver) &&
+            const DeepCollectionEquality()
+                .equals(other._directNameserver, _directNameserver) &&
+            (identical(other.directNameserverFollowPolicy,
+                    directNameserverFollowPolicy) ||
+                other.directNameserverFollowPolicy ==
+                    directNameserverFollowPolicy) &&
             (identical(other.fallbackFilter, fallbackFilter) ||
                 other.fallbackFilter == fallbackFilter));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      enable,
-      listen,
-      preferH3,
-      useHosts,
-      useSystemHosts,
-      respectRules,
-      ipv6,
-      const DeepCollectionEquality().hash(_defaultNameserver),
-      enhancedMode,
-      fakeIpRange,
-      const DeepCollectionEquality().hash(_fakeIpFilter),
-      const DeepCollectionEquality().hash(_nameserverPolicy),
-      const DeepCollectionEquality().hash(_nameserver),
-      const DeepCollectionEquality().hash(_fallback),
-      const DeepCollectionEquality().hash(_proxyServerNameserver),
-      fallbackFilter);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        enable,
+        listen,
+        preferH3,
+        cacheAlgorithm,
+        useHosts,
+        useSystemHosts,
+        respectRules,
+        ipv6,
+        const DeepCollectionEquality().hash(_defaultNameserver),
+        enhancedMode,
+        fakeIpRange,
+        fakeIpRangeV6,
+        const DeepCollectionEquality().hash(_fakeIpFilter),
+        fakeIpTtl,
+        const DeepCollectionEquality().hash(_nameserverPolicy),
+        const DeepCollectionEquality().hash(_nameserver),
+        const DeepCollectionEquality().hash(_fallback),
+        const DeepCollectionEquality().hash(_proxyServerNameserver),
+        const DeepCollectionEquality().hash(_directNameserver),
+        directNameserverFollowPolicy,
+        fallbackFilter
+      ]);
 
   /// Create a copy of Dns
   /// with the given fields replaced by the non-null parameter values.
@@ -2385,6 +2506,7 @@ abstract class _Dns implements Dns {
       {final bool enable,
       final String listen,
       @JsonKey(name: 'prefer-h3') final bool preferH3,
+      @JsonKey(name: 'cache-algorithm') final CacheAlgorithm cacheAlgorithm,
       @JsonKey(name: 'use-hosts') final bool useHosts,
       @JsonKey(name: 'use-system-hosts') final bool useSystemHosts,
       @JsonKey(name: 'respect-rules') final bool respectRules,
@@ -2392,13 +2514,18 @@ abstract class _Dns implements Dns {
       @JsonKey(name: 'default-nameserver') final List<String> defaultNameserver,
       @JsonKey(name: 'enhanced-mode') final DnsMode enhancedMode,
       @JsonKey(name: 'fake-ip-range') final String fakeIpRange,
+      @JsonKey(name: 'fake-ip-range-v6') final String fakeIpRangeV6,
       @JsonKey(name: 'fake-ip-filter') final List<String> fakeIpFilter,
+      @JsonKey(name: 'fake-ip-ttl') final int fakeIpTtl,
       @JsonKey(name: 'nameserver-policy')
       final Map<String, String> nameserverPolicy,
       final List<String> nameserver,
       final List<String> fallback,
       @JsonKey(name: 'proxy-server-nameserver')
       final List<String> proxyServerNameserver,
+      @JsonKey(name: 'direct-nameserver') final List<String> directNameserver,
+      @JsonKey(name: 'direct-nameserver-follow-policy')
+      final bool directNameserverFollowPolicy,
       @JsonKey(name: 'fallback-filter')
       final FallbackFilter fallbackFilter}) = _$DnsImpl;
 
@@ -2411,6 +2538,9 @@ abstract class _Dns implements Dns {
   @override
   @JsonKey(name: 'prefer-h3')
   bool get preferH3;
+  @override
+  @JsonKey(name: 'cache-algorithm')
+  CacheAlgorithm get cacheAlgorithm;
   @override
   @JsonKey(name: 'use-hosts')
   bool get useHosts;
@@ -2432,8 +2562,14 @@ abstract class _Dns implements Dns {
   @JsonKey(name: 'fake-ip-range')
   String get fakeIpRange;
   @override
+  @JsonKey(name: 'fake-ip-range-v6')
+  String get fakeIpRangeV6;
+  @override
   @JsonKey(name: 'fake-ip-filter')
   List<String> get fakeIpFilter;
+  @override
+  @JsonKey(name: 'fake-ip-ttl')
+  int get fakeIpTtl;
   @override
   @JsonKey(name: 'nameserver-policy')
   Map<String, String> get nameserverPolicy;
@@ -2444,6 +2580,12 @@ abstract class _Dns implements Dns {
   @override
   @JsonKey(name: 'proxy-server-nameserver')
   List<String> get proxyServerNameserver;
+  @override
+  @JsonKey(name: 'direct-nameserver')
+  List<String> get directNameserver;
+  @override
+  @JsonKey(name: 'direct-nameserver-follow-policy')
+  bool get directNameserverFollowPolicy;
   @override
   @JsonKey(name: 'fallback-filter')
   FallbackFilter get fallbackFilter;
