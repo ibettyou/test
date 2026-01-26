@@ -41,18 +41,19 @@ class GoogleBottomNavBar extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
           child: GNav(
+            key: ValueKey('gnav_$enableAnimation'),
             rippleColor: context.colorScheme.onSurface.withValues(alpha: 0.15),
             hoverColor: context.colorScheme.onSurface.withValues(alpha: 0.1),
-            gap: enableAnimation ? 8 : 0,
+            gap: 8,
             activeColor: context.colorScheme.onSecondaryContainer,
             iconSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             duration: enableAnimation 
-                ? const Duration(milliseconds: 300) 
-                : const Duration(milliseconds: 1),
+                ? const Duration(milliseconds: 258) 
+                : Duration.zero,
             tabBackgroundColor: context.colorScheme.secondaryContainer,
             color: context.colorScheme.onSurfaceVariant,
-            curve: enableAnimation ? Curves.easeInOut : Curves.linear,
+            curve: enableAnimation ? Curves.easeOutExpo : Curves.linear,
             tabs: navigationItems
                 .map(
                   (e) => GButton(
