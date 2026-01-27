@@ -24,11 +24,7 @@ class SubscriptionInfoView extends StatelessWidget {
 
     final useShow = TrafficValue(value: use).show;
     final totalShow = TrafficValue(value: total).show;
-    final expireShow = subscriptionInfo?.expire != null &&
-            subscriptionInfo!.expire != 0
-        ? DateTime.fromMillisecondsSinceEpoch(subscriptionInfo!.expire * 1000)
-            .show
-        : appLocalizations.infiniteTime;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,13 +35,6 @@ class SubscriptionInfoView extends StatelessWidget {
         ),
         const SizedBox(
           height: 8,
-        ),
-        Text(
-          '$useShow / $totalShow · $expireShow',
-          style: context.textTheme.labelMedium?.toLight,
-        ),
-        const SizedBox(
-          height: 4,
         ),
       ],
     );

@@ -50,6 +50,11 @@ class WriteToSystemItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    // Hide on Android due to lack of root permissions
+    if (system.isAndroid) {
+      return const SizedBox.shrink();
+    }
+
     final writeToSystem = ref
         .watch(patchClashConfigProvider.select((state) => state.ntp.writeToSystem));
     return ListItem.switchItem(

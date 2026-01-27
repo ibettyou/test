@@ -24,79 +24,51 @@ class OverrideTunnelItem extends ConsumerWidget {
   }
 }
 
-class TunnelListItem extends StatelessWidget {
-  const TunnelListItem({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListItem.open(
-      title: Text(appLocalizations.tunnelList),
-      delegate: OpenDelegate(
-        blur: false,
-        title: appLocalizations.tunnelList,
-        widget: Consumer(
-          builder: (_, ref, __) {
-            final tunnels = ref.watch(
-              patchClashConfigProvider.select((state) => state.tunnels),
-            );
-            return _TunnelListPage(tunnels: tunnels);
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _TunnelListPage extends ConsumerWidget {
-  final List<TunnelEntry> tunnels;
-
-  const _TunnelListPage({required this.tunnels});
+class TunnelListWidget extends ConsumerWidget {
+  const TunnelListWidget({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
-    return Scaffold(
-      body: tunnels.isEmpty
-          ? Center(
-              child: Text(
-                appLocalizations.tunnelList,
-                style: context.textTheme.bodyLarge,
-              ),
-            )
-          : ListView.builder(
-              itemCount: tunnels.length,
-              itemBuilder: (context, index) {
-                final tunnel = tunnels[index];
-                return ListItem(
-                  title: Text(tunnel.displayValue),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _showTunnelDialog(
-                          context,
-                          ref,
-                          tunnel: tunnel,
-                          index: index,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteTunnel(ref, index),
-                      ),
-                    ],
-                  ),
-                );
-              },
+    final tunnels = ref.watch(
+      patchClashConfigProvider.select((state) => state.tunnels),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Text(
+            appLocalizations.tunnelList,
+            style: context.textTheme.titleMedium?.copyWith(
+              color: context.colorScheme.primary,
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showTunnelDialog(context, ref),
-        child: const Icon(Icons.add),
-      ),
+          ),
+        ),
+        if (tunnels.isNotEmpty)
+          ...tunnels.asMap().entries.map((entry) {
+            final index = entry.key;
+            final tunnel = entry.value;
+            return ListItem(
+              title: Text(tunnel.displayValue),
+              onTap: () => _showTunnelDialog(
+                context,
+                ref,
+                tunnels,
+                tunnel: tunnel,
+                index: index,
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => _deleteTunnel(ref, tunnels, index),
+              ),
+            );
+          }),
+      ],
     );
   }
 
-  void _deleteTunnel(WidgetRef ref, int index) {
+  void _deleteTunnel(WidgetRef ref, List<TunnelEntry> tunnels, int index) {
     final newTunnels = List<TunnelEntry>.from(tunnels);
     newTunnels.removeAt(index);
     ref.read(patchClashConfigProvider.notifier).updateState(
@@ -106,7 +78,8 @@ class _TunnelListPage extends ConsumerWidget {
 
   void _showTunnelDialog(
     BuildContext context,
-    WidgetRef ref, {
+    WidgetRef ref,
+    List<TunnelEntry> tunnels, {
     TunnelEntry? tunnel,
     int? index,
   }) {
@@ -264,16 +237,46 @@ class _TunnelDialogState extends State<_TunnelDialog> {
   }
 }
 
-const tunnelItems = <Widget>[
-  OverrideTunnelItem(),
-  TunnelListItem(),
-];
-
 class TunnelListView extends ConsumerWidget {
   const TunnelListView({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
-    return generateListView(tunnelItems);
+    final tunnels = ref.watch(
+      patchClashConfigProvider.select((state) => state.tunnels),
+    );
+
+    return Scaffold(
+      body: ListView(
+        children: const [
+          OverrideTunnelItem(),
+          TunnelListWidget(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showTunnelDialog(context, ref, tunnels),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showTunnelDialog(
+    BuildContext context,
+    WidgetRef ref,
+    List<TunnelEntry> tunnels,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => _TunnelDialog(
+        tunnel: null,
+        onSave: (newTunnel) {
+          final newTunnels = List<TunnelEntry>.from(tunnels);
+          newTunnels.add(newTunnel);
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith(tunnels: newTunnels),
+              );
+        },
+      ),
+    );
   }
 }

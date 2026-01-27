@@ -304,6 +304,13 @@ class GlobalState {
       tun: patchConfig.tun.getRealTun(config.networkProps.routeMode),
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
+    // Auto-set secret when external controller is enabled
+    if (realPatchConfig.externalController == ExternalControllerStatus.open) {
+      final secret = realPatchConfig.secret;
+      if (secret != null && secret.isNotEmpty) {
+        rawConfig['secret'] = secret;
+      }
+    }
     rawConfig['external-ui'] = await appPath.uiPath;
     rawConfig['interface-name'] = '';
     rawConfig['tcp-concurrent'] = realPatchConfig.tcpConcurrent;
@@ -414,6 +421,10 @@ class GlobalState {
     if (overrideNtp || !isEnableNtp) {
       final ntp = realPatchConfig.ntp;
       rawConfig['ntp'] = ntp.toJson();
+      // 自动添加 NTP 服务器的 hosts 映射
+      if (overrideNtp) {
+        rawConfig['hosts']['cn.pool.ntp.org'] = '139.199.215.251';
+      }
     }
     if (rawConfig['sniffer'] == null) {
       rawConfig['sniffer'] = {};

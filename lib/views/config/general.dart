@@ -5,6 +5,7 @@ import 'package:li_clash/providers/providers.dart';
 import 'package:li_clash/state.dart';
 import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LogLevelItem extends ConsumerWidget {
@@ -372,6 +373,20 @@ class ExternalControllerItem extends ConsumerWidget {
       delegate: SwitchDelegate(
         value: hasExternalController,
         onChanged: (bool value) async {
+          // Auto-generate secret when enabling external controller
+          if (value) {
+            final currentSecret = ref.read(patchClashConfigProvider.select((state) => state.secret));
+            if (currentSecret == null || currentSecret.isEmpty) {
+              final newSecret = utils.generateSecret();
+              ref.read(patchClashConfigProvider.notifier).updateState(
+                    (state) => state.copyWith(
+                      externalController: ExternalControllerStatus.open,
+                      secret: newSecret,
+                    ),
+                  );
+              return;
+            }
+          }
           ref.read(patchClashConfigProvider.notifier).updateState(
                 (state) => state.copyWith(
                   externalController: value
@@ -380,6 +395,141 @@ class ExternalControllerItem extends ConsumerWidget {
                 ),
               );
         },
+      ),
+    );
+  }
+}
+
+class ControlSecretItem extends ConsumerWidget {
+  const ControlSecretItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final hasExternalController = ref.watch(patchClashConfigProvider.select(
+        (state) => state.externalController == ExternalControllerStatus.open));
+    
+    // Only show when external controller is enabled
+    if (!hasExternalController) {
+      return const SizedBox.shrink();
+    }
+
+    final secret = ref.watch(patchClashConfigProvider.select((state) => state.secret)) ?? '';
+    
+    return ListItem(
+      leading: const Icon(Icons.password_outlined),
+      title: Text(appLocalizations.controlSecret),
+      subtitle: Text(secret.isEmpty ? appLocalizations.controlSecretDesc : secret),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: appLocalizations.generateSecret,
+            onPressed: () {
+              final newSecret = utils.generateSecret();
+              ref.read(patchClashConfigProvider.notifier).updateState(
+                    (state) => state.copyWith(secret: newSecret),
+                  );
+            },
+          ),
+          if (secret.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.copy),
+              tooltip: appLocalizations.copy,
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: secret));
+                if (context.mounted) {
+                  context.showSnackBar(appLocalizations.secretCopied);
+                }
+              },
+            ),
+        ],
+      ),
+      onTap: () async {
+        await globalState.showCommonDialog(
+          child: _SecretDialog(currentSecret: secret),
+        );
+      },
+    );
+  }
+}
+
+class _SecretDialog extends ConsumerStatefulWidget {
+  final String currentSecret;
+  
+  const _SecretDialog({required this.currentSecret});
+
+  @override
+  ConsumerState<_SecretDialog> createState() => _SecretDialogState();
+}
+
+class _SecretDialogState extends ConsumerState<_SecretDialog> {
+  late TextEditingController _controller;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.currentSecret);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleSave() {
+    if (_formKey.currentState?.validate() == false) return;
+    ref.read(patchClashConfigProvider.notifier).updateState(
+          (state) => state.copyWith(secret: _controller.text),
+        );
+    Navigator.of(context).pop();
+  }
+
+  void _handleGenerate() {
+    _controller.text = utils.generateSecret();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonDialog(
+      title: appLocalizations.controlSecret,
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
+              onPressed: _handleGenerate,
+              icon: const Icon(Icons.refresh),
+              label: Text(appLocalizations.generateSecret),
+            ),
+            TextButton(
+              onPressed: _handleSave,
+              child: Text(appLocalizations.save),
+            ),
+          ],
+        ),
+      ],
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: TextFormField(
+            controller: _controller,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: appLocalizations.controlSecret,
+              hintText: appLocalizations.controlSecretDesc,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return appLocalizations.emptyTip(appLocalizations.controlSecret);
+              }
+              return null;
+            },
+          ),
+        ),
       ),
     );
   }
@@ -398,6 +548,7 @@ final generalItems = <Widget>[
   TcpConcurrentItem(),
   GeodataLoaderItem(),
   ExternalControllerItem(),
+  ControlSecretItem(),
 ]
     .separated(
       const Divider(

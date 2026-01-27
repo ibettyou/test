@@ -3016,7 +3016,7 @@ class _$NtpImpl implements _Ntp {
   const _$NtpImpl(
       {this.enable = true,
       @JsonKey(name: 'write-to-system') this.writeToSystem = false,
-      this.server = 'ntp.aliyun.com',
+      this.server = 'cn.pool.ntp.org',
       this.port = 123,
       this.interval = 60});
 
@@ -4413,6 +4413,7 @@ mixin _$ClashConfig {
   @JsonKey(name: 'external-controller')
   ExternalControllerStatus get externalController =>
       throw _privateConstructorUsedError;
+  String? get secret => throw _privateConstructorUsedError;
   @JsonKey(name: 'external-ui-name')
   String? get externalUiName => throw _privateConstructorUsedError;
   @JsonKey(name: 'external-ui-url')
@@ -4466,6 +4467,7 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
+      String? secret,
       @JsonKey(name: 'external-ui-name') String? externalUiName,
       @JsonKey(name: 'external-ui-url') String? externalUiUrl,
       Map<String, String> hosts});
@@ -4518,6 +4520,7 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
+    Object? secret = freezed,
     Object? externalUiName = freezed,
     Object? externalUiUrl = freezed,
     Object? hosts = null,
@@ -4623,6 +4626,10 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
+      secret: freezed == secret
+          ? _value.secret
+          : secret // ignore: cast_nullable_to_non_nullable
+              as String?,
       externalUiName: freezed == externalUiName
           ? _value.externalUiName
           : externalUiName // ignore: cast_nullable_to_non_nullable
@@ -4738,6 +4745,7 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
+      String? secret,
       @JsonKey(name: 'external-ui-name') String? externalUiName,
       @JsonKey(name: 'external-ui-url') String? externalUiUrl,
       Map<String, String> hosts});
@@ -4794,6 +4802,7 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
+    Object? secret = freezed,
     Object? externalUiName = freezed,
     Object? externalUiUrl = freezed,
     Object? hosts = null,
@@ -4899,6 +4908,10 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
+      secret: freezed == secret
+          ? _value.secret
+          : secret // ignore: cast_nullable_to_non_nullable
+              as String?,
       externalUiName: freezed == externalUiName
           ? _value.externalUiName
           : externalUiName // ignore: cast_nullable_to_non_nullable
@@ -4953,6 +4966,7 @@ class _$ClashConfigImpl implements _ClashConfig {
       @JsonKey(name: 'global-ua') this.globalUa,
       @JsonKey(name: 'external-controller')
       this.externalController = ExternalControllerStatus.close,
+      this.secret,
       @JsonKey(name: 'external-ui-name') this.externalUiName,
       @JsonKey(name: 'external-ui-url') this.externalUiUrl,
       final Map<String, String> hosts = const {}})
@@ -5058,6 +5072,8 @@ class _$ClashConfigImpl implements _ClashConfig {
   @JsonKey(name: 'external-controller')
   final ExternalControllerStatus externalController;
   @override
+  final String? secret;
+  @override
   @JsonKey(name: 'external-ui-name')
   final String? externalUiName;
   @override
@@ -5074,7 +5090,7 @@ class _$ClashConfigImpl implements _ClashConfig {
 
   @override
   String toString() {
-    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, tunnels: $tunnels, experimental: $experimental, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, externalUiName: $externalUiName, externalUiUrl: $externalUiUrl, hosts: $hosts)';
+    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, tunnels: $tunnels, experimental: $experimental, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, secret: $secret, externalUiName: $externalUiName, externalUiUrl: $externalUiUrl, hosts: $hosts)';
   }
 
   @override
@@ -5122,6 +5138,7 @@ class _$ClashConfigImpl implements _ClashConfig {
                 other.globalUa == globalUa) &&
             (identical(other.externalController, externalController) ||
                 other.externalController == externalController) &&
+            (identical(other.secret, secret) || other.secret == secret) &&
             (identical(other.externalUiName, externalUiName) ||
                 other.externalUiName == externalUiName) &&
             (identical(other.externalUiUrl, externalUiUrl) ||
@@ -5158,6 +5175,7 @@ class _$ClashConfigImpl implements _ClashConfig {
         const DeepCollectionEquality().hash(_rule),
         globalUa,
         externalController,
+        secret,
         externalUiName,
         externalUiUrl,
         const DeepCollectionEquality().hash(_hosts)
@@ -5211,6 +5229,7 @@ abstract class _ClashConfig implements ClashConfig {
       @JsonKey(name: 'global-ua') final String? globalUa,
       @JsonKey(name: 'external-controller')
       final ExternalControllerStatus externalController,
+      final String? secret,
       @JsonKey(name: 'external-ui-name') final String? externalUiName,
       @JsonKey(name: 'external-ui-url') final String? externalUiUrl,
       final Map<String, String> hosts}) = _$ClashConfigImpl;
@@ -5289,6 +5308,8 @@ abstract class _ClashConfig implements ClashConfig {
   @override
   @JsonKey(name: 'external-controller')
   ExternalControllerStatus get externalController;
+  @override
+  String? get secret;
   @override
   @JsonKey(name: 'external-ui-name')
   String? get externalUiName;

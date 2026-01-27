@@ -313,7 +313,7 @@ const _$DnsModeEnumMap = {
 _$NtpImpl _$$NtpImplFromJson(Map<String, dynamic> json) => _$NtpImpl(
       enable: json['enable'] as bool? ?? true,
       writeToSystem: json['write-to-system'] as bool? ?? false,
-      server: json['server'] as String? ?? 'ntp.aliyun.com',
+      server: json['server'] as String? ?? 'cn.pool.ntp.org',
       port: (json['port'] as num?)?.toInt() ?? 123,
       interval: (json['interval'] as num?)?.toInt() ?? 60,
     );
@@ -464,6 +464,7 @@ _$ClashConfigImpl _$$ClashConfigImplFromJson(Map<String, dynamic> json) =>
       externalController: $enumDecodeNullable(
               _$ExternalControllerStatusEnumMap, json['external-controller']) ??
           ExternalControllerStatus.close,
+      secret: json['secret'] as String?,
       externalUiName: json['external-ui-name'] as String?,
       externalUiUrl: json['external-ui-url'] as String?,
       hosts: (json['hosts'] as Map<String, dynamic>?)?.map(
@@ -500,6 +501,7 @@ Map<String, dynamic> _$$ClashConfigImplToJson(_$ClashConfigImpl instance) =>
       'global-ua': instance.globalUa,
       'external-controller':
           _$ExternalControllerStatusEnumMap[instance.externalController]!,
+      'secret': instance.secret,
       'external-ui-name': instance.externalUiName,
       'external-ui-url': instance.externalUiUrl,
       'hosts': instance.hosts,

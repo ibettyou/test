@@ -251,19 +251,44 @@ class ProfileItem extends StatelessWidget {
 
   List<Widget> _buildUrlProfileInfo(BuildContext context) {
     final subscriptionInfo = profile.subscriptionInfo;
+    final updateTimeText = profile.lastUpdateDate?.lastUpdateTimeDesc ?? '';
+    
     return [
       const SizedBox(
         height: 8,
       ),
-      if (subscriptionInfo != null)
+      if (subscriptionInfo != null) ...[
         SubscriptionInfoView(
           subscriptionInfo: subscriptionInfo,
         ),
-      Text(
-        profile.lastUpdateDate?.lastUpdateTimeDesc ?? '',
-        style: context.textTheme.labelMedium?.toLight,
-      ),
+        // 流量使用 / 总量 · 到期日期   ·   更新时间（全部在同一行）
+        Text(
+          '${_getTrafficText(subscriptionInfo)} · ${_getExpireText(subscriptionInfo)}   ·   $updateTimeText',
+          style: context.textTheme.labelMedium?.toLight,
+        ),
+      ] else
+        // 没有订阅信息时只显示更新时间
+        Text(
+          updateTimeText,
+          style: context.textTheme.labelMedium?.toLight,
+        ),
     ];
+  }
+
+  String _getTrafficText(SubscriptionInfo subscriptionInfo) {
+    final use = subscriptionInfo.upload + subscriptionInfo.download;
+    final total = subscriptionInfo.total;
+    final useShow = TrafficValue(value: use).show;
+    final totalShow = TrafficValue(value: total).show;
+    return '$useShow / $totalShow';
+  }
+
+  String _getExpireText(SubscriptionInfo subscriptionInfo) {
+    if (subscriptionInfo.expire == 0) {
+      return appLocalizations.infiniteTime;
+    }
+    return DateTime.fromMillisecondsSinceEpoch(subscriptionInfo.expire * 1000)
+        .show;
   }
 
   List<Widget> _buildFileProfileInfo(BuildContext context) {

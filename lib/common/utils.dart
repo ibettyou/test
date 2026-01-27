@@ -402,6 +402,14 @@ class Utils {
     }
     return await function();
   }
+
+  /// Generate a random CRC32-like secret (10-digit decimal number)
+  String generateSecret() {
+    final random = Random();
+    // Generate a 10-digit number (1000000000 to 9999999999)
+    final secret = 1000000000 + random.nextInt(9000000000);
+    return secret.toString();
+  }
 }
 
 final utils = Utils();

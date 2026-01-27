@@ -5,7 +5,7 @@ import 'package:li_clash/models/models.dart';
 import 'package:flutter/foundation.dart';
 
 class ClashMessage {
-  final controller = StreamController<Map<String, Object?>>();
+  final controller = StreamController<Map<String, Object?>>.broadcast();
 
   ClashMessage._() {
     controller.stream.listen(

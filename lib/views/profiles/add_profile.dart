@@ -3,6 +3,7 @@ import 'package:li_clash/pages/scan.dart';
 import 'package:li_clash/state.dart';
 import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AddProfileView extends StatelessWidget {
   final BuildContext context;
@@ -18,6 +19,33 @@ class AddProfileView extends StatelessWidget {
 
   Future<void> _handleAddProfileFormURL(String url) async {
     globalState.appController.addProfileFormURL(url);
+  }
+
+  Future<void> _handleAddProfileFromClipboard() async {
+    try {
+      final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+      final text = clipboardData?.text?.trim();
+      
+      if (text == null || text.isEmpty) {
+        if (context.mounted) {
+          context.showSnackBar(appLocalizations.emptyTip(appLocalizations.clipboard));
+        }
+        return;
+      }
+      
+      if (!text.isUrl) {
+        if (context.mounted) {
+          context.showSnackBar(appLocalizations.urlTip(appLocalizations.clipboard));
+        }
+        return;
+      }
+      
+      _handleAddProfileFormURL(text);
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar(e.toString());
+      }
+    }
   }
 
   Future<void> _toScan() async {
@@ -69,6 +97,12 @@ class AddProfileView extends StatelessWidget {
           title: Text(appLocalizations.qrcode),
           subtitle: Text(appLocalizations.qrcodeDesc),
           onTap: _toScan,
+        ),
+        ListItem(
+          leading: const Icon(Icons.content_paste),
+          title: Text(appLocalizations.clipboard),
+          subtitle: Text(appLocalizations.clipboardDesc),
+          onTap: _handleAddProfileFromClipboard,
         ),
         ListItem(
           leading: const Icon(Icons.upload_file_sharp),

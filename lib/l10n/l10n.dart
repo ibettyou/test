@@ -682,6 +682,21 @@ class AppLocalizations {
     );
   }
 
+  /// `Clipboard`
+  String get clipboard {
+    return Intl.message('Clipboard', name: 'clipboard', desc: '', args: []);
+  }
+
+  /// `Auto-get subscription link from clipboard`
+  String get clipboardDesc {
+    return Intl.message(
+      'Auto-get subscription link from clipboard',
+      name: 'clipboardDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `URL`
   String get url {
     return Intl.message('URL', name: 'url', desc: '', args: []);
@@ -1397,6 +1412,46 @@ class AppLocalizations {
     return Intl.message(
       'Once enabled, the Clash kernel can be controlled on port 9090',
       name: 'externalControllerDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Control Secret`
+  String get controlSecret {
+    return Intl.message(
+      'Control Secret',
+      name: 'controlSecret',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `RESTful API access password`
+  String get controlSecretDesc {
+    return Intl.message(
+      'RESTful API access password',
+      name: 'controlSecretDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generate`
+  String get generateSecret {
+    return Intl.message(
+      'Generate',
+      name: 'generateSecret',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Secret copied to clipboard`
+  String get secretCopied {
+    return Intl.message(
+      'Secret copied to clipboard',
+      name: 'secretCopied',
       desc: '',
       args: [],
     );
@@ -2242,10 +2297,10 @@ class AppLocalizations {
     return Intl.message('Status', name: 'snifferStatus', desc: '', args: []);
   }
 
-  /// `Enable domain sniffing service`
+  /// `Enable sniffer service settings`
   String get snifferStatusDesc {
     return Intl.message(
-      'Enable domain sniffing service',
+      'Enable sniffer service settings',
       name: 'snifferStatusDesc',
       desc: '',
       args: [],
@@ -2257,10 +2312,10 @@ class AppLocalizations {
     return Intl.message('force-dns-mapping', name: 'forceDnsMapping', desc: '', args: []);
   }
 
-  /// `Sniff real IP mapping`
+  /// `Force DNS mapping`
   String get forceDnsMappingDesc {
     return Intl.message(
-      'Sniff real IP mapping',
+      'Force DNS mapping',
       name: 'forceDnsMappingDesc',
       desc: '',
       args: [],
@@ -2272,10 +2327,10 @@ class AppLocalizations {
     return Intl.message('parse-pure-ip', name: 'parsePureIp', desc: '', args: []);
   }
 
-  /// `Sniff unmapped IP addresses`
+  /// `Parse pure IP connections`
   String get parsePureIpDesc {
     return Intl.message(
-      'Sniff unmapped IP addresses',
+      'Parse pure IP connections',
       name: 'parsePureIpDesc',
       desc: '',
       args: [],
@@ -2287,10 +2342,10 @@ class AppLocalizations {
     return Intl.message('override-destination', name: 'overrideDestination', desc: '', args: []);
   }
 
-  /// `Override connection destination`
+  /// `Override target address`
   String get overrideDestinationDesc {
     return Intl.message(
-      'Override connection destination',
+      'Override target address',
       name: 'overrideDestinationDesc',
       desc: '',
       args: [],
@@ -2312,24 +2367,24 @@ class AppLocalizations {
     return Intl.message('QUIC Port Sniffing', name: 'quicPortSniffer', desc: '', args: []);
   }
 
-  /// `Force Domain Sniffing`
+  /// `Force sniff domain`
   String get forceDomain {
-    return Intl.message('Force Domain Sniffing', name: 'forceDomain', desc: '', args: []);
+    return Intl.message('Force sniff domain', name: 'forceDomain', desc: '', args: []);
   }
 
-  /// `Skip Domain Sniffing`
+  /// `Skip domain`
   String get skipDomain {
-    return Intl.message('Skip Domain Sniffing', name: 'skipDomain', desc: '', args: []);
+    return Intl.message('Skip domain', name: 'skipDomain', desc: '', args: []);
   }
 
-  /// `Skip Source Address Sniffing`
+  /// `Skip source IP`
   String get skipSrcAddress {
-    return Intl.message('Skip Source Address Sniffing', name: 'skipSrcAddress', desc: '', args: []);
+    return Intl.message('Skip source IP', name: 'skipSrcAddress', desc: '', args: []);
   }
 
-  /// `Skip Destination Address Sniffing`
+  /// `Skip destination IP`
   String get skipDstAddress {
-    return Intl.message('Skip Destination Address Sniffing', name: 'skipDstAddress', desc: '', args: []);
+    return Intl.message('Skip destination IP', name: 'skipDstAddress', desc: '', args: []);
   }
 
   /// `Ports`
@@ -2912,9 +2967,9 @@ class AppLocalizations {
     return Intl.message('ICMP Forwarding', name: 'icmpForwarding', desc: '', args: []);
   }
 
-  /// `Enable ICMPing Support`
+  /// `Enable ICMP Ping`
   String get icmpForwardingDesc {
-    return Intl.message('Enable ICMPing Support', name: 'icmpForwardingDesc', desc: '', args: []);
+    return Intl.message('Enable ICMP Ping', name: 'icmpForwardingDesc', desc: '', args: []);
   }
 
   /// `DNS Hijack`

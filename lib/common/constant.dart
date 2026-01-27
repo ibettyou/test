@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 const appName = 'LiClash';
 const appHelperService = 'LiClashHelperService';
 const coreName = 'clash.meta';
-const tunDeviceName = 'Mihomo';
+const tunDeviceName = 'Bettbox';
 const browserUa =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36';
 const packageName = 'com.appshub.liclash';

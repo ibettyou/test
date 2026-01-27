@@ -394,7 +394,7 @@ class Ntp with _$Ntp {
   const factory Ntp({
     @Default(true) bool enable,
     @Default(false) @JsonKey(name: 'write-to-system') bool writeToSystem,
-    @Default('ntp.aliyun.com') String server,
+    @Default('cn.pool.ntp.org') String server,
     @Default(123) int port,
     @Default(60) int interval,
   }) = _Ntp;
@@ -643,6 +643,7 @@ class ClashConfig with _$ClashConfig {
     @Default(ExternalControllerStatus.close)
     @JsonKey(name: 'external-controller')
     ExternalControllerStatus externalController,
+    String? secret,
     @JsonKey(name: 'external-ui-name') String? externalUiName,
     @JsonKey(name: 'external-ui-url') String? externalUiUrl,
     @Default({}) HostsMap hosts,

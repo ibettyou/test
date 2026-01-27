@@ -277,9 +277,16 @@ class Windows {
   }
 
   Future<bool> registerTask(String appName, {bool requireNetwork = true}) async {
+    final executablePath = Platform.resolvedExecutable;
+    final workingDirectory = dirname(executablePath);
+    
     final taskXml = '''
 <?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>开机自动启动代理服务</Description>
+    <URI>\\$appName</URI>
+  </RegistrationInfo>
   <Principals>
     <Principal id="Author">
       <LogonType>S4U</LogonType>
@@ -287,14 +294,16 @@ class Windows {
     </Principal>
   </Principals>
   <Triggers>
-    <LogonTrigger/>
+    <LogonTrigger>
+      <Enabled>true</Enabled>
+    </LogonTrigger>
   </Triggers>
   <Settings>
-    <MultipleInstancesPolicy>Parallel</MultipleInstancesPolicy>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
     <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
     <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
     <AllowHardTerminate>false</AllowHardTerminate>
-    <StartWhenAvailable>false</StartWhenAvailable>
+    <StartWhenAvailable>true</StartWhenAvailable>
     <RunOnlyIfNetworkAvailable>$requireNetwork</RunOnlyIfNetworkAvailable>
     <IdleSettings>
       <StopOnIdleEnd>false</StopOnIdleEnd>
@@ -305,12 +314,13 @@ class Windows {
     <Hidden>false</Hidden>
     <RunOnlyIfIdle>false</RunOnlyIfIdle>
     <WakeToRun>false</WakeToRun>
-    <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>
-    <Priority>8</Priority>
+    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+    <Priority>6</Priority>
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>"${Platform.resolvedExecutable}"</Command>
+      <Command>"$executablePath"</Command>
+      <WorkingDirectory>$workingDirectory</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>''';
