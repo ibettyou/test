@@ -305,9 +305,7 @@ class GlobalState {
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
     rawConfig['external-ui'] = await appPath.uiPath;
-    rawConfig['external-ui-name'] = realPatchConfig.externalUiName;
     rawConfig['interface-name'] = '';
-    rawConfig['external-ui-url'] = realPatchConfig.externalUiUrl;
     rawConfig['tcp-concurrent'] = realPatchConfig.tcpConcurrent;
     rawConfig['unified-delay'] = realPatchConfig.unifiedDelay;
     rawConfig['ipv6'] = realPatchConfig.ipv6;

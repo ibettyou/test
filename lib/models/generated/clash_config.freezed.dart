@@ -4414,9 +4414,9 @@ mixin _$ClashConfig {
   ExternalControllerStatus get externalController =>
       throw _privateConstructorUsedError;
   @JsonKey(name: 'external-ui-name')
-  String get externalUiName => throw _privateConstructorUsedError;
+  String? get externalUiName => throw _privateConstructorUsedError;
   @JsonKey(name: 'external-ui-url')
-  String get externalUiUrl => throw _privateConstructorUsedError;
+  String? get externalUiUrl => throw _privateConstructorUsedError;
   Map<String, String> get hosts => throw _privateConstructorUsedError;
 
   /// Serializes this ClashConfig to a JSON map.
@@ -4466,8 +4466,8 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
-      @JsonKey(name: 'external-ui-name') String externalUiName,
-      @JsonKey(name: 'external-ui-url') String externalUiUrl,
+      @JsonKey(name: 'external-ui-name') String? externalUiName,
+      @JsonKey(name: 'external-ui-url') String? externalUiUrl,
       Map<String, String> hosts});
 
   $TunCopyWith<$Res> get tun;
@@ -4518,8 +4518,8 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
-    Object? externalUiName = null,
-    Object? externalUiUrl = null,
+    Object? externalUiName = freezed,
+    Object? externalUiUrl = freezed,
     Object? hosts = null,
   }) {
     return _then(_value.copyWith(
@@ -4623,14 +4623,14 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
-      externalUiName: null == externalUiName
+      externalUiName: freezed == externalUiName
           ? _value.externalUiName
           : externalUiName // ignore: cast_nullable_to_non_nullable
-              as String,
-      externalUiUrl: null == externalUiUrl
+              as String?,
+      externalUiUrl: freezed == externalUiUrl
           ? _value.externalUiUrl
           : externalUiUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       hosts: null == hosts
           ? _value.hosts
           : hosts // ignore: cast_nullable_to_non_nullable
@@ -4738,8 +4738,8 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
-      @JsonKey(name: 'external-ui-name') String externalUiName,
-      @JsonKey(name: 'external-ui-url') String externalUiUrl,
+      @JsonKey(name: 'external-ui-name') String? externalUiName,
+      @JsonKey(name: 'external-ui-url') String? externalUiUrl,
       Map<String, String> hosts});
 
   @override
@@ -4794,8 +4794,8 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
-    Object? externalUiName = null,
-    Object? externalUiUrl = null,
+    Object? externalUiName = freezed,
+    Object? externalUiUrl = freezed,
     Object? hosts = null,
   }) {
     return _then(_$ClashConfigImpl(
@@ -4899,14 +4899,14 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
-      externalUiName: null == externalUiName
+      externalUiName: freezed == externalUiName
           ? _value.externalUiName
           : externalUiName // ignore: cast_nullable_to_non_nullable
-              as String,
-      externalUiUrl: null == externalUiUrl
+              as String?,
+      externalUiUrl: freezed == externalUiUrl
           ? _value.externalUiUrl
           : externalUiUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       hosts: null == hosts
           ? _value._hosts
           : hosts // ignore: cast_nullable_to_non_nullable
@@ -4953,8 +4953,8 @@ class _$ClashConfigImpl implements _ClashConfig {
       @JsonKey(name: 'global-ua') this.globalUa,
       @JsonKey(name: 'external-controller')
       this.externalController = ExternalControllerStatus.close,
-      @JsonKey(name: 'external-ui-name') this.externalUiName = 'bettbox',
-      @JsonKey(name: 'external-ui-url') this.externalUiUrl = '',
+      @JsonKey(name: 'external-ui-name') this.externalUiName,
+      @JsonKey(name: 'external-ui-url') this.externalUiUrl,
       final Map<String, String> hosts = const {}})
       : _tunnels = tunnels,
         _proxyGroups = proxyGroups,
@@ -5059,10 +5059,10 @@ class _$ClashConfigImpl implements _ClashConfig {
   final ExternalControllerStatus externalController;
   @override
   @JsonKey(name: 'external-ui-name')
-  final String externalUiName;
+  final String? externalUiName;
   @override
   @JsonKey(name: 'external-ui-url')
-  final String externalUiUrl;
+  final String? externalUiUrl;
   final Map<String, String> _hosts;
   @override
   @JsonKey()
@@ -5211,8 +5211,8 @@ abstract class _ClashConfig implements ClashConfig {
       @JsonKey(name: 'global-ua') final String? globalUa,
       @JsonKey(name: 'external-controller')
       final ExternalControllerStatus externalController,
-      @JsonKey(name: 'external-ui-name') final String externalUiName,
-      @JsonKey(name: 'external-ui-url') final String externalUiUrl,
+      @JsonKey(name: 'external-ui-name') final String? externalUiName,
+      @JsonKey(name: 'external-ui-url') final String? externalUiUrl,
       final Map<String, String> hosts}) = _$ClashConfigImpl;
 
   factory _ClashConfig.fromJson(Map<String, dynamic> json) =
@@ -5291,10 +5291,10 @@ abstract class _ClashConfig implements ClashConfig {
   ExternalControllerStatus get externalController;
   @override
   @JsonKey(name: 'external-ui-name')
-  String get externalUiName;
+  String? get externalUiName;
   @override
   @JsonKey(name: 'external-ui-url')
-  String get externalUiUrl;
+  String? get externalUiUrl;
   @override
   Map<String, String> get hosts;
 

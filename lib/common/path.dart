@@ -108,7 +108,7 @@ class AppPath {
 
   Future<String> get uiPath async {
     final directory = await dataDir.future;
-    return join(directory.path, 'ui', 'bettbox');
+    return join(directory.path, 'ui');
   }
 }
 
