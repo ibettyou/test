@@ -18,7 +18,7 @@ class OnlinePanel extends StatelessWidget {
             iconData: Icons.launch,
           ),
           onPressed: () async {
-            final uri = Uri.parse('http://127.0.0.1:9090/bettbox/');
+            final uri = Uri.parse('http://127.0.0.1:9090/ui/');
             if (await canLaunchUrl(uri)) {
               await launchUrl(uri, mode: LaunchMode.externalApplication);
             }

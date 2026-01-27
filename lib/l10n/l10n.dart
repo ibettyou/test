@@ -2307,24 +2307,24 @@ class AppLocalizations {
     );
   }
 
-  /// `force-dns-mapping`
+  /// `Force DNS Mapping`
   String get forceDnsMapping {
-    return Intl.message('force-dns-mapping', name: 'forceDnsMapping', desc: '', args: []);
+    return Intl.message('Force DNS Mapping', name: 'forceDnsMapping', desc: '', args: []);
   }
 
-  /// `Force DNS mapping`
+  /// `Force DNS query results to be mapped to connections`
   String get forceDnsMappingDesc {
     return Intl.message(
-      'Force DNS mapping',
+      'Force DNS query results to be mapped to connections',
       name: 'forceDnsMappingDesc',
       desc: '',
       args: [],
     );
   }
 
-  /// `parse-pure-ip`
+  /// `Parse Pure IP`
   String get parsePureIp {
-    return Intl.message('parse-pure-ip', name: 'parsePureIp', desc: '', args: []);
+    return Intl.message('Parse Pure IP', name: 'parsePureIp', desc: '', args: []);
   }
 
   /// `Parse pure IP connections`
@@ -2337,15 +2337,15 @@ class AppLocalizations {
     );
   }
 
-  /// `override-destination`
+  /// `Override Destination`
   String get overrideDestination {
-    return Intl.message('override-destination', name: 'overrideDestination', desc: '', args: []);
+    return Intl.message('Override Destination', name: 'overrideDestination', desc: '', args: []);
   }
 
-  /// `Override target address`
+  /// `Override connection destination with sniffing results`
   String get overrideDestinationDesc {
     return Intl.message(
-      'Override target address',
+      'Override connection destination with sniffing results',
       name: 'overrideDestinationDesc',
       desc: '',
       args: [],
@@ -2507,9 +2507,9 @@ class AppLocalizations {
     return Intl.message('Override experimental configuration options when enabled', name: 'overrideExperimentalDesc', desc: '', args: []);
   }
 
-  /// `Disable Generic Segmentation Offload`
+  /// `Disable QUIC generic segmentation offload`
   String get quicGoDisableGso {
-    return Intl.message('Disable Generic Segmentation Offload', name: 'quicGoDisableGso', desc: '', args: []);
+    return Intl.message('Disable QUIC generic segmentation offload', name: 'quicGoDisableGso', desc: '', args: []);
   }
 
   /// `Disable QUIC generic segmentation offload feature`
@@ -2517,9 +2517,9 @@ class AppLocalizations {
     return Intl.message('Disable QUIC generic segmentation offload feature', name: 'quicGoDisableGsoDesc', desc: '', args: []);
   }
 
-  /// `Disable Explicit Congestion Notification`
+  /// `Disable QUIC explicit congestion notification`
   String get quicGoDisableEcn {
-    return Intl.message('Disable Explicit Congestion Notification', name: 'quicGoDisableEcn', desc: '', args: []);
+    return Intl.message('Disable QUIC explicit congestion notification', name: 'quicGoDisableEcn', desc: '', args: []);
   }
 
   /// `Disable QUIC explicit congestion notification feature`
@@ -2527,9 +2527,9 @@ class AppLocalizations {
     return Intl.message('Disable QUIC explicit congestion notification feature', name: 'quicGoDisableEcnDesc', desc: '', args: []);
   }
 
-  /// `Enable IP4P Address Conversion`
+  /// `Enable dialer IP4P address conversion`
   String get dialerIp4pConvert {
-    return Intl.message('Enable IP4P Address Conversion', name: 'dialerIp4pConvert', desc: '', args: []);
+    return Intl.message('Enable dialer IP4P address conversion', name: 'dialerIp4pConvert', desc: '', args: []);
   }
 
   /// `Enable dialer IP4P address conversion feature`

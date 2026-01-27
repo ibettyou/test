@@ -5,25 +5,6 @@ import 'package:li_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OverrideTunnelItem extends ConsumerWidget {
-  const OverrideTunnelItem({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final override = ref.watch(overrideTunnelProvider);
-    return ListItem.switchItem(
-      title: Text(appLocalizations.overrideTunnel),
-      subtitle: Text(appLocalizations.overrideTunnelDesc),
-      delegate: SwitchDelegate(
-        value: override,
-        onChanged: (bool value) async {
-          ref.read(overrideTunnelProvider.notifier).value = value;
-        },
-      ),
-    );
-  }
-}
-
 class TunnelListWidget extends ConsumerWidget {
   const TunnelListWidget({super.key});
 
@@ -33,23 +14,30 @@ class TunnelListWidget extends ConsumerWidget {
       patchClashConfigProvider.select((state) => state.tunnels),
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+    if (tunnels.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Center(
           child: Text(
-            appLocalizations.tunnelList,
-            style: context.textTheme.titleMedium?.copyWith(
-              color: context.colorScheme.primary,
+            appLocalizations.noData,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colorScheme.onSurface.withOpacity(0.6),
             ),
           ),
         ),
-        if (tunnels.isNotEmpty)
-          ...tunnels.asMap().entries.map((entry) {
-            final index = entry.key;
-            final tunnel = entry.value;
-            return ListItem(
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: tunnels.length,
+      itemBuilder: (context, index) {
+        final tunnel = tunnels[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: CommonCard(
+            child: ListItem(
               title: Text(tunnel.displayValue),
               onTap: () => _showTunnelDialog(
                 context,
@@ -59,12 +47,13 @@ class TunnelListWidget extends ConsumerWidget {
                 index: index,
               ),
               trailing: IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete_outline),
                 onPressed: () => _deleteTunnel(ref, tunnels, index),
               ),
-            );
-          }),
-      ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -248,9 +237,9 @@ class TunnelListView extends ConsumerWidget {
 
     return Scaffold(
       body: ListView(
-        children: const [
-          OverrideTunnelItem(),
-          TunnelListWidget(),
+        padding: const EdgeInsets.only(top: 16),
+        children: [
+          const TunnelListWidget(),
         ],
       ),
       floatingActionButton: FloatingActionButton(

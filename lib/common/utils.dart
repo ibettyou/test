@@ -403,11 +403,11 @@ class Utils {
     return await function();
   }
 
-  /// Generate a random CRC32-like secret (10-digit decimal number)
+  /// Generate a random 8-digit secret
   String generateSecret() {
     final random = Random();
-    // Generate a 10-digit number (1000000000 to 9999999999)
-    final secret = 1000000000 + random.nextInt(9000000000);
+    // Generate an 8-digit number (10000000 to 99999999)
+    final secret = 10000000 + random.nextInt(90000000);
     return secret.toString();
   }
 }

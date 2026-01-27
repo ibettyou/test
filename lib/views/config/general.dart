@@ -373,27 +373,27 @@ class ExternalControllerItem extends ConsumerWidget {
       delegate: SwitchDelegate(
         value: hasExternalController,
         onChanged: (bool value) async {
-          // Auto-generate secret when enabling external controller
           if (value) {
-            final currentSecret = ref.read(patchClashConfigProvider.select((state) => state.secret));
-            if (currentSecret == null || currentSecret.isEmpty) {
-              final newSecret = utils.generateSecret();
-              ref.read(patchClashConfigProvider.notifier).updateState(
-                    (state) => state.copyWith(
-                      externalController: ExternalControllerStatus.open,
-                      secret: newSecret,
-                    ),
-                  );
-              return;
-            }
+            // 开启外部控制器时，自动生成8位数字密码
+            final newSecret = utils.generateSecret();
+            ref.read(patchClashConfigProvider.notifier).updateState(
+                  (state) => state.copyWith(
+                    externalController: ExternalControllerStatus.open,
+                    secret: newSecret,
+                  ),
+                );
+            // 应用配置
+            await globalState.appController.applyProfile();
+          } else {
+            // 关闭外部控制器
+            ref.read(patchClashConfigProvider.notifier).updateState(
+                  (state) => state.copyWith(
+                    externalController: ExternalControllerStatus.close,
+                  ),
+                );
+            // 应用配置
+            await globalState.appController.applyProfile();
           }
-          ref.read(patchClashConfigProvider.notifier).updateState(
-                (state) => state.copyWith(
-                  externalController: value
-                      ? ExternalControllerStatus.open
-                      : ExternalControllerStatus.close,
-                ),
-              );
         },
       ),
     );
@@ -419,21 +419,8 @@ class ControlSecretItem extends ConsumerWidget {
       leading: const Icon(Icons.password_outlined),
       title: Text(appLocalizations.controlSecret),
       subtitle: Text(secret.isEmpty ? appLocalizations.controlSecretDesc : secret),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: appLocalizations.generateSecret,
-            onPressed: () {
-              final newSecret = utils.generateSecret();
-              ref.read(patchClashConfigProvider.notifier).updateState(
-                    (state) => state.copyWith(secret: newSecret),
-                  );
-            },
-          ),
-          if (secret.isNotEmpty)
-            IconButton(
+      trailing: secret.isNotEmpty
+          ? IconButton(
               icon: const Icon(Icons.copy),
               tooltip: appLocalizations.copy,
               onPressed: () {
@@ -442,9 +429,8 @@ class ControlSecretItem extends ConsumerWidget {
                   context.showSnackBar(appLocalizations.secretCopied);
                 }
               },
-            ),
-        ],
-      ),
+            )
+          : null,
       onTap: () async {
         await globalState.showCommonDialog(
           child: _SecretDialog(currentSecret: secret),
@@ -479,16 +465,14 @@ class _SecretDialogState extends ConsumerState<_SecretDialog> {
     super.dispose();
   }
 
-  void _handleSave() {
+  Future<void> _handleSave() async {
     if (_formKey.currentState?.validate() == false) return;
     ref.read(patchClashConfigProvider.notifier).updateState(
           (state) => state.copyWith(secret: _controller.text),
         );
     Navigator.of(context).pop();
-  }
-
-  void _handleGenerate() {
-    _controller.text = utils.generateSecret();
+    // 手动更改密码后应用配置
+    await globalState.appController.applyProfile();
   }
 
   @override
@@ -496,19 +480,9 @@ class _SecretDialogState extends ConsumerState<_SecretDialog> {
     return CommonDialog(
       title: appLocalizations.controlSecret,
       actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton.icon(
-              onPressed: _handleGenerate,
-              icon: const Icon(Icons.refresh),
-              label: Text(appLocalizations.generateSecret),
-            ),
-            TextButton(
-              onPressed: _handleSave,
-              child: Text(appLocalizations.save),
-            ),
-          ],
+        TextButton(
+          onPressed: _handleSave,
+          child: Text(appLocalizations.save),
         ),
       ],
       child: Form(

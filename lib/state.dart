@@ -392,6 +392,11 @@ class GlobalState {
     if (rawConfig['hosts'] == null) {
       rawConfig['hosts'] = {};
     }
+    // 如果启用了覆写NTP，自动添加 NTP 服务器的 hosts 映射
+    final overrideNtp = globalState.config.overrideNtp;
+    if (overrideNtp) {
+      rawConfig['hosts']['cn.pool.ntp.org'] = '139.199.215.251';
+    }
     for (final host in realPatchConfig.hosts.entries) {
       rawConfig['hosts'][host.key] = host.value.splitByMultipleSeparators;
     }
@@ -421,10 +426,6 @@ class GlobalState {
     if (overrideNtp || !isEnableNtp) {
       final ntp = realPatchConfig.ntp;
       rawConfig['ntp'] = ntp.toJson();
-      // 自动添加 NTP 服务器的 hosts 映射
-      if (overrideNtp) {
-        rawConfig['hosts']['cn.pool.ntp.org'] = '139.199.215.251';
-      }
     }
     if (rawConfig['sniffer'] == null) {
       rawConfig['sniffer'] = {};
@@ -435,14 +436,17 @@ class GlobalState {
       final sniffer = realPatchConfig.sniffer;
       rawConfig['sniffer'] = sniffer.toJson();
     }
-    final overrideTunnel = globalState.config.overrideTunnel;
-    if (overrideTunnel) {
-      final tunnels = realPatchConfig.tunnels;
-      if (tunnels.isNotEmpty) {
-        rawConfig['tunnels'] = tunnels.map((t) => t.toClashJson()).toList();
-      } else {
-        rawConfig.remove('tunnels');
-      }
+    // Tunnel 追加逻辑：将GUI中的tunnels追加到配置文件的tunnels中
+    final guiTunnels = realPatchConfig.tunnels;
+    if (guiTunnels.isNotEmpty) {
+      // 获取配置文件中已有的tunnels
+      final existingTunnels = rawConfig['tunnels'] as List? ?? [];
+      // 将GUI中的tunnels追加到现有tunnels后面
+      final allTunnels = [
+        ...existingTunnels,
+        ...guiTunnels.map((t) => t.toClashJson()).toList(),
+      ];
+      rawConfig['tunnels'] = allTunnels;
     }
     if (rawConfig['experimental'] == null) {
       rawConfig['experimental'] = {};

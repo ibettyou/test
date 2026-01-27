@@ -115,60 +115,34 @@ class HttpPortSnifferItem extends ConsumerWidget {
     final httpConfig = ref.watch(
         patchClashConfigProvider.select((state) => state.sniffer.sniff['HTTP']));
     final ports = httpConfig?.ports.join(', ') ?? '';
-    final overrideDest = httpConfig?.overrideDest ?? false;
 
-    return ListItem.open(
+    return ListItem(
       title: Text(appLocalizations.httpPortSniffer),
       subtitle: Text(ports.isEmpty ? '80, 8080-8880' : ports),
-      delegate: OpenDelegate(
+      onTap: () => _showHttpDialog(context, ref, httpConfig),
+    );
+  }
+
+  void _showHttpDialog(BuildContext context, WidgetRef ref, SnifferConfig? httpConfig) async {
+    final ports = httpConfig?.ports.join(', ') ?? '';
+    final overrideDest = httpConfig?.overrideDest ?? true; // HTTP 默认为 true
+
+    await globalState.showCommonDialog(
+      child: _SnifferPortDialog(
         title: appLocalizations.httpPortSniffer,
-        widget: Column(
-          children: generateSection(
-            title: appLocalizations.options,
-            items: [
-              Consumer(builder: (_, ref, __) {
-                return ListItem.input(
-                  title: Text(appLocalizations.snifferPorts),
-                  subtitle: Text(ports),
-                  delegate: InputDelegate(
-                    title: appLocalizations.snifferPorts,
-                    value: ports,
-                    onChanged: (String? value) {
-                      if (value == null) return;
-                      final newPorts = value.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
-                      final newSniff = Map<String, SnifferConfig>.from(
-                          ref.read(patchClashConfigProvider).sniffer.sniff);
-                      newSniff['HTTP'] = SnifferConfig(
-                        ports: newPorts,
-                        overrideDest: overrideDest,
-                      );
-                      ref.read(patchClashConfigProvider.notifier).updateState(
-                          (state) => state.copyWith.sniffer(sniff: newSniff));
-                    },
-                  ),
-                );
-              }),
-              Consumer(builder: (_, ref, __) {
-                return ListItem.switchItem(
-                  title: Text(appLocalizations.overrideDestination),
-                  delegate: SwitchDelegate(
-                    value: overrideDest,
-                    onChanged: (bool value) {
-                      final newSniff = Map<String, SnifferConfig>.from(
-                          ref.read(patchClashConfigProvider).sniffer.sniff);
-                      newSniff['HTTP'] = SnifferConfig(
-                        ports: httpConfig?.ports ?? [],
-                        overrideDest: value,
-                      );
-                      ref.read(patchClashConfigProvider.notifier).updateState(
-                          (state) => state.copyWith.sniffer(sniff: newSniff));
-                    },
-                  ),
-                );
-              }),
-            ],
-          ),
-        ),
+        ports: ports,
+        overrideDest: overrideDest,
+        onSave: (newPorts, newOverrideDest) {
+          final portList = newPorts.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+          final newSniff = Map<String, SnifferConfig>.from(
+              ref.read(patchClashConfigProvider).sniffer.sniff);
+          newSniff['HTTP'] = SnifferConfig(
+            ports: portList,
+            overrideDest: newOverrideDest,
+          );
+          ref.read(patchClashConfigProvider.notifier).updateState(
+              (state) => state.copyWith.sniffer(sniff: newSniff));
+        },
       ),
     );
   }
@@ -183,18 +157,30 @@ class TlsPortSnifferItem extends ConsumerWidget {
         patchClashConfigProvider.select((state) => state.sniffer.sniff['TLS']));
     final ports = tlsConfig?.ports.join(', ') ?? '';
 
-    return ListItem.input(
+    return ListItem(
       title: Text(appLocalizations.tlsPortSniffer),
       subtitle: Text(ports.isEmpty ? '443, 8443' : ports),
-      delegate: InputDelegate(
+      onTap: () => _showTlsDialog(context, ref, tlsConfig),
+    );
+  }
+
+  void _showTlsDialog(BuildContext context, WidgetRef ref, SnifferConfig? tlsConfig) async {
+    final ports = tlsConfig?.ports.join(', ') ?? '';
+    final overrideDest = tlsConfig?.overrideDest ?? false;
+
+    await globalState.showCommonDialog(
+      child: _SnifferPortDialog(
         title: appLocalizations.tlsPortSniffer,
-        value: ports,
-        onChanged: (String? value) {
-          if (value == null) return;
-          final newPorts = value.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+        ports: ports,
+        overrideDest: overrideDest,
+        onSave: (newPorts, newOverrideDest) {
+          final portList = newPorts.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
           final newSniff = Map<String, SnifferConfig>.from(
               ref.read(patchClashConfigProvider).sniffer.sniff);
-          newSniff['TLS'] = SnifferConfig(ports: newPorts);
+          newSniff['TLS'] = SnifferConfig(
+            ports: portList,
+            overrideDest: newOverrideDest,
+          );
           ref.read(patchClashConfigProvider.notifier).updateState(
               (state) => state.copyWith.sniffer(sniff: newSniff));
         },
@@ -212,21 +198,119 @@ class QuicPortSnifferItem extends ConsumerWidget {
         patchClashConfigProvider.select((state) => state.sniffer.sniff['QUIC']));
     final ports = quicConfig?.ports.join(', ') ?? '';
 
-    return ListItem.input(
+    return ListItem(
       title: Text(appLocalizations.quicPortSniffer),
       subtitle: Text(ports.isEmpty ? '443, 8443' : ports),
-      delegate: InputDelegate(
+      onTap: () => _showQuicDialog(context, ref, quicConfig),
+    );
+  }
+
+  void _showQuicDialog(BuildContext context, WidgetRef ref, SnifferConfig? quicConfig) async {
+    final ports = quicConfig?.ports.join(', ') ?? '';
+    final overrideDest = quicConfig?.overrideDest ?? false;
+
+    await globalState.showCommonDialog(
+      child: _SnifferPortDialog(
         title: appLocalizations.quicPortSniffer,
-        value: ports,
-        onChanged: (String? value) {
-          if (value == null) return;
-          final newPorts = value.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+        ports: ports,
+        overrideDest: overrideDest,
+        onSave: (newPorts, newOverrideDest) {
+          final portList = newPorts.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
           final newSniff = Map<String, SnifferConfig>.from(
               ref.read(patchClashConfigProvider).sniffer.sniff);
-          newSniff['QUIC'] = SnifferConfig(ports: newPorts);
+          newSniff['QUIC'] = SnifferConfig(
+            ports: portList,
+            overrideDest: newOverrideDest,
+          );
           ref.read(patchClashConfigProvider.notifier).updateState(
               (state) => state.copyWith.sniffer(sniff: newSniff));
         },
+      ),
+    );
+  }
+}
+
+class _SnifferPortDialog extends StatefulWidget {
+  final String title;
+  final String ports;
+  final bool overrideDest;
+  final Function(String ports, bool overrideDest) onSave;
+
+  const _SnifferPortDialog({
+    required this.title,
+    required this.ports,
+    required this.overrideDest,
+    required this.onSave,
+  });
+
+  @override
+  State<_SnifferPortDialog> createState() => _SnifferPortDialogState();
+}
+
+class _SnifferPortDialogState extends State<_SnifferPortDialog> {
+  late TextEditingController _portsController;
+  late bool _overrideDest;
+
+  @override
+  void initState() {
+    super.initState();
+    _portsController = TextEditingController(text: widget.ports);
+    _overrideDest = widget.overrideDest;
+  }
+
+  @override
+  void dispose() {
+    _portsController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonDialog(
+      title: widget.title,
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(appLocalizations.cancel),
+        ),
+        TextButton(
+          onPressed: () {
+            widget.onSave(_portsController.text, _overrideDest);
+            Navigator.of(context).pop();
+          },
+          child: Text(appLocalizations.save),
+        ),
+      ],
+      child: SizedBox(
+        width: 300,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _portsController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: appLocalizations.snifferPorts,
+                hintText: '443, 8443',
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(appLocalizations.overrideDestination),
+                Switch(
+                  value: _overrideDest,
+                  onChanged: (value) {
+                    setState(() {
+                      _overrideDest = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -237,90 +321,30 @@ class ForceDomainWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final forceDomain = ref.watch(patchClashConfigProvider
-        .select((state) => state.sniffer.forceDomain));
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            appLocalizations.forceDomain,
-            style: context.textTheme.titleMedium?.copyWith(
-              color: context.colorScheme.primary,
-            ),
-          ),
-        ),
-        if (forceDomain.isNotEmpty)
-          ...forceDomain.asMap().entries.map((entry) {
-            final index = entry.key;
-            final domain = entry.value;
-            return ListItem(
-              title: Text(domain),
-              onTap: () => _showDomainDialog(
-                context,
-                ref,
-                forceDomain,
-                title: appLocalizations.forceDomain,
-                value: domain,
-                index: index,
-                onSave: (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(forceDomain: newList));
-                },
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _deleteItem(ref, forceDomain, index, (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(forceDomain: newList));
-                }),
-              ),
+    return ListItem.open(
+      title: Text(appLocalizations.forceDomain),
+      delegate: OpenDelegate(
+        blur: false,
+        title: appLocalizations.forceDomain,
+        widget: Consumer(
+          builder: (_, ref, __) {
+            final forceDomain = ref.watch(
+              patchClashConfigProvider.select((state) => state.sniffer.forceDomain),
             );
-          }),
-      ],
-    );
-  }
-
-  void _deleteItem(WidgetRef ref, List<String> list, int index, Function(List<String>) onSave) {
-    final newList = List<String>.from(list);
-    newList.removeAt(index);
-    onSave(newList);
-  }
-
-  void _showDomainDialog(
-    BuildContext context,
-    WidgetRef ref,
-    List<String> list, {
-    required String title,
-    String? value,
-    int? index,
-    required Function(List<String>) onSave,
-  }) async {
-    final result = await globalState.showCommonDialog<String>(
-      child: InputDialog(
-        autofocus: true,
-        title: title,
-        labelText: appLocalizations.domain,
-        value: value ?? '',
-        validator: (v) {
-          if (v == null || v.isEmpty) {
-            return appLocalizations.emptyTip(appLocalizations.domain);
-          }
-          return null;
-        },
+            return ListInputPage(
+              title: appLocalizations.forceDomain,
+              items: forceDomain,
+              titleBuilder: (item) => Text(item),
+              onChange: (items) {
+                ref.read(patchClashConfigProvider.notifier).updateState(
+                      (state) => state.copyWith.sniffer(forceDomain: List.from(items)),
+                    );
+              },
+            );
+          },
+        ),
       ),
     );
-    if (result != null) {
-      final newList = List<String>.from(list);
-      if (index != null) {
-        newList[index] = result;
-      } else {
-        newList.add(result);
-      }
-      onSave(newList);
-    }
   }
 }
 
@@ -329,90 +353,30 @@ class SkipDomainWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final skipDomain = ref.watch(patchClashConfigProvider
-        .select((state) => state.sniffer.skipDomain));
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            appLocalizations.skipDomain,
-            style: context.textTheme.titleMedium?.copyWith(
-              color: context.colorScheme.primary,
-            ),
-          ),
-        ),
-        if (skipDomain.isNotEmpty)
-          ...skipDomain.asMap().entries.map((entry) {
-            final index = entry.key;
-            final domain = entry.value;
-            return ListItem(
-              title: Text(domain),
-              onTap: () => _showDomainDialog(
-                context,
-                ref,
-                skipDomain,
-                title: appLocalizations.skipDomain,
-                value: domain,
-                index: index,
-                onSave: (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(skipDomain: newList));
-                },
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _deleteItem(ref, skipDomain, index, (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(skipDomain: newList));
-                }),
-              ),
+    return ListItem.open(
+      title: Text(appLocalizations.skipDomain),
+      delegate: OpenDelegate(
+        blur: false,
+        title: appLocalizations.skipDomain,
+        widget: Consumer(
+          builder: (_, ref, __) {
+            final skipDomain = ref.watch(
+              patchClashConfigProvider.select((state) => state.sniffer.skipDomain),
             );
-          }),
-      ],
-    );
-  }
-
-  void _deleteItem(WidgetRef ref, List<String> list, int index, Function(List<String>) onSave) {
-    final newList = List<String>.from(list);
-    newList.removeAt(index);
-    onSave(newList);
-  }
-
-  void _showDomainDialog(
-    BuildContext context,
-    WidgetRef ref,
-    List<String> list, {
-    required String title,
-    String? value,
-    int? index,
-    required Function(List<String>) onSave,
-  }) async {
-    final result = await globalState.showCommonDialog<String>(
-      child: InputDialog(
-        autofocus: true,
-        title: title,
-        labelText: appLocalizations.domain,
-        value: value ?? '',
-        validator: (v) {
-          if (v == null || v.isEmpty) {
-            return appLocalizations.emptyTip(appLocalizations.domain);
-          }
-          return null;
-        },
+            return ListInputPage(
+              title: appLocalizations.skipDomain,
+              items: skipDomain,
+              titleBuilder: (item) => Text(item),
+              onChange: (items) {
+                ref.read(patchClashConfigProvider.notifier).updateState(
+                      (state) => state.copyWith.sniffer(skipDomain: List.from(items)),
+                    );
+              },
+            );
+          },
+        ),
       ),
     );
-    if (result != null) {
-      final newList = List<String>.from(list);
-      if (index != null) {
-        newList[index] = result;
-      } else {
-        newList.add(result);
-      }
-      onSave(newList);
-    }
   }
 }
 
@@ -421,90 +385,30 @@ class SkipSrcAddressWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final skipSrcAddress = ref.watch(patchClashConfigProvider
-        .select((state) => state.sniffer.skipSrcAddress));
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            appLocalizations.skipSrcAddress,
-            style: context.textTheme.titleMedium?.copyWith(
-              color: context.colorScheme.primary,
-            ),
-          ),
-        ),
-        if (skipSrcAddress.isNotEmpty)
-          ...skipSrcAddress.asMap().entries.map((entry) {
-            final index = entry.key;
-            final address = entry.value;
-            return ListItem(
-              title: Text(address),
-              onTap: () => _showAddressDialog(
-                context,
-                ref,
-                skipSrcAddress,
-                title: appLocalizations.skipSrcAddress,
-                value: address,
-                index: index,
-                onSave: (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(skipSrcAddress: newList));
-                },
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _deleteItem(ref, skipSrcAddress, index, (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(skipSrcAddress: newList));
-                }),
-              ),
+    return ListItem.open(
+      title: Text(appLocalizations.skipSrcAddress),
+      delegate: OpenDelegate(
+        blur: false,
+        title: appLocalizations.skipSrcAddress,
+        widget: Consumer(
+          builder: (_, ref, __) {
+            final skipSrcAddress = ref.watch(
+              patchClashConfigProvider.select((state) => state.sniffer.skipSrcAddress),
             );
-          }),
-      ],
-    );
-  }
-
-  void _deleteItem(WidgetRef ref, List<String> list, int index, Function(List<String>) onSave) {
-    final newList = List<String>.from(list);
-    newList.removeAt(index);
-    onSave(newList);
-  }
-
-  void _showAddressDialog(
-    BuildContext context,
-    WidgetRef ref,
-    List<String> list, {
-    required String title,
-    String? value,
-    int? index,
-    required Function(List<String>) onSave,
-  }) async {
-    final result = await globalState.showCommonDialog<String>(
-      child: InputDialog(
-        autofocus: true,
-        title: title,
-        labelText: appLocalizations.address,
-        value: value ?? '',
-        validator: (v) {
-          if (v == null || v.isEmpty) {
-            return appLocalizations.emptyTip(appLocalizations.address);
-          }
-          return null;
-        },
+            return ListInputPage(
+              title: appLocalizations.skipSrcAddress,
+              items: skipSrcAddress,
+              titleBuilder: (item) => Text(item),
+              onChange: (items) {
+                ref.read(patchClashConfigProvider.notifier).updateState(
+                      (state) => state.copyWith.sniffer(skipSrcAddress: List.from(items)),
+                    );
+              },
+            );
+          },
+        ),
       ),
     );
-    if (result != null) {
-      final newList = List<String>.from(list);
-      if (index != null) {
-        newList[index] = result;
-      } else {
-        newList.add(result);
-      }
-      onSave(newList);
-    }
   }
 }
 
@@ -513,90 +417,30 @@ class SkipDstAddressWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final skipDstAddress = ref.watch(patchClashConfigProvider
-        .select((state) => state.sniffer.skipDstAddress));
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text(
-            appLocalizations.skipDstAddress,
-            style: context.textTheme.titleMedium?.copyWith(
-              color: context.colorScheme.primary,
-            ),
-          ),
-        ),
-        if (skipDstAddress.isNotEmpty)
-          ...skipDstAddress.asMap().entries.map((entry) {
-            final index = entry.key;
-            final address = entry.value;
-            return ListItem(
-              title: Text(address),
-              onTap: () => _showAddressDialog(
-                context,
-                ref,
-                skipDstAddress,
-                title: appLocalizations.skipDstAddress,
-                value: address,
-                index: index,
-                onSave: (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(skipDstAddress: newList));
-                },
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _deleteItem(ref, skipDstAddress, index, (newList) {
-                  ref.read(patchClashConfigProvider.notifier).updateState(
-                      (state) => state.copyWith.sniffer(skipDstAddress: newList));
-                }),
-              ),
+    return ListItem.open(
+      title: Text(appLocalizations.skipDstAddress),
+      delegate: OpenDelegate(
+        blur: false,
+        title: appLocalizations.skipDstAddress,
+        widget: Consumer(
+          builder: (_, ref, __) {
+            final skipDstAddress = ref.watch(
+              patchClashConfigProvider.select((state) => state.sniffer.skipDstAddress),
             );
-          }),
-      ],
-    );
-  }
-
-  void _deleteItem(WidgetRef ref, List<String> list, int index, Function(List<String>) onSave) {
-    final newList = List<String>.from(list);
-    newList.removeAt(index);
-    onSave(newList);
-  }
-
-  void _showAddressDialog(
-    BuildContext context,
-    WidgetRef ref,
-    List<String> list, {
-    required String title,
-    String? value,
-    int? index,
-    required Function(List<String>) onSave,
-  }) async {
-    final result = await globalState.showCommonDialog<String>(
-      child: InputDialog(
-        autofocus: true,
-        title: title,
-        labelText: appLocalizations.address,
-        value: value ?? '',
-        validator: (v) {
-          if (v == null || v.isEmpty) {
-            return appLocalizations.emptyTip(appLocalizations.address);
-          }
-          return null;
-        },
+            return ListInputPage(
+              title: appLocalizations.skipDstAddress,
+              items: skipDstAddress,
+              titleBuilder: (item) => Text(item),
+              onChange: (items) {
+                ref.read(patchClashConfigProvider.notifier).updateState(
+                      (state) => state.copyWith.sniffer(skipDstAddress: List.from(items)),
+                    );
+              },
+            );
+          },
+        ),
       ),
     );
-    if (result != null) {
-      final newList = List<String>.from(list);
-      if (index != null) {
-        newList[index] = result;
-      } else {
-        newList.add(result);
-      }
-      onSave(newList);
-    }
   }
 }
 
@@ -636,116 +480,6 @@ class SnifferListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    return Scaffold(
-      body: generateListView(snifferItems),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddMenu(context, ref),
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  void _showAddMenu(BuildContext context, WidgetRef ref) async {
-    final result = await showDialog<String>(
-      context: context,
-      builder: (context) => SimpleDialog(
-        title: Text(appLocalizations.add),
-        children: [
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, 'forceDomain'),
-            child: Text(appLocalizations.forceDomain),
-          ),
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, 'skipDomain'),
-            child: Text(appLocalizations.skipDomain),
-          ),
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, 'skipSrcAddress'),
-            child: Text(appLocalizations.skipSrcAddress),
-          ),
-          SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, 'skipDstAddress'),
-            child: Text(appLocalizations.skipDstAddress),
-          ),
-        ],
-      ),
-    );
-
-    if (result == null || !context.mounted) return;
-
-    switch (result) {
-      case 'forceDomain':
-        _showDomainDialog(context, ref, appLocalizations.forceDomain, (value) {
-          final forceDomain = ref.read(patchClashConfigProvider).sniffer.forceDomain;
-          final newList = List<String>.from(forceDomain)..add(value);
-          ref.read(patchClashConfigProvider.notifier).updateState(
-              (state) => state.copyWith.sniffer(forceDomain: newList));
-        });
-        break;
-      case 'skipDomain':
-        _showDomainDialog(context, ref, appLocalizations.skipDomain, (value) {
-          final skipDomain = ref.read(patchClashConfigProvider).sniffer.skipDomain;
-          final newList = List<String>.from(skipDomain)..add(value);
-          ref.read(patchClashConfigProvider.notifier).updateState(
-              (state) => state.copyWith.sniffer(skipDomain: newList));
-        });
-        break;
-      case 'skipSrcAddress':
-        _showAddressDialog(context, ref, appLocalizations.skipSrcAddress, (value) {
-          final skipSrcAddress = ref.read(patchClashConfigProvider).sniffer.skipSrcAddress;
-          final newList = List<String>.from(skipSrcAddress)..add(value);
-          ref.read(patchClashConfigProvider.notifier).updateState(
-              (state) => state.copyWith.sniffer(skipSrcAddress: newList));
-        });
-        break;
-      case 'skipDstAddress':
-        _showAddressDialog(context, ref, appLocalizations.skipDstAddress, (value) {
-          final skipDstAddress = ref.read(patchClashConfigProvider).sniffer.skipDstAddress;
-          final newList = List<String>.from(skipDstAddress)..add(value);
-          ref.read(patchClashConfigProvider.notifier).updateState(
-              (state) => state.copyWith.sniffer(skipDstAddress: newList));
-        });
-        break;
-    }
-  }
-
-  void _showDomainDialog(BuildContext context, WidgetRef ref, String title, Function(String) onSave) async {
-    final result = await globalState.showCommonDialog<String>(
-      child: InputDialog(
-        autofocus: true,
-        title: title,
-        labelText: appLocalizations.domain,
-        value: '',
-        validator: (v) {
-          if (v == null || v.isEmpty) {
-            return appLocalizations.emptyTip(appLocalizations.domain);
-          }
-          return null;
-        },
-      ),
-    );
-    if (result != null) {
-      onSave(result);
-    }
-  }
-
-  void _showAddressDialog(BuildContext context, WidgetRef ref, String title, Function(String) onSave) async {
-    final result = await globalState.showCommonDialog<String>(
-      child: InputDialog(
-        autofocus: true,
-        title: title,
-        labelText: appLocalizations.address,
-        value: '',
-        validator: (v) {
-          if (v == null || v.isEmpty) {
-            return appLocalizations.emptyTip(appLocalizations.address);
-          }
-          return null;
-        },
-      ),
-    );
-    if (result != null) {
-      onSave(result);
-    }
+    return generateListView(snifferItems);
   }
 }
