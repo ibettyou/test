@@ -517,6 +517,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "dozeSuspendDesc": MessageLookupByLibrary.simpleMessage(
       "Enable Doze suspend mode support",
     ),
+    "storeFix": MessageLookupByLibrary.simpleMessage("Store Fix"),
+    "storeFixDesc": MessageLookupByLibrary.simpleMessage(
+      "Fix Play Store download issues",
+    ),
     "otherContributors": MessageLookupByLibrary.simpleMessage(
       "Other contributors",
     ),

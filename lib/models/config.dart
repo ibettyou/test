@@ -151,6 +151,7 @@ class VpnProps with _$VpnProps {
     @Default(false) bool dozeSuspend,
     @Default(false) bool smartAutoStop,
     @Default('') String smartAutoStopNetworks,
+    @Default(false) bool storeFix,
     @Default(defaultAccessControl) AccessControl accessControl,
   }) = _VpnProps;
 

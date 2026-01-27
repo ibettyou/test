@@ -285,6 +285,16 @@ class AppLocalizations {
     return Intl.message('Enable Doze suspend mode support', name: 'dozeSuspendDesc', desc: '', args: []);
   }
 
+  /// `Store Fix`
+  String get storeFix {
+    return Intl.message('Store Fix', name: 'storeFix', desc: '', args: []);
+  }
+
+  /// `Fix Play Store download issues`
+  String get storeFixDesc {
+    return Intl.message('Fix Play Store download issues', name: 'storeFixDesc', desc: '', args: []);
+  }
+
   /// `About`
   String get about {
     return Intl.message('About', name: 'about', desc: '', args: []);

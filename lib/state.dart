@@ -393,8 +393,7 @@ class GlobalState {
       rawConfig['hosts'] = {};
     }
     // 如果启用了覆写NTP，自动添加 NTP 服务器的 hosts 映射
-    final overrideNtp = globalState.config.overrideNtp;
-    if (overrideNtp) {
+    if (globalState.config.overrideNtp) {
       rawConfig['hosts']['cn.pool.ntp.org'] = '139.199.215.251';
     }
     for (final host in realPatchConfig.hosts.entries) {

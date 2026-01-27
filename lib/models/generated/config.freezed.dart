@@ -1172,6 +1172,7 @@ mixin _$VpnProps {
   bool get dozeSuspend => throw _privateConstructorUsedError;
   bool get smartAutoStop => throw _privateConstructorUsedError;
   String get smartAutoStopNetworks => throw _privateConstructorUsedError;
+  bool get storeFix => throw _privateConstructorUsedError;
   AccessControl get accessControl => throw _privateConstructorUsedError;
 
   /// Serializes this VpnProps to a JSON map.
@@ -1198,6 +1199,7 @@ abstract class $VpnPropsCopyWith<$Res> {
       bool dozeSuspend,
       bool smartAutoStop,
       String smartAutoStopNetworks,
+      bool storeFix,
       AccessControl accessControl});
 
   $AccessControlCopyWith<$Res> get accessControl;
@@ -1226,6 +1228,7 @@ class _$VpnPropsCopyWithImpl<$Res, $Val extends VpnProps>
     Object? dozeSuspend = null,
     Object? smartAutoStop = null,
     Object? smartAutoStopNetworks = null,
+    Object? storeFix = null,
     Object? accessControl = null,
   }) {
     return _then(_value.copyWith(
@@ -1261,6 +1264,10 @@ class _$VpnPropsCopyWithImpl<$Res, $Val extends VpnProps>
           ? _value.smartAutoStopNetworks
           : smartAutoStopNetworks // ignore: cast_nullable_to_non_nullable
               as String,
+      storeFix: null == storeFix
+          ? _value.storeFix
+          : storeFix // ignore: cast_nullable_to_non_nullable
+              as bool,
       accessControl: null == accessControl
           ? _value.accessControl
           : accessControl // ignore: cast_nullable_to_non_nullable
@@ -1296,6 +1303,7 @@ abstract class _$$VpnPropsImplCopyWith<$Res>
       bool dozeSuspend,
       bool smartAutoStop,
       String smartAutoStopNetworks,
+      bool storeFix,
       AccessControl accessControl});
 
   @override
@@ -1323,6 +1331,7 @@ class __$$VpnPropsImplCopyWithImpl<$Res>
     Object? dozeSuspend = null,
     Object? smartAutoStop = null,
     Object? smartAutoStopNetworks = null,
+    Object? storeFix = null,
     Object? accessControl = null,
   }) {
     return _then(_$VpnPropsImpl(
@@ -1358,6 +1367,10 @@ class __$$VpnPropsImplCopyWithImpl<$Res>
           ? _value.smartAutoStopNetworks
           : smartAutoStopNetworks // ignore: cast_nullable_to_non_nullable
               as String,
+      storeFix: null == storeFix
+          ? _value.storeFix
+          : storeFix // ignore: cast_nullable_to_non_nullable
+              as bool,
       accessControl: null == accessControl
           ? _value.accessControl
           : accessControl // ignore: cast_nullable_to_non_nullable
@@ -1378,6 +1391,7 @@ class _$VpnPropsImpl implements _VpnProps {
       this.dozeSuspend = false,
       this.smartAutoStop = false,
       this.smartAutoStopNetworks = '',
+      this.storeFix = false,
       this.accessControl = defaultAccessControl});
 
   factory _$VpnPropsImpl.fromJson(Map<String, dynamic> json) =>
@@ -1409,11 +1423,14 @@ class _$VpnPropsImpl implements _VpnProps {
   final String smartAutoStopNetworks;
   @override
   @JsonKey()
+  final bool storeFix;
+  @override
+  @JsonKey()
   final AccessControl accessControl;
 
   @override
   String toString() {
-    return 'VpnProps(enable: $enable, systemProxy: $systemProxy, ipv6: $ipv6, allowBypass: $allowBypass, routeMode: $routeMode, dozeSuspend: $dozeSuspend, smartAutoStop: $smartAutoStop, smartAutoStopNetworks: $smartAutoStopNetworks, accessControl: $accessControl)';
+    return 'VpnProps(enable: $enable, systemProxy: $systemProxy, ipv6: $ipv6, allowBypass: $allowBypass, routeMode: $routeMode, dozeSuspend: $dozeSuspend, smartAutoStop: $smartAutoStop, smartAutoStopNetworks: $smartAutoStopNetworks, storeFix: $storeFix, accessControl: $accessControl)';
   }
 
   @override
@@ -1435,6 +1452,8 @@ class _$VpnPropsImpl implements _VpnProps {
                 other.smartAutoStop == smartAutoStop) &&
             (identical(other.smartAutoStopNetworks, smartAutoStopNetworks) ||
                 other.smartAutoStopNetworks == smartAutoStopNetworks) &&
+            (identical(other.storeFix, storeFix) ||
+                other.storeFix == storeFix) &&
             (identical(other.accessControl, accessControl) ||
                 other.accessControl == accessControl));
   }
@@ -1451,6 +1470,7 @@ class _$VpnPropsImpl implements _VpnProps {
       dozeSuspend,
       smartAutoStop,
       smartAutoStopNetworks,
+      storeFix,
       accessControl);
 
   /// Create a copy of VpnProps
@@ -1479,6 +1499,7 @@ abstract class _VpnProps implements VpnProps {
       final bool dozeSuspend,
       final bool smartAutoStop,
       final String smartAutoStopNetworks,
+      final bool storeFix,
       final AccessControl accessControl}) = _$VpnPropsImpl;
 
   factory _VpnProps.fromJson(Map<String, dynamic> json) =
@@ -1500,6 +1521,8 @@ abstract class _VpnProps implements VpnProps {
   bool get smartAutoStop;
   @override
   String get smartAutoStopNetworks;
+  @override
+  bool get storeFix;
   @override
   AccessControl get accessControl;
 

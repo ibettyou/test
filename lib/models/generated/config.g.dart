@@ -159,6 +159,7 @@ _$VpnPropsImpl _$$VpnPropsImplFromJson(Map<String, dynamic> json) =>
       dozeSuspend: json['dozeSuspend'] as bool? ?? false,
       smartAutoStop: json['smartAutoStop'] as bool? ?? false,
       smartAutoStopNetworks: json['smartAutoStopNetworks'] as String? ?? '',
+      storeFix: json['storeFix'] as bool? ?? false,
       accessControl: json['accessControl'] == null
           ? defaultAccessControl
           : AccessControl.fromJson(
@@ -175,6 +176,7 @@ Map<String, dynamic> _$$VpnPropsImplToJson(_$VpnPropsImpl instance) =>
       'dozeSuspend': instance.dozeSuspend,
       'smartAutoStop': instance.smartAutoStop,
       'smartAutoStopNetworks': instance.smartAutoStopNetworks,
+      'storeFix': instance.storeFix,
       'accessControl': instance.accessControl,
     };
 

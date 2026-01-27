@@ -96,6 +96,48 @@ class DozeSuspendItem extends ConsumerWidget {
   }
 }
 
+class StoreFixItem extends ConsumerWidget {
+  const StoreFixItem({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final storeFix = ref.watch(
+      vpnSettingProvider.select((state) => state.storeFix),
+    );
+    return ListItem.switchItem(
+      title: Text(appLocalizations.storeFix),
+      subtitle: Text(appLocalizations.storeFixDesc),
+      delegate: SwitchDelegate(
+        value: storeFix,
+        onChanged: (bool value) async {
+          ref.read(vpnSettingProvider.notifier).updateState(
+                (state) => state.copyWith(
+                  storeFix: value,
+                ),
+              );
+          
+          // Update hosts mapping
+          final currentHosts = Map<String, String>.from(
+            ref.read(patchClashConfigProvider).hosts,
+          );
+          
+          if (value) {
+            // Add the hosts mapping
+            currentHosts['service.googleapis.cn'] = 'service.googleapis.com';
+          } else {
+            // Remove the hosts mapping
+            currentHosts.remove('service.googleapis.cn');
+          }
+          
+          ref.read(patchClashConfigProvider.notifier).updateState(
+                (state) => state.copyWith(hosts: currentHosts),
+              );
+        },
+      ),
+    );
+  }
+}
+
 class OtherSettingView extends ConsumerWidget {
   const OtherSettingView({super.key});
 
@@ -109,6 +151,7 @@ class OtherSettingView extends ConsumerWidget {
       const SmartAutoStopItem(),
       if (smartAutoStop) const NetworkMatchItem(),
       if (system.isAndroid) const DozeSuspendItem(),
+      const StoreFixItem(),
     ];
 
     if (items.isEmpty) {

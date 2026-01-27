@@ -37,6 +37,8 @@
   "tooManyRules": "Maximum 2 rules allowed",
   "dozeSuspend": "Doze Suspend",
   "dozeSuspendDesc": "Enable Doze suspend mode support",
+  "storeFix": "Store Fix",
+  "storeFixDesc": "Fix Play Store download issues",
   "about": "About",
   "en": "English",
   "ja": "Japanese",
