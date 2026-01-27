@@ -643,6 +643,7 @@ class ClashConfig with _$ClashConfig {
     @Default(ExternalControllerStatus.close)
     @JsonKey(name: 'external-controller')
     ExternalControllerStatus externalController,
+    @Default('bettbox') @JsonKey(name: 'external-ui-name') String externalUiName,
     @Default('') @JsonKey(name: 'external-ui-url') String externalUiUrl,
     @Default({}) HostsMap hosts,
   }) = _ClashConfig;

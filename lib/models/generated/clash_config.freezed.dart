@@ -4413,6 +4413,8 @@ mixin _$ClashConfig {
   @JsonKey(name: 'external-controller')
   ExternalControllerStatus get externalController =>
       throw _privateConstructorUsedError;
+  @JsonKey(name: 'external-ui-name')
+  String get externalUiName => throw _privateConstructorUsedError;
   @JsonKey(name: 'external-ui-url')
   String get externalUiUrl => throw _privateConstructorUsedError;
   Map<String, String> get hosts => throw _privateConstructorUsedError;
@@ -4464,6 +4466,7 @@ abstract class $ClashConfigCopyWith<$Res> {
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
+      @JsonKey(name: 'external-ui-name') String externalUiName,
       @JsonKey(name: 'external-ui-url') String externalUiUrl,
       Map<String, String> hosts});
 
@@ -4515,6 +4518,7 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
+    Object? externalUiName = null,
     Object? externalUiUrl = null,
     Object? hosts = null,
   }) {
@@ -4619,6 +4623,10 @@ class _$ClashConfigCopyWithImpl<$Res, $Val extends ClashConfig>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
+      externalUiName: null == externalUiName
+          ? _value.externalUiName
+          : externalUiName // ignore: cast_nullable_to_non_nullable
+              as String,
       externalUiUrl: null == externalUiUrl
           ? _value.externalUiUrl
           : externalUiUrl // ignore: cast_nullable_to_non_nullable
@@ -4730,6 +4738,7 @@ abstract class _$$ClashConfigImplCopyWith<$Res>
       @JsonKey(name: 'global-ua') String? globalUa,
       @JsonKey(name: 'external-controller')
       ExternalControllerStatus externalController,
+      @JsonKey(name: 'external-ui-name') String externalUiName,
       @JsonKey(name: 'external-ui-url') String externalUiUrl,
       Map<String, String> hosts});
 
@@ -4785,6 +4794,7 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
     Object? rule = null,
     Object? globalUa = freezed,
     Object? externalController = null,
+    Object? externalUiName = null,
     Object? externalUiUrl = null,
     Object? hosts = null,
   }) {
@@ -4889,6 +4899,10 @@ class __$$ClashConfigImplCopyWithImpl<$Res>
           ? _value.externalController
           : externalController // ignore: cast_nullable_to_non_nullable
               as ExternalControllerStatus,
+      externalUiName: null == externalUiName
+          ? _value.externalUiName
+          : externalUiName // ignore: cast_nullable_to_non_nullable
+              as String,
       externalUiUrl: null == externalUiUrl
           ? _value.externalUiUrl
           : externalUiUrl // ignore: cast_nullable_to_non_nullable
@@ -4939,6 +4953,7 @@ class _$ClashConfigImpl implements _ClashConfig {
       @JsonKey(name: 'global-ua') this.globalUa,
       @JsonKey(name: 'external-controller')
       this.externalController = ExternalControllerStatus.close,
+      @JsonKey(name: 'external-ui-name') this.externalUiName = 'bettbox',
       @JsonKey(name: 'external-ui-url') this.externalUiUrl = '',
       final Map<String, String> hosts = const {}})
       : _tunnels = tunnels,
@@ -5043,6 +5058,9 @@ class _$ClashConfigImpl implements _ClashConfig {
   @JsonKey(name: 'external-controller')
   final ExternalControllerStatus externalController;
   @override
+  @JsonKey(name: 'external-ui-name')
+  final String externalUiName;
+  @override
   @JsonKey(name: 'external-ui-url')
   final String externalUiUrl;
   final Map<String, String> _hosts;
@@ -5056,7 +5074,7 @@ class _$ClashConfigImpl implements _ClashConfig {
 
   @override
   String toString() {
-    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, tunnels: $tunnels, experimental: $experimental, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, externalUiUrl: $externalUiUrl, hosts: $hosts)';
+    return 'ClashConfig(mixedPort: $mixedPort, socksPort: $socksPort, port: $port, redirPort: $redirPort, tproxyPort: $tproxyPort, mode: $mode, allowLan: $allowLan, logLevel: $logLevel, ipv6: $ipv6, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, tun: $tun, dns: $dns, ntp: $ntp, sniffer: $sniffer, tunnels: $tunnels, experimental: $experimental, geoXUrl: $geoXUrl, geodataLoader: $geodataLoader, proxyGroups: $proxyGroups, rule: $rule, globalUa: $globalUa, externalController: $externalController, externalUiName: $externalUiName, externalUiUrl: $externalUiUrl, hosts: $hosts)';
   }
 
   @override
@@ -5104,6 +5122,8 @@ class _$ClashConfigImpl implements _ClashConfig {
                 other.globalUa == globalUa) &&
             (identical(other.externalController, externalController) ||
                 other.externalController == externalController) &&
+            (identical(other.externalUiName, externalUiName) ||
+                other.externalUiName == externalUiName) &&
             (identical(other.externalUiUrl, externalUiUrl) ||
                 other.externalUiUrl == externalUiUrl) &&
             const DeepCollectionEquality().equals(other._hosts, _hosts));
@@ -5138,6 +5158,7 @@ class _$ClashConfigImpl implements _ClashConfig {
         const DeepCollectionEquality().hash(_rule),
         globalUa,
         externalController,
+        externalUiName,
         externalUiUrl,
         const DeepCollectionEquality().hash(_hosts)
       ]);
@@ -5190,6 +5211,7 @@ abstract class _ClashConfig implements ClashConfig {
       @JsonKey(name: 'global-ua') final String? globalUa,
       @JsonKey(name: 'external-controller')
       final ExternalControllerStatus externalController,
+      @JsonKey(name: 'external-ui-name') final String externalUiName,
       @JsonKey(name: 'external-ui-url') final String externalUiUrl,
       final Map<String, String> hosts}) = _$ClashConfigImpl;
 
@@ -5267,6 +5289,9 @@ abstract class _ClashConfig implements ClashConfig {
   @override
   @JsonKey(name: 'external-controller')
   ExternalControllerStatus get externalController;
+  @override
+  @JsonKey(name: 'external-ui-name')
+  String get externalUiName;
   @override
   @JsonKey(name: 'external-ui-url')
   String get externalUiUrl;

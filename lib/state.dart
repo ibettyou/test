@@ -304,7 +304,8 @@ class GlobalState {
       tun: patchConfig.tun.getRealTun(config.networkProps.routeMode),
     );
     rawConfig['external-controller'] = realPatchConfig.externalController.value;
-    rawConfig['external-ui'] = '';
+    rawConfig['external-ui'] = await appPath.uiPath;
+    rawConfig['external-ui-name'] = realPatchConfig.externalUiName;
     rawConfig['interface-name'] = '';
     rawConfig['external-ui-url'] = realPatchConfig.externalUiUrl;
     rawConfig['tcp-concurrent'] = realPatchConfig.tcpConcurrent;

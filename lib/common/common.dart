@@ -35,5 +35,6 @@ export 'string.dart';
 export 'system.dart';
 export 'text.dart';
 export 'tray.dart';
+export 'ui_manager.dart';
 export 'utils.dart';
 export 'window.dart';

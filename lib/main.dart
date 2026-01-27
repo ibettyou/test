@@ -33,6 +33,13 @@ Future<void> main() async {
   await clashCore.preload();
   await globalState.initApp(version);
   
+  // 初始化 UI 文件
+  try {
+    await uiManager.initializeUI();
+  } catch (e) {
+    commonPrint.log('Failed to initialize UI: $e');
+  }
+  
   // 检查用户是否启用崩溃分析
   final enableCrashReport = globalState.config.appSetting.enableCrashReport;
   
