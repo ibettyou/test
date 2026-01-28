@@ -51,7 +51,11 @@ class OptionsDialog<T> extends StatelessWidget {
                       Navigator.of(context).pop(value);
                     },
                   ),
-                  title: Text(textBuilder(option)),
+                  title: Text(
+                    textBuilder(option),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 );
               },
             ),

@@ -116,6 +116,12 @@ class TestUrlItem extends ConsumerWidget {
 
   // Custom URL marker
   static const String _customUrlMarker = '__CUSTOM_URL__';
+  
+  // Pre-computed options list to avoid recreating on every build
+  static final List<String> _options = [
+    ...presetTestUrls,
+    _customUrlMarker,
+  ];
 
   @override
   Widget build(BuildContext context, ref) {
@@ -131,7 +137,7 @@ class TestUrlItem extends ConsumerWidget {
       subtitle: Text(testUrl),
       delegate: OptionsDelegate<String>(
         title: appLocalizations.testUrl,
-        options: [...presetTestUrls, _customUrlMarker],
+        options: _options,
         value: isPresetUrl ? testUrl : _customUrlMarker,
         onChanged: (String? value) async {
           if (value == null) return;
