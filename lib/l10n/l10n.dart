@@ -472,20 +472,20 @@ class AppLocalizations {
     return Intl.message('Logcat', name: 'logcat', desc: '', args: []);
   }
 
-  /// `Disabling will hide the log entry`
+  /// `Enabling will show the log entry`
   String get logcatDesc {
     return Intl.message(
-      'Disabling will hide the log entry',
+      'Enabling will show the log entry',
       name: 'logcatDesc',
       desc: '',
       args: [],
     );
   }
 
-  /// `Crash analytics`
+  /// `Auto crash analytics`
   String get enableCrashReport {
     return Intl.message(
-      'Crash analytics',
+      'Auto crash analytics',
       name: 'enableCrashReport',
       desc: '',
       args: [],
@@ -1662,6 +1662,16 @@ class AppLocalizations {
     return Intl.message('Test url', name: 'testUrl', desc: '', args: []);
   }
 
+  /// `Start test`
+  String get startTest {
+    return Intl.message('Start test', name: 'startTest', desc: '', args: []);
+  }
+
+  /// `Add profile`
+  String get addProfile {
+    return Intl.message('Add profile', name: 'addProfile', desc: '', args: []);
+  }
+
   /// `Custom URL...`
   String get customUrl {
     return Intl.message('Custom URL...', name: 'customUrl', desc: '', args: []);
@@ -1832,10 +1842,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Only statistics proxy`
+  /// `Proxy traffic statistics`
   String get onlyStatisticsProxy {
     return Intl.message(
-      'Only statistics proxy',
+      'Proxy traffic statistics',
       name: 'onlyStatisticsProxy',
       desc: '',
       args: [],

@@ -123,12 +123,11 @@ class _ProfilesViewState extends State<ProfilesView> {
   }
 
   Widget _buildFAB() {
-    return FloatingActionButton(
+    return FloatingActionButton.extended(
       heroTag: null,
       onPressed: _handleShowAddExtendPage,
-      child: const Icon(
-        Icons.add,
-      ),
+      icon: const Icon(Icons.add),
+      label: Text(appLocalizations.addProfile),
     );
   }
 
@@ -261,16 +260,20 @@ class ProfileItem extends StatelessWidget {
         SubscriptionInfoView(
           subscriptionInfo: subscriptionInfo,
         ),
-        // 流量使用 / 总量 · 到期日期   ·   更新时间（全部在同一行）
+        // 流量使用 / 总量 · 到期日期 - 更新时间（全部在同一行）
         Text(
-          '${_getTrafficText(subscriptionInfo)} · ${_getExpireText(subscriptionInfo)}   ·   $updateTimeText',
+          '${_getTrafficText(subscriptionInfo)} · ${_getExpireText(subscriptionInfo)} - $updateTimeText',
           style: context.textTheme.labelMedium?.toLight,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ] else
         // 没有订阅信息时只显示更新时间
         Text(
           updateTimeText,
           style: context.textTheme.labelMedium?.toLight,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
     ];
   }
@@ -278,6 +281,18 @@ class ProfileItem extends StatelessWidget {
   String _getTrafficText(SubscriptionInfo subscriptionInfo) {
     final use = subscriptionInfo.upload + subscriptionInfo.download;
     final total = subscriptionInfo.total;
+    
+    // 如果没有流量信息（use 和 total 都为 0），显示 Unlimited
+    if (use == 0 && total == 0) {
+      return 'Unlimited';
+    }
+    
+    // 如果总流量为0但有使用量，显示已使用 / Unlimited
+    if (total == 0) {
+      final useShow = TrafficValue(value: use).show;
+      return '$useShow / Unlimited';
+    }
+    
     final useShow = TrafficValue(value: use).show;
     final totalShow = TrafficValue(value: total).show;
     return '$useShow / $totalShow';

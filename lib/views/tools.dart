@@ -127,6 +127,12 @@ class _ToolViewState extends ConsumerState<ToolsView> {
 class _LocaleItem extends ConsumerWidget {
   const _LocaleItem();
 
+  // Cache the options list to avoid recreating on every build
+  static final List<Locale?> _localeOptions = [
+    null,
+    ...AppLocalizations.delegate.supportedLocales,
+  ];
+
   String _getLocaleString(Locale? locale) {
     if (locale == null) return appLocalizations.defaultText;
     return Intl.message(locale.toString());
@@ -144,7 +150,7 @@ class _LocaleItem extends ConsumerWidget {
       subtitle: Text(Intl.message(subTitle)),
       delegate: OptionsDelegate(
         title: appLocalizations.language,
-        options: [null, ...AppLocalizations.delegate.supportedLocales],
+        options: _localeOptions,
         onChanged: (Locale? locale) {
           ref.read(appSettingProvider.notifier).updateState(
                 (state) => state.copyWith(locale: locale?.toString()),

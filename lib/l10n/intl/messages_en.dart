@@ -106,7 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "auto": MessageLookupByLibrary.simpleMessage("Auto"),
     "enableCrashReport": MessageLookupByLibrary.simpleMessage(
-      "Crash analytics",
+      "Auto crash analytics",
     ),
     "enableCrashReportDesc": MessageLookupByLibrary.simpleMessage(
       "Auto submit app crash logs",
@@ -410,7 +410,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logLevel": MessageLookupByLibrary.simpleMessage("LogLevel"),
     "logcat": MessageLookupByLibrary.simpleMessage("Logcat"),
     "logcatDesc": MessageLookupByLibrary.simpleMessage(
-      "Disabling will hide the log entry",
+      "Enabling will show the log entry",
     ),
     "logs": MessageLookupByLibrary.simpleMessage("Logs"),
     "logsDesc": MessageLookupByLibrary.simpleMessage("Log capture records"),
@@ -485,7 +485,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Only third-party apps",
     ),
     "onlyStatisticsProxy": MessageLookupByLibrary.simpleMessage(
-      "Only statistics proxy",
+      "Proxy traffic statistics",
     ),
     "onlyStatisticsProxyDesc": MessageLookupByLibrary.simpleMessage(
       "When turned on, only statistics proxy traffic",
@@ -826,6 +826,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enabling it will allow TCP concurrency",
     ),
     "testUrl": MessageLookupByLibrary.simpleMessage("Test url"),
+    "startTest": MessageLookupByLibrary.simpleMessage("Start test"),
+    "addProfile": MessageLookupByLibrary.simpleMessage("Add profile"),
     "customUrl": MessageLookupByLibrary.simpleMessage("Custom URL..."),
     "textScale": MessageLookupByLibrary.simpleMessage("Text Scaling"),
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),

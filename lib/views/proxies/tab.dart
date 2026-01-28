@@ -492,10 +492,11 @@ class _DelayTestButtonState extends State<DelayTestButton>
           ),
         );
       },
-      child: FloatingActionButton(
+      child: FloatingActionButton.extended(
         heroTag: null,
         onPressed: _healthcheck,
-        child: const Icon(Icons.network_ping),
+        icon: const Icon(Icons.network_ping),
+        label: Text(appLocalizations.startTest),
       ),
     );
   }
