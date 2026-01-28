@@ -114,36 +114,64 @@ class KeepAliveIntervalItem extends ConsumerWidget {
 class TestUrlItem extends ConsumerWidget {
   const TestUrlItem({super.key});
 
+  // Custom URL marker
+  static const String _customUrlMarker = '__CUSTOM_URL__';
+
   @override
   Widget build(BuildContext context, ref) {
     final testUrl =
         ref.watch(appSettingProvider.select((state) => state.testUrl));
-    return ListItem.input(
+    
+    // Check if current URL is in preset list
+    final isPresetUrl = presetTestUrls.contains(testUrl);
+    
+    return ListItem<String>.options(
       leading: const Icon(Icons.timeline),
       title: Text(appLocalizations.testUrl),
       subtitle: Text(testUrl),
-      delegate: InputDelegate(
-        resetValue: defaultTestUrl,
+      delegate: OptionsDelegate<String>(
         title: appLocalizations.testUrl,
-        value: testUrl,
-        validator: (String? value) {
-          if (value == null || value.isEmpty) {
-            return appLocalizations.emptyTip(appLocalizations.testUrl);
+        options: [...presetTestUrls, _customUrlMarker],
+        value: isPresetUrl ? testUrl : _customUrlMarker,
+        onChanged: (String? value) async {
+          if (value == null) return;
+          
+          if (value == _customUrlMarker) {
+            // Show custom URL input dialog
+            final customUrl = await globalState.showCommonDialog<String>(
+              child: InputDialog(
+                title: appLocalizations.customUrl,
+                value: isPresetUrl ? '' : testUrl,
+                resetValue: defaultTestUrl,
+                validator: (String? inputValue) {
+                  if (inputValue == null || inputValue.isEmpty) {
+                    return appLocalizations.emptyTip(appLocalizations.testUrl);
+                  }
+                  if (!inputValue.isUrl) {
+                    return appLocalizations.urlTip(appLocalizations.testUrl);
+                  }
+                  return null;
+                },
+              ),
+            );
+            
+            if (customUrl != null) {
+              ref.read(appSettingProvider.notifier).updateState(
+                    (state) => state.copyWith(testUrl: customUrl),
+                  );
+            }
+          } else {
+            // Use preset URL
+            ref.read(appSettingProvider.notifier).updateState(
+                  (state) => state.copyWith(testUrl: value),
+                );
           }
-          if (!value.isUrl) {
-            return appLocalizations.urlTip(appLocalizations.testUrl);
-          }
-          return null;
         },
-        onChanged: (String? value) {
-          if (value == null) {
-            return;
+        textBuilder: (url) {
+          if (url == _customUrlMarker) {
+            return appLocalizations.customUrl;
           }
-          ref.read(appSettingProvider.notifier).updateState(
-                (state) => state.copyWith(
-                  testUrl: value,
-                ),
-              );
+          return url;
         },
       ),
     );

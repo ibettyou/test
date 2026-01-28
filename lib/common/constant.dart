@@ -52,6 +52,16 @@ const defaultExternalController = '127.0.0.1:9090';
 const maxMobileWidth = 600;
 const maxLaptopWidth = 840;
 const defaultTestUrl = 'https://g.cn/generate_204';
+
+// Preset test URLs
+const presetTestUrls = [
+  'https://g.cn/generate_204',
+  'https://www.gstatic.com/generate_204',
+  'https://www.google.com/generate_204',
+  'https://cp.cloudflare.com/generate_204',
+  'https://www.apple.com/library/test/success.html',
+];
+
 final commonFilter = ImageFilter.blur(
   sigmaX: 5,
   sigmaY: 5,

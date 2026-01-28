@@ -1662,6 +1662,11 @@ class AppLocalizations {
     return Intl.message('Test url', name: 'testUrl', desc: '', args: []);
   }
 
+  /// `Custom URL...`
+  String get customUrl {
+    return Intl.message('Custom URL...', name: 'customUrl', desc: '', args: []);
+  }
+
   /// `Sync`
   String get sync {
     return Intl.message('Sync', name: 'sync', desc: '', args: []);
