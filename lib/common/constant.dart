@@ -94,7 +94,7 @@ const proxiesListStoreKey = PageStorageKey<String>('proxies_list');
 const toolsStoreKey = PageStorageKey<String>('tools');
 const profilesStoreKey = PageStorageKey<String>('profiles');
 
-const defaultPrimaryColor = 0xFF000000;
+const defaultPrimaryColor = 0xFF00796B;
 
 double getWidgetHeight(num lines) {
   return max(lines * 84 + (lines - 1) * 16, 0).ap;
@@ -107,12 +107,12 @@ final mainIsolate = 'LiClashMainIsolate';
 final serviceIsolate = 'LiClashServiceIsolate';
 
 const defaultPrimaryColors = [
-  defaultPrimaryColor,
+  0xFF000000,
   0xFF1976D2,
-  0xFF00796B,
-  0xFFD32F2F,
+  defaultPrimaryColor,
+  0xFFE91E63,
   0xFF7B1FA2,
-  0xFFFFB300,
+  0xFFD97706,
   0xFF455A64,
 ];
 

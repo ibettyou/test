@@ -30,31 +30,53 @@ class OptionsDialog<T> extends StatelessWidget {
     return CommonDialog(
       title: title,
       padding: const EdgeInsets.symmetric(
-        horizontal: 8,
+        horizontal: 16,
         vertical: 16,
       ),
-      child: Wrap(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           for (final option in options)
             Builder(
               builder: (context) {
-                if (value == option) {
+                final isSelected = value == option;
+                if (isSelected) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Scrollable.ensureVisible(context);
                   });
                 }
-                return ListItem.radio(
-                  delegate: RadioDelegate(
-                    value: option,
-                    groupValue: value,
-                    onChanged: (T? value) {
-                      Navigator.of(context).pop(value);
-                    },
-                  ),
-                  title: Text(
-                    textBuilder(option),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop(option);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: isSelected
+                              ? context.colorScheme.primary
+                              : context.colorScheme.outlineVariant,
+                          width: isSelected ? 2 : 1,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      textBuilder(option),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: context.textTheme.bodyLarge?.copyWith(
+                        color: isSelected
+                            ? context.colorScheme.primary
+                            : context.colorScheme.onSurface,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
+                    ),
                   ),
                 );
               },

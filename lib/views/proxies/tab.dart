@@ -483,13 +483,9 @@ class _DelayTestButtonState extends State<DelayTestButton>
     return AnimatedBuilder(
       animation: _controller.view,
       builder: (_, child) {
-        return SizedBox(
-          width: 56,
-          height: 56,
-          child: Transform.scale(
-            scale: _scale.value,
-            child: child,
-          ),
+        return Transform.scale(
+          scale: _scale.value,
+          child: child,
         );
       },
       child: FloatingActionButton.extended(

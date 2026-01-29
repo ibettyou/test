@@ -261,19 +261,25 @@ class ProfileItem extends StatelessWidget {
           subscriptionInfo: subscriptionInfo,
         ),
         // 流量使用 / 总量 · 到期日期 - 更新时间（全部在同一行）
-        Text(
-          '${_getTrafficText(subscriptionInfo)} · ${_getExpireText(subscriptionInfo)} - $updateTimeText',
-          style: context.textTheme.labelMedium?.toLight,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        SizedBox(
+          width: double.infinity,
+          child: Text(
+            '${_getTrafficText(subscriptionInfo)} · ${_getExpireText(subscriptionInfo)} - $updateTimeText',
+            style: context.textTheme.labelMedium?.toLight,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ] else
         // 没有订阅信息时只显示更新时间
-        Text(
-          updateTimeText,
-          style: context.textTheme.labelMedium?.toLight,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        SizedBox(
+          width: double.infinity,
+          child: Text(
+            updateTimeText,
+            style: context.textTheme.labelMedium?.toLight,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
     ];
   }
